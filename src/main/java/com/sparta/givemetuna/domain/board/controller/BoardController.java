@@ -2,12 +2,14 @@ package com.sparta.givemetuna.domain.board.controller;
 
 import com.sparta.givemetuna.domain.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/boards")
 public class BoardController {
+
     private final BoardService boardService;
 
     @PostMapping
