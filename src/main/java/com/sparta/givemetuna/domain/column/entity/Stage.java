@@ -4,6 +4,7 @@ import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.card.entity.UserCard;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.user.entity.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,9 +37,9 @@ public class Stage {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@OneToMany(mappedBy = "stage", targetEntity = UserCard.class)
+	@OneToMany(mappedBy = "stage", targetEntity = UserCard.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<UserCard> userCards = new ArrayList<>();
 
-	@OneToMany(mappedBy = "stage", targetEntity = Checklist.class)
+	@OneToMany(mappedBy = "stage", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Checklist> checklists = new ArrayList<>();
 }
