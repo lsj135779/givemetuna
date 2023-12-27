@@ -1,5 +1,6 @@
 package com.sparta.givemetuna.domain.issue.entity;
 
+import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.user.entity.BoardUserRole;
 import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -30,6 +31,10 @@ public class Issue {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "card_id")
+    private Card card;
 
     @OneToMany(mappedBy = "issue")
     private List<IssueComment> issueComments = new ArrayList<>();

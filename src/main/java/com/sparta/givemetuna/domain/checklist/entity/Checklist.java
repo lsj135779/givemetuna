@@ -1,5 +1,7 @@
 package com.sparta.givemetuna.domain.checklist.entity;
 
+import com.sparta.givemetuna.domain.card.entity.Card;
+import com.sparta.givemetuna.domain.column.entity.Stage;
 import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.*;
 
@@ -18,6 +20,14 @@ public class Checklist {
 
     @Column
     private Integer priority;
+
+    @ManyToOne
+    @JoinColumn(name = "card_id")
+    private Card card;
+
+    @ManyToOne
+    @JoinColumn(name = "stage_id")
+    private Stage stage;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

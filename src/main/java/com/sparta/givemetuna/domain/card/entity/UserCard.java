@@ -1,5 +1,6 @@
 package com.sparta.givemetuna.domain.card.entity;
 
+import com.sparta.givemetuna.domain.column.entity.Stage;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.entity.UserRole;
 import jakarta.persistence.*;
@@ -14,6 +15,10 @@ public class UserCard {
     @ManyToOne
     @JoinColumn(name = "card_id")
     private Card card;
+
+    @ManyToOne
+    @JoinColumn(name = "stage_id")
+    private Stage stage;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

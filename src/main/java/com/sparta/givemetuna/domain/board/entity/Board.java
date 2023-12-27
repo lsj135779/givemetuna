@@ -23,6 +23,6 @@ public class Board {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "Column")
-    private List<Stage> columns = new ArrayList<>();
+    @OneToMany(mappedBy = "board",targetEntity = Stage.class,cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Stage> stages = new ArrayList<>();
 }
