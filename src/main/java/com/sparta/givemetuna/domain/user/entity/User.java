@@ -1,58 +1,57 @@
 package com.sparta.givemetuna.domain.user.entity;
 
-import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.card.entity.UserCard;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
-import com.sparta.givemetuna.domain.column.entity.Stage;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "user")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column
-    private String account;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column
-    private String password;
+	@Column(unique = true)
+	private String account;
 
-    @Column
-    @Email
-    private String email;
+	@Column
+	private String password;
 
-    @Column
-    private String nickname;
+	@Column
+	@Email
+	private String email;
 
-    @Column
-    @Email
-    private String github;
+	@Column
+	private String nickname;
 
-    @Column
-    private String description;
+	@Column
+	@Email
+	private String github;
 
-    @OneToMany(mappedBy = "user")
-    private List<Board> boards = new ArrayList<>();
+	@Column
+	private String description;
 
-    @OneToMany(mappedBy = "user")
-    private List<Stage> stages = new ArrayList<>();
+	@OneToMany(mappedBy = "user")
+	private List<Issue> issues = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Checklist> checklists = new ArrayList<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Checklist> checklists = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Issue> issues = new ArrayList<>();
+	@OneToMany(mappedBy = "user")
+	private List<UserCard> userCards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<UserCard> userCards = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<BoardUserRole> boardUserRoles = new ArrayList<>();
+	@OneToMany(mappedBy = "user")
+	private List<BoardUserRole> boardUserRoles = new ArrayList<>();
 }
