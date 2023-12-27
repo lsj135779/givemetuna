@@ -19,10 +19,12 @@ public class Board {
     private String name;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "board",targetEntity = Stage.class,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Stage> stages = new ArrayList<>();
+
+    /* Board 삭제 시, Card와 Checklist 삭제 쿼리를 구현해주어야함 @임지훈 */
 }

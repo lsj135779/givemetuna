@@ -1,26 +1,28 @@
 package com.sparta.givemetuna.domain.card.entity;
 
-import com.sparta.givemetuna.domain.column.entity.Stage;
 import com.sparta.givemetuna.domain.user.entity.User;
-import com.sparta.givemetuna.domain.user.entity.UserRole;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "userCard")
 public class UserCard {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "card_id")
-    private Card card;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "stage_id")
-    private Stage stage;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "card_id")
+	private Card card;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 }
