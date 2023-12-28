@@ -32,7 +32,8 @@ public class IssueController {
 //		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
 //		Card card = cardService.getCardById(issueCreateRequestDto.getCardId());
-		IssueCreateResponseDto issueCreateResponseDto = issueService.createIssue(issueCreateRequestDto, Card.builder().build(),
+		IssueCreateResponseDto issueCreateResponseDto = issueService.createIssue(issueCreateRequestDto,
+			Card.builder().build(),
 			User.builder().build());
 		return ResponseEntity.status(HttpStatus.CREATED).body(issueCreateResponseDto);
 	}
