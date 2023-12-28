@@ -95,4 +95,9 @@ public class Issue extends BaseEntity {
 		this.card = card;
 		this.setUpdatedAt(updatedAt);
 	}
+
+	public void close(Status status, LocalDateTime updatedAt) {
+		this.status = status;
+		this.setUpdatedAt(updatedAt);
+	}
 }

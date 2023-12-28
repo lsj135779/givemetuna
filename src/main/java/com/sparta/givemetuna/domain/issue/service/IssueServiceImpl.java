@@ -3,6 +3,9 @@ package com.sparta.givemetuna.domain.issue.service;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.issue.dto.IssueCreateRequestDto;
 import com.sparta.givemetuna.domain.issue.dto.IssueCreateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.IssueDeleteResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.IssueUpdateRequestDto;
 import com.sparta.givemetuna.domain.issue.dto.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
@@ -49,5 +52,17 @@ public class IssueServiceImpl implements IssueService {
 	public Issue selectByIdAndUser(long issueId) {
 		return issueRepository.findById(issueId).orElseThrow(
 			() -> new RuntimeException("찾으시는 issue가 존재하지 않습니다.")); // 도메인 커스텀 예외로 변경 요망
+	}
+
+	@Override
+	public IssueStatusUpdateResponseDto closeIssue(IssueStatusUpdateRequestDto updateRequestDto, Issue issue, LocalDateTime updatedAt) {
+		issue.close(updateRequestDto.getStatus(), updatedAt);
+
+		return IssueStatusUpdateResponseDto.of(issue);
+	}
+
+	@Override
+	public IssueDeleteResponseDto deleteIssue(Issue issue) {
+		return null;
 	}
 }

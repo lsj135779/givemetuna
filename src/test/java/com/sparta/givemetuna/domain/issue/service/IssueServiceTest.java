@@ -6,6 +6,8 @@ import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.issue.dto.IssueCreateRequestDto;
 import com.sparta.givemetuna.domain.issue.dto.IssueCreateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.IssueUpdateRequestDto;
 import com.sparta.givemetuna.domain.issue.dto.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
@@ -84,10 +86,39 @@ class IssueServiceTest extends IntegrationTestSupport {
 		IssueUpdateResponseDto updateResponseDto = issueService.updateIssue(updateRequestDto, issue, now);
 
 		// THEN
-//		assertEquals(1L, updateResponseDto.getIssueId());
-//		assertEquals("도메인이슈 : 업무 프로세스가 수정요청드립니다.", updateResponseDto.getTitle());
-//		assertEquals("요청주신 업무 관련하여 이상한 점을 발견했는데요. 혹시 이 부분에 대해서 이야기할 수 있을까요?", updateResponseDto.getContents());
-//		assertEquals(now, updateResponseDto.getUpdatedAt());
-//		assertEquals(2L, updateResponseDto.getCardId());
+		assertEquals(1L, updateResponseDto.getIssueId());
+		assertEquals("도메인이슈 : 업무 프로세스가 수정요청드립니다.", updateResponseDto.getTitle());
+		assertEquals("요청주신 업무 관련하여 이상한 점을 발견했는데요. 혹시 이 부분에 대해서 이야기할 수 있을까요?", updateResponseDto.getContents());
+		assertEquals(now, updateResponseDto.getUpdatedAt());
+		assertEquals(2L, updateResponseDto.getCardId());
+	}
+
+	@Test
+	@DisplayName("이슈를 닫거나 엽니다.")
+	public void 이슈_종료() {
+		// GIVEN
+		Card card1 = cardRepository.save(Card.builder().id(1L).build());
+		User user = userRepository.save(User.builder().build());
+		Issue issue = Issue.builder()
+			.id(1L)
+			.title("도메인이슈 : 업무 프로세스가 이상합니다")
+			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
+			.status(Status.OPEN)
+			.card(card1)
+			.user(user)
+			.build();
+		issueRepository.save(issue);
+		IssueStatusUpdateRequestDto requestDto = IssueStatusUpdateRequestDto.builder()
+			.status(Status.CLOSED)
+			.build();
+
+		// WHEN
+		LocalDateTime now = LocalDateTime.now();
+		IssueStatusUpdateResponseDto responseDto = issueService.closeIssue(requestDto, issue, now);
+
+		// THEN
+		assertEquals(1L, responseDto.getIssueId());
+		assertEquals(Status.CLOSED, responseDto.getStatus());
+		assertEquals(now, responseDto.getUpdatedAt());
 	}
 }

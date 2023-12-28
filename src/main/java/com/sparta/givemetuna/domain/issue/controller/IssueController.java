@@ -3,6 +3,9 @@ package com.sparta.givemetuna.domain.issue.controller;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.issue.dto.IssueCreateRequestDto;
 import com.sparta.givemetuna.domain.issue.dto.IssueCreateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.IssueDeleteResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.IssueUpdateRequestDto;
 import com.sparta.givemetuna.domain.issue.dto.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
@@ -13,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +41,7 @@ public class IssueController {
 		@RequestBody IssueCreateRequestDto createRequestDto
 //		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
-		/* Body 검증 :: Card 검증 */
+		/* Body 검증 :: Card 검증 *//**/
 		// Card card = cardService.selectById(createRequestDto.getCardId());
 		IssueCreateResponseDto responseDto = issueService.createIssue(
 			createRequestDto,
@@ -66,5 +70,39 @@ public class IssueController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 	}
 
+	@PatchMapping("{issue_id}/status")
+	public ResponseEntity<IssueStatusUpdateResponseDto> closeIssue(
+		@PathVariable("issue_id") long issueId,
+		@RequestBody IssueStatusUpdateRequestDto updateRequestDto
+//		@AuthenticationPrincipal UserDetailsImpl userDetails
+	) {
+		/* Header 검증 :: Issue 작성자 검증 */
+		// User user = userDetails.getUser();
+		Issue issue = issueService.selectByIdAndUser(issueId);
+
+		IssueStatusUpdateResponseDto responseDto = issueService.closeIssue(
+			updateRequestDto,
+			issue,
+			LocalDateTime.now()
+		);
+
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
+
+	@DeleteMapping("{issue_id}")
+	public ResponseEntity<IssueDeleteResponseDto> deleteIssue(
+		@PathVariable("issue_id") long issueId
+//		@AuthenticationPrincipal UserDetailsImpl userDetails
+	) {
+		/* Header 검증 :: Issue 작성자 검증 */
+		// User user = userDetails.getUser();
+		Issue issue = issueService.selectByIdAndUser(issueId);
+
+		IssueDeleteResponseDto responseDto = issueService.deleteIssue(
+			issue
+		);
+
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
 }
 
