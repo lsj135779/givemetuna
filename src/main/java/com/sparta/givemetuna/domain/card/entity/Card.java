@@ -1,7 +1,7 @@
 package com.sparta.givemetuna.domain.card.entity;
 
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
-import com.sparta.givemetuna.domain.column.entity.Stage;
+import com.sparta.givemetuna.domain.stage.entity.Stage;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,9 +15,17 @@ import jakarta.persistence.Table;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "card")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 public class Card {
 
 	@OneToMany(mappedBy = "card", targetEntity = UserCard.class, cascade = CascadeType.ALL, orphanRemoval = true)

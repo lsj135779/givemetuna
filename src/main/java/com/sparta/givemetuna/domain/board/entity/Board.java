@@ -1,7 +1,7 @@
 package com.sparta.givemetuna.domain.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sparta.givemetuna.domain.column.entity.Stage;
+import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

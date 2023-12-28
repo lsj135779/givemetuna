@@ -1,4 +1,4 @@
-package com.sparta.givemetuna.domain.column.entity;
+package com.sparta.givemetuna.domain.stage.entity;
 
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.card.entity.Card;
