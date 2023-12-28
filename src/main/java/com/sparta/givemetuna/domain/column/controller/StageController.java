@@ -14,24 +14,24 @@ public class StageController {
 
     private final StageService stageService;
 
-    @PostMapping("/{board_id}/columns")
+    @PostMapping("/{board_id}/stages")
     public void createStage() {
 
     }
 
-    @PatchMapping("/{column_id}")
+    @PatchMapping("/{stage_id}")
     public void updateStage() {
 
     }
 
     // 페이징 및 정렬
 
-    @DeleteMapping("/{column_id}")
+    @DeleteMapping("/{stage_id}")
     public void deleteStage() {
 
     }
 
-    @GetMapping("/{column_id}")
+    @GetMapping("/{stage_id}")
     public void getStage() {
 
     }
