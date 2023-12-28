@@ -1,6 +1,6 @@
-package com.sparta.givemetuna.domain.column.service;
+package com.sparta.givemetuna.domain.stage.service;
 
-import com.sparta.givemetuna.domain.column.repository.StageRepository;
+import com.sparta.givemetuna.domain.stage.repository.StageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

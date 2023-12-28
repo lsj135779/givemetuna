@@ -1,10 +1,7 @@
-package com.sparta.givemetuna.domain.column.controller;
+package com.sparta.givemetuna.domain.stage.controller;
 
-import com.sparta.givemetuna.domain.column.dto.CreateStageRequestDto;
-import com.sparta.givemetuna.domain.column.dto.CreateStageResponseDto;
-import com.sparta.givemetuna.domain.column.service.StageService;
+import com.sparta.givemetuna.domain.stage.service.StageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
