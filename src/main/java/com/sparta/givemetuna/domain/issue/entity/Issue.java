@@ -1,9 +1,10 @@
 package com.sparta.givemetuna.domain.issue.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.common.BaseEntity;
-import com.sparta.givemetuna.domain.issue.dto.IssueCreateRequestDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueUpdateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateRequestDto;
 import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -38,13 +39,16 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 public class Issue extends BaseEntity {
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<IssueComment> issueComments = new ArrayList<>();
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "card_id")
 	private Card card;

@@ -1,19 +1,19 @@
-package com.sparta.givemetuna.domain.issue.controller;
+package com.sparta.givemetuna.domain.issue.controller.cud;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
-import com.sparta.givemetuna.domain.issue.dto.IssueCreateRequestDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueCreateResponseDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueDeleteResponseDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateRequestDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateResponseDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueUpdateRequestDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueUpdateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueDeleteResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueStatusUpdateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueStatusUpdateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
-import com.sparta.givemetuna.domain.issue.service.IssueService;
+import com.sparta.givemetuna.domain.issue.service.cud.IssueCudService;
+import com.sparta.givemetuna.domain.issue.service.read.IssueReadService;
 import com.sparta.givemetuna.domain.user.entity.User;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,10 +29,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequiredArgsConstructor
 @RequestMapping("/api/issues")
 @EnableWebMvc
-public class IssueController {
+public class IssueCudController {
 
-	@Qualifier("issueJpaCrudService")
-	private final IssueService issueService;
+	//	@Qualifier("issueJpaCudService")
+	private final IssueCudService issueCudService;
+
+	private final IssueReadService issueReadService;
 
 //	private final CardService cardService;
 
@@ -43,7 +45,7 @@ public class IssueController {
 	) {
 		/* Body 검증 :: Card 검증 *//**/
 		// Card card = cardService.selectById(createRequestDto.getCardId());
-		IssueCreateResponseDto responseDto = issueService.createIssue(
+		IssueCreateResponseDto responseDto = issueCudService.createIssue(
 			createRequestDto,
 			Card.builder().build(),
 			User.builder().build(),
@@ -60,9 +62,9 @@ public class IssueController {
 	) {
 		/* Header 검증 :: Issue 작성자 검증 */
 		// User user = userDetails.getUser();
-		Issue issue = issueService.selectByIdAndUser(issueId);
+		Issue issue = issueReadService.selectByIdAndUser(issueId, User.builder().build());
 
-		IssueUpdateResponseDto responseDto = issueService.updateIssue(
+		IssueUpdateResponseDto responseDto = issueCudService.updateIssue(
 			updateRequestDto,
 			issue,
 			LocalDateTime.now()
@@ -78,9 +80,9 @@ public class IssueController {
 	) {
 		/* Header 검증 :: Issue 작성자 검증 */
 		// User user = userDetails.getUser();
-		Issue issue = issueService.selectByIdAndUser(issueId);
+		Issue issue = issueReadService.selectByIdAndUser(issueId, User.builder().build());
 
-		IssueStatusUpdateResponseDto responseDto = issueService.closeIssue(
+		IssueStatusUpdateResponseDto responseDto = issueCudService.closeIssue(
 			updateRequestDto,
 			issue,
 			LocalDateTime.now()
@@ -96,9 +98,9 @@ public class IssueController {
 	) {
 		/* Header 검증 :: Issue 작성자 검증 */
 		// User user = userDetails.getUser();
-		Issue issue = issueService.selectByIdAndUser(issueId);
+		Issue issue = issueReadService.selectByIdAndUser(issueId, User.builder().build());
 
-		IssueDeleteResponseDto responseDto = issueService.deleteIssue(
+		IssueDeleteResponseDto responseDto = issueCudService.deleteIssue(
 			issue
 		);
 

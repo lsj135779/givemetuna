@@ -1,7 +1,6 @@
-package com.sparta.givemetuna.domain.issue.dto;
+package com.sparta.givemetuna.domain.issue.dto.cud;
 
 import com.sparta.givemetuna.domain.issue.entity.Issue;
-import com.sparta.givemetuna.domain.issue.entity.Status;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,18 +10,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
-public class IssueStatusUpdateResponseDto {
+public class IssueUpdateResponseDto {
 
 	private long issueId;
 
-	private Status status;
+	private String title;
+
+	private String contents;
+
+	private long cardId;
 
 	private LocalDateTime updatedAt;
 
-	public static IssueStatusUpdateResponseDto of(Issue issue) {
-		return new IssueStatusUpdateResponseDto(
+	public static IssueUpdateResponseDto of(Issue issue) {
+		return new IssueUpdateResponseDto(
 			issue.getId(),
-			issue.getStatus(),
+			issue.getTitle(),
+			issue.getContents(),
+			issue.getCard().getId(),
 			issue.getUpdatedAt());
 	}
 }

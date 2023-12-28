@@ -1,4 +1,4 @@
-package com.sparta.givemetuna.domain.issue.dto;
+package com.sparta.givemetuna.domain.issue.dto.cud;
 
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import java.time.LocalDateTime;

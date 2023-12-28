@@ -4,15 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
-import com.sparta.givemetuna.domain.issue.dto.IssueCreateRequestDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueCreateResponseDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateRequestDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateResponseDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueUpdateRequestDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueUpdateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueDeleteResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueStatusUpdateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueStatusUpdateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.entity.Status;
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
+import com.sparta.givemetuna.domain.issue.service.cud.IssueCudService;
 import com.sparta.givemetuna.domain.support.IntegrationTestSupport;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
@@ -20,13 +22,12 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
-class IssueServiceTest extends IntegrationTestSupport {
+class IssueCudServiceTest extends IntegrationTestSupport {
 
 	@Autowired
-	@Qualifier("issueJpaCrudService")
-	private IssueService issueService;
+//	@Qualifier("issueJpaCrudService")
+	private IssueCudService issueCudService;
 
 	@Autowired
 	private IssueRepository issueRepository;
@@ -51,7 +52,7 @@ class IssueServiceTest extends IntegrationTestSupport {
 
 		// WHEN
 		LocalDateTime now = LocalDateTime.now();
-		IssueCreateResponseDto responseDto = issueService.createIssue(requestDto, card, user, now);
+		IssueCreateResponseDto responseDto = issueCudService.createIssue(requestDto, card, user, now);
 
 		// THEN
 		assertEquals(requestDto.getTitle(), responseDto.getTitle());
@@ -83,7 +84,7 @@ class IssueServiceTest extends IntegrationTestSupport {
 
 		// WHEN
 		LocalDateTime now = LocalDateTime.now();
-		IssueUpdateResponseDto updateResponseDto = issueService.updateIssue(updateRequestDto, issue, now);
+		IssueUpdateResponseDto updateResponseDto = issueCudService.updateIssue(updateRequestDto, issue, now);
 
 		// THEN
 		assertEquals(1L, updateResponseDto.getIssueId());
@@ -114,11 +115,35 @@ class IssueServiceTest extends IntegrationTestSupport {
 
 		// WHEN
 		LocalDateTime now = LocalDateTime.now();
-		IssueStatusUpdateResponseDto responseDto = issueService.closeIssue(requestDto, issue, now);
+		IssueStatusUpdateResponseDto responseDto = issueCudService.closeIssue(requestDto, issue, now);
 
 		// THEN
 		assertEquals(1L, responseDto.getIssueId());
 		assertEquals(Status.CLOSED, responseDto.getStatus());
 		assertEquals(now, responseDto.getUpdatedAt());
+	}
+
+	@Test
+	@DisplayName("이슈를 삭제합니다.")
+	public void 이슈_삭제() {
+		// GIVEN
+		Card card1 = cardRepository.save(Card.builder().id(1L).build());
+		User user = userRepository.save(User.builder().build());
+		Issue issue = Issue.builder()
+			.id(1L)
+			.title("도메인이슈 : 업무 프로세스가 이상합니다")
+			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
+			.status(Status.OPEN)
+			.card(card1)
+			.user(user)
+			.build();
+		issueRepository.save(issue);
+
+		// WHEN
+		IssueDeleteResponseDto deleteResponseDto = issueCudService.deleteIssue(issue);
+
+		// THEN
+		assertEquals(1L, deleteResponseDto.getIssueId());
+
 	}
 }

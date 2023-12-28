@@ -1,4 +1,4 @@
-package com.sparta.givemetuna.domain.issue.dto;
+package com.sparta.givemetuna.domain.issue.dto.cud;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

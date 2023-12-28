@@ -1,25 +1,25 @@
-package com.sparta.givemetuna.domain.issue.service;
+package com.sparta.givemetuna.domain.issue.service.cud;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
-import com.sparta.givemetuna.domain.issue.dto.IssueCreateRequestDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueCreateResponseDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueDeleteResponseDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateRequestDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueStatusUpdateResponseDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueUpdateRequestDto;
-import com.sparta.givemetuna.domain.issue.dto.IssueUpdateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueDeleteResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueStatusUpdateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueStatusUpdateResponseDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateRequestDto;
+import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
 import com.sparta.givemetuna.domain.user.entity.User;
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service("issueJpaCrudService")
+@Service("issueJpaCudService")
 @RequiredArgsConstructor
 @Transactional
-public class IssueServiceImpl implements IssueService {
+public class IssueCudServiceImpl implements IssueCudService {
 
 //	private final CardService cardService;
 
@@ -49,12 +49,6 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public Issue selectByIdAndUser(long issueId) {
-		return issueRepository.findById(issueId).orElseThrow(
-			() -> new RuntimeException("찾으시는 issue가 존재하지 않습니다.")); // 도메인 커스텀 예외로 변경 요망
-	}
-
-	@Override
 	public IssueStatusUpdateResponseDto closeIssue(IssueStatusUpdateRequestDto updateRequestDto, Issue issue, LocalDateTime updatedAt) {
 		issue.close(updateRequestDto.getStatus(), updatedAt);
 
@@ -63,6 +57,8 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	public IssueDeleteResponseDto deleteIssue(Issue issue) {
-		return null;
+		issueRepository.delete(issue);
+
+		return IssueDeleteResponseDto.of(issue.getId());
 	}
 }

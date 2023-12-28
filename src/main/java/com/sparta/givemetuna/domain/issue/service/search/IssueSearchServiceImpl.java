@@ -1,4 +1,4 @@
-package com.sparta.givemetuna.domain.issue.service;
+package com.sparta.givemetuna.domain.issue.service.search;
 
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
 import lombok.RequiredArgsConstructor;
