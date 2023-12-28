@@ -22,6 +22,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,19 +40,17 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 public class Issue extends BaseEntity {
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<IssueComment> issueComments = new ArrayList<>();
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "card_id")
+	private Card card;
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "card_id")
-	private Card card;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -91,6 +90,22 @@ public class Issue extends BaseEntity {
 			user,
 			createdAt
 		);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof Issue issue)) {
+			return false;
+		}
+		return getId().equals(issue.getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId());
 	}
 
 	public void update(IssueUpdateRequestDto updateRequestDto, Card card, LocalDateTime updatedAt) {
