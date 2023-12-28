@@ -49,16 +49,35 @@ create table if not exists card
     foreign key (stage_id) references stage (id)
     );
 
+create table if not exists checklist
+(
+    id       bigint auto_increment
+    primary key,
+    contents varchar(255) null,
+    priority int          null,
+    card_id  bigint       null,
+    stage_id bigint       null,
+    user_id  bigint       null,
+    `check`  bit          null,
+    constraint FK25m7kyibidtclp6imt0265660
+    foreign key (user_id) references user (id),
+    constraint FKmq05kujpd06x59cm9u46s9eui
+    foreign key (card_id) references card (id),
+    constraint FKs1xjr2ux7fw0qab0qcig644em
+    foreign key (stage_id) references stage (id)
+    );
+
 create table if not exists issue
 (
-    id        bigint auto_increment
+    id         bigint auto_increment
     primary key,
-    closed_at datetime(6)  null,
-    contents  varchar(255) null,
-    is_closed bit          null,
-    title     varchar(255) null,
-    card_id   bigint       null,
-    user_id   bigint       null,
+    created_at datetime(6)             not null,
+    updated_at datetime(6)             null,
+    contents   varchar(255)            null,
+    status     enum ('OPEN', 'CLOSED') null,
+    title      varchar(255)            null,
+    card_id    bigint                  null,
+    user_id    bigint                  null,
     constraint FKes381ej4aaydv9lxvgxjjuy1x
     foreign key (card_id) references card (id),
     constraint FKip9bige7u8us6u9wtqd2r0th7
@@ -67,11 +86,13 @@ create table if not exists issue
 
 create table if not exists issue_comment
 (
-    id       bigint auto_increment
+    id         bigint auto_increment
     primary key,
-    contents varchar(255) null,
-    issue_id bigint       null,
-    user_id  bigint       null,
+    created_at datetime(6)  not null,
+    updated_at datetime(6)  null,
+    contents   varchar(255) null,
+    issue_id   bigint       null,
+    user_id    bigint       null,
     constraint FK7oiyufdigsfevlnbft6ag181r
     foreign key (user_id) references user (id),
     constraint FK8wy5rxggrte2ntcq80g7o7210
