@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
-public class IssueCreateResponseDto {
+public class IssueUpdateResponseDto {
 
 	private long issueId;
 
@@ -20,15 +20,14 @@ public class IssueCreateResponseDto {
 
 	private long cardId;
 
-	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
 
-	public static IssueCreateResponseDto of(Issue issue) {
-		return new IssueCreateResponseDto(
+	public static IssueUpdateResponseDto of(Issue issue) {
+		return new IssueUpdateResponseDto(
 			issue.getId(),
 			issue.getTitle(),
 			issue.getContents(),
 			issue.getCard().getId(),
-			issue.getCreatedAt()
-		);
+			issue.getUpdatedAt());
 	}
 }
