@@ -1,5 +1,6 @@
 package com.sparta.givemetuna.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.givemetuna.domain.card.entity.UserCard;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
@@ -18,13 +19,35 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
+
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private final List<Issue> issues = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+	private final List<Checklist> checklists = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private final List<UserCard> userCards = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private final List<BoardUserRole> boardUserRoles = new ArrayList<>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,18 +72,6 @@ public class User {
 
 	@Column
 	private String description;
-
-	@OneToMany(mappedBy = "user")
-	private List<Issue> issues = new ArrayList<>();
-
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Checklist> checklists = new ArrayList<>();
-
-	@OneToMany(mappedBy = "user")
-	private List<UserCard> userCards = new ArrayList<>();
-
-	@OneToMany(mappedBy = "user")
-	private List<BoardUserRole> boardUserRoles = new ArrayList<>();
 
 	public User(String account, String password, String email, String nickname, String github, String description){
 		this.account = account;
