@@ -2,7 +2,7 @@ package com.sparta.givemetuna.domain.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.givemetuna.domain.board.dto.CreateBoardRequestDto;
-import com.sparta.givemetuna.domain.column.entity.Stage;
+import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,11 +15,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter

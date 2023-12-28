@@ -13,19 +13,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 @Table(name = "user")
 @Builder
@@ -73,7 +70,7 @@ public class User {
 	@Column
 	private String description;
 
-	public User(String account, String password, String email, String nickname, String github, String description){
+	public User(String account, String password, String email, String nickname, String github, String description) {
 		this.account = account;
 		this.password = password;
 		this.email = email;
