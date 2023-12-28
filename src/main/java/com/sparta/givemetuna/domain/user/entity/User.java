@@ -12,9 +12,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User {
@@ -54,4 +61,13 @@ public class User {
 
 	@OneToMany(mappedBy = "user")
 	private List<BoardUserRole> boardUserRoles = new ArrayList<>();
+
+	public User(String account, String password, String email, String nickname, String github, String description){
+		this.account = account;
+		this.password = password;
+		this.email = email;
+		this.nickname = nickname;
+		this.github = github;
+		this.description = description;
+	}
 }
