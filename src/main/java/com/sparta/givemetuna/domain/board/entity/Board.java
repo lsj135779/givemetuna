@@ -45,4 +45,8 @@ public class Board {
 	public Board(CreateBoardRequestDto requestDto) {
 		this.name = requestDto.getName();
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

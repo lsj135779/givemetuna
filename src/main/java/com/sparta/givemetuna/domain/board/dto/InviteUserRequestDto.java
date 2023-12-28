@@ -1,4 +1,4 @@
 package com.sparta.givemetuna.domain.board.dto;
 
-public class InviteUserToBoardRequestDto {
+public class InviteUserRequestDto {
 }

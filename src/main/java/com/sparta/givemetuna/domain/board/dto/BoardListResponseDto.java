@@ -4,12 +4,14 @@ import com.sparta.givemetuna.domain.board.entity.Board;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-public class BoardResponseDto {
+public class BoardListResponseDto {
     private String name;
 
-    public BoardResponseDto(Board board) {
-        this.name = board.getName();
+    public BoardListResponseDto(String name) {
+        this.name = name;
     }
 }
