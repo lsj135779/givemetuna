@@ -27,61 +27,61 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Card extends BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column
-	private Long creator;
+    @Column
+    private Long creator;
 
-	@Column
-	private Long assignor;
+    @Column
+    private Long assignor;
 
-	@Column
-	private String title;
+    @Column(nullable = false)
+    private String title;
 
-	@Column
-	private Integer priority;
+    @Column
+    private Integer priority;
 
-	@Column
-	private Boolean isDone;
+    @Column
+    private Boolean isDone;
 
-	@Column
-	private Timestamp startedAt;
+    @Column
+    private Timestamp startedAt;
 
-	@Column
-	private Timestamp closedAt;
+    @Column
+    private Timestamp closedAt;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Stage stage;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Stage stage;
 
-	@OneToMany(mappedBy = "card", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<Checklist> checklists = new ArrayList<>();
+    @OneToMany(mappedBy = "card", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Checklist> checklists = new ArrayList<>();
 
-	@Builder
-	private Card(Long id, Long creator, Long assignor, Stage stage, String title, Integer priority,
-			Boolean isDone, Timestamp startedAt, Timestamp closedAt) {
-		this.id = id;
-		this.creator = creator;
-		this.assignor = assignor;
-		this.stage = stage;
-		this.title = title;
-		this.priority = priority;
-		this.isDone = isDone;
-		this.startedAt = startedAt;
-		this.closedAt = closedAt;
-	}
+    @Builder
+    private Card(Long id, Long creator, Long assignor, Stage stage, String title, Integer priority,
+            Boolean isDone, Timestamp startedAt, Timestamp closedAt) {
+        this.id = id;
+        this.creator = creator;
+        this.assignor = assignor;
+        this.stage = stage;
+        this.title = title;
+        this.priority = priority;
+        this.isDone = isDone;
+        this.startedAt = startedAt;
+        this.closedAt = closedAt;
+    }
 
-	public static Card of(Card card) {
-		return Card.builder()
-				.creator(card.getCreator())
-				.assignor(card.getAssignor())
-				.stage(card.getStage())
-				.title(card.getTitle())
-				.priority(card.getPriority())
-				.isDone(card.getIsDone())
-				.startedAt(card.getStartedAt())
-				.closedAt(card.getClosedAt())
-				.build();
-	}
+    public static Card of(Card card) {
+        return Card.builder()
+                .creator(card.getCreator())
+                .assignor(card.getAssignor())
+                .stage(card.getStage())
+                .title(card.getTitle())
+                .priority(card.getPriority())
+                .isDone(card.getIsDone())
+                .startedAt(card.getStartedAt())
+                .closedAt(card.getClosedAt())
+                .build();
+    }
 }
