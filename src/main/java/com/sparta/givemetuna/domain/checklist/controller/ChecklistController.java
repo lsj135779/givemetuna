@@ -5,13 +5,15 @@ import com.sparta.givemetuna.domain.checklist.dto.ChecklistContentsUpdateRequest
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistContentsUpdateResponseDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistCreateRequestDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistCreateResponseDto;
+import com.sparta.givemetuna.domain.checklist.dto.ChecklistDeleteResponseDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistPriorityUpdateRequestDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistPriorityUpdateResponseDto;
 import com.sparta.givemetuna.domain.checklist.service.ChecklistService;
-import com.sparta.givemetuna.domain.user.entity.User;
+import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,12 +45,15 @@ public class ChecklistController {
 	public ResponseEntity<ChecklistCreateResponseDto> createChecklist(
 		@RequestBody @Valid ChecklistCreateRequestDto checklistCreateRequestDto,
 		@PathVariable Long board_id, @PathVariable Long stage_id,
-		@PathVariable Long card_id) { // 사용자 인증 정보 추가 @AuthenticationPrincipal UserDetailsImpl userDetails
-		User user = User.builder().build();
-		ChecklistCreateResponseDto checklistCreateResponseDto = checklistService.createChecklist(checklistCreateRequestDto, board_id,
-			stage_id,
-			card_id, user);
-		return ResponseEntity.ok().body(checklistCreateResponseDto);
+		@PathVariable Long card_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		try {
+			ChecklistCreateResponseDto checklistCreateResponseDto = checklistService.createChecklist(checklistCreateRequestDto, board_id,
+				stage_id,
+				card_id, userDetails.getUser());
+			return ResponseEntity.ok().body(checklistCreateResponseDto);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@PatchMapping("/{checklist_id}/contents")
@@ -56,21 +61,27 @@ public class ChecklistController {
 		@RequestBody @Valid ChecklistContentsUpdateRequestDto checklistContentsUpdateRequestDto,
 		@PathVariable Long board_id,
 		@PathVariable Long stage_id, @PathVariable Long card_id,
-		@PathVariable Long checklist_id) { // 사용자 인증 정보 추가 @AuthenticationPrincipal UserDetailsImpl userDetails
-		User user = new User();
-		ChecklistContentsUpdateResponseDto checklistContentsUpdateResponseDto = checklistService.updateChecklistConetents(
-			checklistContentsUpdateRequestDto, board_id, stage_id, card_id, checklist_id, user);
-		return ResponseEntity.ok().body(checklistContentsUpdateResponseDto);
+		@PathVariable Long checklist_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		try {
+			ChecklistContentsUpdateResponseDto checklistContentsUpdateResponseDto = checklistService.updateChecklistConetents(
+				checklistContentsUpdateRequestDto, board_id, stage_id, card_id, checklist_id, userDetails.getUser());
+			return ResponseEntity.ok().body(checklistContentsUpdateResponseDto);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@PatchMapping("/{checklist_id}/checks")
 	public ResponseEntity<ChecklistCheckUpdateResponseDto> updateChecklistChecks(@PathVariable Long board_id, @PathVariable Long stage_id,
 		@PathVariable Long card_id,
-		@PathVariable Long checklist_id) { // 사용자 인증 정보 추가 @AuthenticationPrincipal UserDetailsImpl userDetails
-		User user = new User();
-		ChecklistCheckUpdateResponseDto checklistCheckUpdateResponseDto = checklistService.updateChecklistchecks(board_id, stage_id,
-			card_id, checklist_id, user);
-		return ResponseEntity.ok().body(checklistCheckUpdateResponseDto);
+		@PathVariable Long checklist_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		try {
+			ChecklistCheckUpdateResponseDto checklistCheckUpdateResponseDto = checklistService.updateChecklistchecks(board_id, stage_id,
+				card_id, checklist_id, userDetails.getUser());
+			return ResponseEntity.ok().body(checklistCheckUpdateResponseDto);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@PatchMapping("/{checklist_id}/priorities")
@@ -78,17 +89,26 @@ public class ChecklistController {
 		@RequestBody ChecklistPriorityUpdateRequestDto checklistPriorityUpdateRequestDto,
 		@PathVariable Long board_id,
 		@PathVariable Long stage_id, @PathVariable Long card_id,
-		@PathVariable Long checklist_id) { // 사용자 인증 정보 추가 @AuthenticationPrincipal UserDetailsImpl userDetails
-		User user = new User();
-		ChecklistPriorityUpdateResponseDto checklistPriorityUpdateResponseDto = checklistService.updateChecklistPriorities(
-			checklistPriorityUpdateRequestDto, board_id, stage_id, card_id, checklist_id, user);
-		return ResponseEntity.ok().body(checklistPriorityUpdateResponseDto);
+		@PathVariable Long checklist_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		try {
+			ChecklistPriorityUpdateResponseDto checklistPriorityUpdateResponseDto = checklistService.updateChecklistPriorities(
+				checklistPriorityUpdateRequestDto, board_id, stage_id, card_id, checklist_id, userDetails.getUser());
+			return ResponseEntity.ok().body(checklistPriorityUpdateResponseDto);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@DeleteMapping("/{checklist_id}")
-	public void deleteChecklist(@PathVariable Long board_id, @PathVariable Long stage_id, @PathVariable Long card_id,
-		@PathVariable Long checklist_id) { // 사용자 인증 정보 추가 @AuthenticationPrincipal UserDetailsImpl userDetails
-		User user = new User();
-		checklistService.deleteChecklist(board_id, stage_id, card_id, checklist_id, user);
+	public ResponseEntity<ChecklistDeleteResponseDto> deleteChecklist(@PathVariable Long board_id, @PathVariable Long stage_id,
+		@PathVariable Long card_id,
+		@PathVariable Long checklist_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		try {
+			ChecklistDeleteResponseDto checklistDeleteResponseDto = checklistService.deleteChecklist(board_id, stage_id, card_id,
+				checklist_id, userDetails.getUser());
+			return ResponseEntity.ok().body(checklistDeleteResponseDto);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
