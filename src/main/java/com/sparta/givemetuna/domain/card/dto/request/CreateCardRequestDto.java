@@ -1,5 +1,6 @@
 package com.sparta.givemetuna.domain.card.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.sql.Timestamp;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class CreateCardRequestDto {
 
     @Size(max = 500)
+    @NotNull
     private String title;
 
     private String account;
