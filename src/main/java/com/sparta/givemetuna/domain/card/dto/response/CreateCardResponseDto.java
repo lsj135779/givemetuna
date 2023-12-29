@@ -1,6 +1,8 @@
 package com.sparta.givemetuna.domain.card.dto.response;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
+import com.sparta.givemetuna.domain.stage.entity.Stage;
+import com.sparta.givemetuna.domain.user.entity.User;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -24,7 +26,8 @@ public class CreateCardResponseDto {
 
     @Builder
     private CreateCardResponseDto(Long boardId, Long stageId, String title, String account,
-            Integer priority, Boolean isDone, Timestamp startedAt, Timestamp closedAt, LocalDateTime createdAt) {
+            Integer priority, Boolean isDone, Timestamp startedAt, Timestamp closedAt,
+            LocalDateTime createdAt) {
         this.boardId = boardId;
         this.stageId = stageId;
         this.title = title;
@@ -36,12 +39,12 @@ public class CreateCardResponseDto {
         this.createdAt = createdAt;
     }
 
-    public static CreateCardResponseDto of(Card card) {
+    public static CreateCardResponseDto of(Card card, Stage stage, User user) {
         return CreateCardResponseDto.builder()
-                .boardId()
+                .boardId(stage.getBoard().getId())
                 .stageId(card.getStage().getId())
                 .title(card.getTitle())
-                .account() //card.getAssignor().getUser
+                .account(user.getAccount())
                 .priority(card.getPriority())
                 .isDone(card.getIsDone())
                 .startedAt(card.getStartedAt())
