@@ -39,12 +39,12 @@ public class CreateCardResponseDto {
         this.createdAt = createdAt;
     }
 
-    public static CreateCardResponseDto of(Card card, Stage stage, User user) {
+    public static CreateCardResponseDto of(Card card, Stage stage, User assignor) {
         return CreateCardResponseDto.builder()
                 .boardId(stage.getBoard().getId())
                 .stageId(card.getStage().getId())
                 .title(card.getTitle())
-                .account(user.getAccount())
+                .account(assignor.getAccount())
                 .priority(card.getPriority())
                 .isDone(card.getIsDone())
                 .startedAt(card.getStartedAt())

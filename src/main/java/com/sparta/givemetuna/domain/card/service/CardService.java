@@ -22,12 +22,12 @@ public class CardService {
     private final ChecklistService checklistService;
 
     @Transactional
-    public CreateCardResponseDto createCard(Stage stage, User checkedUser,
+    public CreateCardResponseDto createCard(Stage stage, User creator, User assignor,
             CreateCardRequestDto requestDto) {
 
         Card saveCard = Card.builder()
-                .creator(checkedUser.getId())
-                .assignor(checkedUser.getId())
+                .creator(creator.getId())
+                .assignor(assignor.getId())
                 .stage(stage)
                 .title(requestDto.getTitle())
                 .priority(requestDto.getPriority())
@@ -38,6 +38,6 @@ public class CardService {
 
         cardRepository.save(saveCard);
 
-        return CreateCardResponseDto.of(saveCard, stage, checkedUser);
+        return CreateCardResponseDto.of(saveCard, stage, assignor);
     }
 }
