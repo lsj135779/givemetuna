@@ -2,15 +2,17 @@ package com.sparta.givemetuna.domain.issue.dto.read;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
+import com.sparta.givemetuna.domain.issue.entity.IssueComment;
 import com.sparta.givemetuna.domain.issue.entity.Status;
-import lombok.AccessLevel;
+import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor
+//@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter
-@ToString
+@EqualsAndHashCode
 public class IssueReadResponseDto {
 
 	private long id;
@@ -23,13 +25,16 @@ public class IssueReadResponseDto {
 
 	private long cardId;
 
+	private List<IssueComment> issueComments;
+
 	@QueryProjection
-	public IssueReadResponseDto(long id, String title, String contents, Status status, long cardId) {
+	public IssueReadResponseDto(long id, String title, String contents, Status status, long cardId, List<IssueComment> issueComments) {
 		this.id = id;
 		this.title = title;
 		this.contents = contents;
 		this.status = status;
 		this.cardId = cardId;
+		this.issueComments = issueComments;
 	}
 
 	public static IssueReadResponseDto of(Issue issue) {
@@ -38,7 +43,8 @@ public class IssueReadResponseDto {
 			issue.getTitle(),
 			issue.getContents(),
 			issue.getStatus(),
-			issue.getCard().getId()
+			issue.getCard().getId(),
+			issue.getIssueComments()
 		);
 	}
 }

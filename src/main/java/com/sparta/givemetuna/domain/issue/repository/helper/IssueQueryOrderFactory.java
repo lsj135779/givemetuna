@@ -12,6 +12,13 @@ import org.springframework.util.ObjectUtils;
 
 public final class IssueQueryOrderFactory {
 
+	/**
+	 * 페이징 인스턴스로부터 Issue 컬럼에 따라 정렬기준치 리스트를 생성,반환
+	 *
+	 * @param pageable 페이징 인스턴스
+	 * @return 정렬기준치 리스트
+	 * @author 임지훈
+	 */
 	public static List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
 
 		List<OrderSpecifier> ORDERS = new ArrayList<>();
@@ -36,5 +43,18 @@ public final class IssueQueryOrderFactory {
 		}
 
 		return ORDERS;
+	}
+
+	/**
+	 * 페이징 인스턴스로부터 Issue 컬럼에 따라 정렬기준치를 배열화하여 반환
+	 *
+	 * @param pageable 페이징 인스턴스
+	 * @return 정렬기준치 배열
+	 * @author 임지훈
+	 */
+	public static OrderSpecifier[] getAllOrderSpecifiersArr(Pageable pageable) {
+		return IssueQueryOrderFactory
+			.getAllOrderSpecifiers(pageable)
+			.toArray(OrderSpecifier[]::new);
 	}
 }

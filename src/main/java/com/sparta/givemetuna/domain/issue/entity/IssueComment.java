@@ -27,5 +27,6 @@ public class IssueComment extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "issue_id")
+//	@Fetch(FetchMode.JOIN)
 	private Issue issue;
 }

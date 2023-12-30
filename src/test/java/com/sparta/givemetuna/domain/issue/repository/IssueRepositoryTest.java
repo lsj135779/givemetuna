@@ -1,7 +1,6 @@
 package com.sparta.givemetuna.domain.issue.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
@@ -16,6 +15,7 @@ import com.sparta.givemetuna.global.config.JpaAuditingConfig;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +43,34 @@ class IssueRepositoryTest {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@BeforeEach
+	void setUp() {
+		// GIVEN
+		User user = userRepository.save(User.builder().build());
+		Card card = cardRepository.save(Card.builder().build());
+		List<Issue> issues = new ArrayList<>();
+		for (long l = 1L; l < 10L; l++) {
+			Issue issue = Issue.builder()
+				.title(String.format("도메인이슈 #%d", l))
+				.contents(String.format("요청 업무 프로세스 이슈 #%d 에 관하여 여쭤보고 싶습니다.", l))
+				.user(user)
+				.card(card)
+				.status(Status.OPEN)
+				.build();
+			issueRepository.save(issue);
+		}
+		for (long l = 1L; l < 10L; l++) {
+			Issue issue = Issue.builder()
+				.title(String.format("도메인이슈 #%d [종료]", l))
+				.contents(String.format("요청 업무 프로세스 이슈 #%d 를 잘 이해하지 못 하겠습니다.", l))
+				.user(user)
+				.card(card)
+				.status(Status.CLOSED)
+				.build();
+			issueRepository.save(issue);
+		}
+	}
 
 	@AfterEach
 	void tearDown() {
@@ -75,31 +103,6 @@ class IssueRepositoryTest {
 	@Test
 	@DisplayName("회원에 대한 이슈리스트를 조건 조회합니다.")
 	public void 회원_이슈_리스트_조건조회() {
-		// GIVEN
-		User user = userRepository.save(User.builder().build());
-		Card card = cardRepository.save(Card.builder().build());
-		List<Issue> issues = new ArrayList<>();
-		for (long l = 1L; l < 10L; l++) {
-			Issue issue = Issue.builder()
-				.title(String.format("도메인이슈 #%d", l))
-				.contents(String.format("요청 업무 프로세스 이슈 #%d 에 관하여 여쭤보고 싶습니다.", l))
-				.user(user)
-				.card(card)
-				.status(Status.OPEN)
-				.build();
-			issueRepository.save(issue);
-		}
-		for (long l = 1L; l < 10L; l++) {
-			Issue issue = Issue.builder()
-				.title(String.format("도메인이슈 #%d [종료]", l))
-				.contents(String.format("요청 업무 프로세스 이슈 #%d 를 잘 이해하지 못 하겠습니다.", l))
-				.user(user)
-				.card(card)
-				.status(Status.CLOSED)
-				.build();
-			issueRepository.save(issue);
-		}
-
 		// WHEN
 		IssueSelectCondition condition = IssueSelectCondition.builder()
 			.status(Status.CLOSED)
@@ -111,29 +114,13 @@ class IssueRepositoryTest {
 			.filter(issue -> issue.getStatus().equals(Status.CLOSED))
 			.map(IssueReadResponseDto::of)
 			.toList();
-		long countOfSelectedClosed = selectedReadResponseDtos.stream()
-			.filter(issueReadResponseDto -> issueReadResponseDto.getTitle().contains("[종료]"))
-			.count();
-		assertEquals(9L, countOfSelectedClosed);
-		assertTrue(selectedReadResponseDtos.contains(filteredReadResponseDtos));
+		assertEquals(selectedReadResponseDtos, filteredReadResponseDtos);
+		assertEquals(9L, selectedReadResponseDtos.size());
 	}
 
 	@Test
 	@DisplayName("회원에 대한 이슈 리스트를 조건조회하여 페이징 처리합니다.")
 	public void 회원_이슈_리스트_조건조회_페이징() {
-		// GIVEN
-		User user = userRepository.save(User.builder().id(1L).build());
-		for (long l = 1L; l < 30L; l++) {
-			Issue issue = Issue.builder()
-				.id(l)
-				.title(String.format("도메인이슈 #%d", l))
-				.contents(String.format("요청 업무 프로세스 이슈 #%d 에 관하여 여쭤보고 싶습니다.", l))
-				.user(user)
-				.status(Status.OPEN)
-				.build();
-			issueRepository.save(issue);
-		}
-
 		// WHEN
 		Pageable pageable = PageRequest.of(
 			0,

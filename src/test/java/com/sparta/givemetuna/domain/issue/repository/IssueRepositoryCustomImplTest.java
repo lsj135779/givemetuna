@@ -1,9 +1,12 @@
 package com.sparta.givemetuna.domain.issue.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.querydsl.jpa.impl.JPAQuery;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.configuration.QueryDslConfig;
+import com.sparta.givemetuna.domain.issue.dto.read.IssueReadResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueSelectCondition;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.entity.Status;
@@ -12,6 +15,7 @@ import com.sparta.givemetuna.domain.user.repository.UserRepository;
 import com.sparta.givemetuna.global.config.JpaAuditingConfig;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +43,13 @@ class IssueRepositoryCustomImplTest {
 	private IssueRepository issueRepository;
 
 	@Autowired
+	private QueryDslConfig qd;
+
+	@Autowired
 	private IssueRepositoryCustomImpl issueRepositoryCustom;
 
-	@Test
-	@DisplayName("조회")
-	public void 조회() {
+	@BeforeEach
+	void setUp() {
 		// GIVEN
 		User user = userRepository.save(User.builder().build());
 		Card card = cardRepository.save(Card.builder().build());
@@ -58,15 +64,37 @@ class IssueRepositoryCustomImplTest {
 				.build();
 			issueRepository.save(issue);
 		}
+	}
 
+	@Test
+	@DisplayName("조건에 따른 조회쿼리에 따른 Issue 리스트를 구합니다.")
+	public void 조건조회_쿼리_issue리스트반환() {
 		// WHEN
 		IssueSelectCondition condition = IssueSelectCondition.builder()
-			.status(Status.CLOSED)
+			.status(Status.OPEN)
 			.build();
-		JPAQuery<Issue> getJpaQuery = ReflectionTestUtils.invokeMethod(issueRepositoryCustom, "selectBy", condition);
+		JPAQuery<Issue> issuesByCondition = ReflectionTestUtils.invokeMethod(issueRepositoryCustom, "queryAllBy", condition);
 
 		// THEN
-		List<Issue> dtos = getJpaQuery.fetch();
-		dtos.forEach(System.out::println);
+		assertEquals(9, issuesByCondition.fetch().size());
+	}
+
+	@Test
+	@DisplayName("조건에 따른 조회쿼리에 따른 IssueReadResponseDto 리스트를 구합니다.")
+	public void 조건조회_쿼리_dto리스트반환() {
+		// WHEN
+		IssueSelectCondition conditionOfStatus = IssueSelectCondition.builder()
+			.status(Status.OPEN)
+			.build();
+		IssueSelectCondition conditionOfStatusAndTitle = IssueSelectCondition.builder()
+			.status(Status.OPEN)
+			.title("도메인이슈 #3")
+			.build();
+		List<IssueReadResponseDto> dtosOfStatus = issueRepositoryCustom.selectByCondition(conditionOfStatus);
+		List<IssueReadResponseDto> dtosOfStatusAndTitle = issueRepositoryCustom.selectByCondition(conditionOfStatusAndTitle);
+
+		// THEN
+		assertEquals(9, dtosOfStatus.size());
+		assertEquals(1, dtosOfStatusAndTitle.size());
 	}
 }
