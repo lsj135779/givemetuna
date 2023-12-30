@@ -53,7 +53,7 @@ public class ChecklistService {
 			}
 		}
 
-		Checklist newChecklist = Checklist.of(checklistCreateRequestDto, false, 4, card, user); // 카드정보, 유저정보 추가
+		Checklist newChecklist = Checklist.of(checklistCreateRequestDto, false, 4, true, card, user); // 카드정보, 유저정보 추가
 		Checklist savedChecklist = checklistRepository.save(newChecklist);
 		return ChecklistCreateResponseDto.of(savedChecklist);
 	}
@@ -170,6 +170,11 @@ public class ChecklistService {
 			}
 		}
 
+		// 첫 번째 체크리스트는 삭제 불가능
+		if (!checklist.getDeletable()) {
+			throw new IllegalArgumentException("삭제할 수 없는 체크리스트입니다.");
+		}
+
 		Long id = checklist.getId();
 		checklistRepository.delete(checklist);
 		return ChecklistDeleteResponseDto.of(id);
@@ -182,6 +187,7 @@ public class ChecklistService {
 			.contents("받은 카드를 확인했습니까?")
 			.check(false)
 			.priority(4)
+			.deletable(false)
 			.card(card)
 			.user(user).build();
 		checklistRepository.save(checklist);

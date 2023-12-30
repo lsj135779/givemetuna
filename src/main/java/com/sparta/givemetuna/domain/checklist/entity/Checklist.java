@@ -40,6 +40,9 @@ public class Checklist {
 	@Column
 	private Integer priority;
 
+	@Column
+	private Boolean deletable;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "card_id")
 	private Card card;
@@ -48,19 +51,22 @@ public class Checklist {
 	@JoinColumn(name = "assignee")
 	private User user;
 
-	public Checklist(String contents, boolean b, int i, Card card, User user) {
+	public Checklist(String contents, boolean check, int priority, boolean deletable, Card card, User user) {
 		this.contents = contents;
-		this.check = b;
-		this.priority = i;
+		this.check = check;
+		this.priority = priority;
+		this.deletable = deletable;
 		this.card = card;
 		this.user = user;
 	}
 
-	public static Checklist of(ChecklistCreateRequestDto checklistCreateRequestDto, boolean b, int i, Card card, User user) {
+	public static Checklist of(ChecklistCreateRequestDto checklistCreateRequestDto, boolean check, int priority, boolean deletable,
+		Card card, User user) {
 		return new Checklist(
 			checklistCreateRequestDto.getContents(),
-			b,
-			i,
+			check,
+			priority,
+			deletable,
 			card,
 			user
 		);
