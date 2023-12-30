@@ -176,7 +176,14 @@ public class ChecklistService {
 	}
 
 	// 처음 빈카드에서 카드를 부여할 때 체크리스트 만드는 메서드 추가
-	public void firstCreateChecklist() { // Parameter로 부여받은 유저정보, 카드정보를 가져온다.
+	public void firstCreateChecklist(Card card, User user) { // Parameter로 부여받은 유저정보, 카드정보를 가져온다.
 		// builder로 Checklist객체 만들어서 저장하기
+		Checklist checklist = Checklist.builder()
+			.contents("받은 카드를 확인했습니까?")
+			.check(false)
+			.priority(4)
+			.card(card)
+			.user(user).build();
+		checklistRepository.save(checklist);
 	}
 }
