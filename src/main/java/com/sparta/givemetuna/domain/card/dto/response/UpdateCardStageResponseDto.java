@@ -1,8 +1,6 @@
 package com.sparta.givemetuna.domain.card.dto.response;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
-import com.sparta.givemetuna.domain.stage.entity.Stage;
-import com.sparta.givemetuna.domain.user.entity.User;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -41,12 +39,12 @@ public class UpdateCardStageResponseDto {
         this.updatedAt = updatedAt;
     }
 
-    public static UpdateCardStageResponseDto of(Card card, Stage stage, User assignor) {
+    public static UpdateCardStageResponseDto of(Card card) {
         return UpdateCardStageResponseDto.builder()
-                .boardId(stage.getBoard().getId())
+                .boardId(card.getStage().getBoard().getId())
                 .stageId(card.getStage().getId())
                 .title(card.getTitle())
-                .account(assignor.getAccount())
+                .account(card.getAssignor().getAccount())
                 .priority(card.getPriority())
                 .isDone(card.getIsDone())
                 .startedAt(card.getStartedAt())

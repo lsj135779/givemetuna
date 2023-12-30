@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public class UpdateCardStageRequestDto {
 
-    Long stage;
+    private Long stageId;
 }
