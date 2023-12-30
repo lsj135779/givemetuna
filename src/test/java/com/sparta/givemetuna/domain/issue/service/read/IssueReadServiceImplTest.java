@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
+import com.sparta.givemetuna.domain.issue.dto.read.IssueReadResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.entity.Status;
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
@@ -45,11 +46,10 @@ class IssueReadServiceImplTest extends IntegrationTestSupport {
 		issueRepository.save(issue);
 
 		// WHEN
-		Issue foundIssue = issueReadService.selectByIdAndUser(1L, user);
+		IssueReadResponseDto responseDto = issueReadService.getIssue(1L, user);
 
 		// THEN
-		assertEquals(issue, foundIssue);
-		assertEquals(card, foundIssue.getCard());
-		assertEquals(user, foundIssue.getUser());
+		assertEquals(issue.getId(), responseDto.getId());
+		assertEquals(card.getId(), responseDto.getCardId());
 	}
 }

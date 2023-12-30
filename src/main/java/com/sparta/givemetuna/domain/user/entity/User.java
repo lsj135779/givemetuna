@@ -1,7 +1,7 @@
 package com.sparta.givemetuna.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sparta.givemetuna.domain.card.entity.UserCard;
+import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import jakarta.persistence.CascadeType;
@@ -15,33 +15,36 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Entity
 @Table(name = "user")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id", callSuper = false)
 public class User {
 
 	@OneToMany(mappedBy = "user")
 	@JsonIgnore
 	private final List<Issue> issues = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
 	private final List<Checklist> checklists = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
-	private final List<UserCard> userCards = new ArrayList<>();
+	private final List<Card> cardsCreated = new ArrayList<>();
+
+	@OneToMany(mappedBy = "assignor", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+	private final List<Card> cardsAssignedTo = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user")
 	@JsonIgnore
@@ -78,21 +81,5 @@ public class User {
 		this.nickname = nickname;
 		this.github = github;
 		this.description = description;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (!(o instanceof User user)) {
-			return false;
-		}
-		return getId().equals(user.getId());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getId());
 	}
 }
