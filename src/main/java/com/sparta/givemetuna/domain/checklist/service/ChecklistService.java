@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class ChecklistService {
 
 	private final ChecklistRepository checklistRepository;
+
 	private final CardTempService cardTempService;
 
 	public ChecklistCreateResponseDto createChecklist(ChecklistCreateRequestDto checklistCreateRequestDto, Long boardId, Long stageId,
@@ -51,7 +52,7 @@ public class ChecklistService {
 		// 관리자 가능
 		// 해당 카드를 만든 매니저 가능
 		// 체크리스트 생성한 유저 가능
-		if (!Objects.equals(checklist.getUser().getId(), user.getId())) {
+		if (!Objects.equals(checklist.getAssignee().getId(), user.getId())) {
 			throw new IllegalArgumentException("체크리스트 생성자만 수정이 가능합니다.");
 		}
 

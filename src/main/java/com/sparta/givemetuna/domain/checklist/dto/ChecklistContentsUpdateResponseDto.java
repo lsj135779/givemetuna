@@ -11,16 +11,21 @@ import lombok.NoArgsConstructor;
 public class ChecklistContentsUpdateResponseDto {
 
 	private Long id;
+
 	private Long user_id;
+
 	private Long card_id;
+
 	private String contents;
+
 	private Boolean check;
+
 	private Integer priority;
 
 	public static ChecklistContentsUpdateResponseDto of(Checklist checklist) {
 		return new ChecklistContentsUpdateResponseDto(
 			checklist.getId(),
-			checklist.getUser().getId(),
+			checklist.getAssignee().getId(),
 			checklist.getCard().getId(),
 			checklist.getContents(),
 			checklist.getCheck(),

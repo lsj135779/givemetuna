@@ -19,14 +19,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -38,6 +38,8 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicInsert
 @DynamicUpdate
 @Getter
+@EqualsAndHashCode(of = "id", callSuper = false)
+@ToString
 public class Issue extends BaseEntity {
 
 	@OneToMany(mappedBy = "issue", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -65,58 +67,37 @@ public class Issue extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
-	public Issue(String title, String contents, Status status, Card card, User user, LocalDateTime createdAt) {
+	public Issue(String title, String contents, Status status, Card card, User user) {
 		this.title = title;
 		this.contents = contents;
 		this.status = status;
 		this.card = card;
 		this.user = user;
-		this.setCreatedAt(createdAt);
 	}
 
-	public Issue(String title, String contents, Status status, LocalDateTime createdAt) {
+	public Issue(String title, String contents, Status status) {
 		this.title = title;
 		this.contents = contents;
 		this.status = status;
-		this.setCreatedAt(createdAt);
 	}
 
-	public static Issue of(IssueCreateRequestDto requestDto, Card card, User user, LocalDateTime createdAt) {
+	public static Issue of(IssueCreateRequestDto requestDto, Card card, User user) {
 		return new Issue(
 			requestDto.getTitle(),
 			requestDto.getContents(),
 			Status.OPEN,
 			card,
-			user,
-			createdAt
+			user
 		);
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (!(o instanceof Issue issue)) {
-			return false;
-		}
-		return getId().equals(issue.getId());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getId());
-	}
-
-	public void update(IssueUpdateRequestDto updateRequestDto, Card card, LocalDateTime updatedAt) {
+	public void update(IssueUpdateRequestDto updateRequestDto, Card card) {
 		this.title = updateRequestDto.getTitle();
 		this.contents = updateRequestDto.getContents();
 		this.card = card;
-		this.setUpdatedAt(updatedAt);
 	}
 
-	public void close(Status status, LocalDateTime updatedAt) {
+	public void close(Status status) {
 		this.status = status;
-		this.setUpdatedAt(updatedAt);
 	}
 }
