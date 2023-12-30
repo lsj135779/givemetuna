@@ -4,6 +4,7 @@ import static com.sparta.givemetuna.domain.card.constant.CardConstant.DEFAULT_IS
 
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.checklist.service.ChecklistService;
@@ -26,8 +27,8 @@ public class CardService {
             CreateCardRequestDto requestDto) {
 
         Card saveCard = Card.builder()
-                .creator(creator.getId())
-                .assignor(assignor.getId())
+                .creator(creator)
+                .assignor(assignor)
                 .stage(stage)
                 .title(requestDto.getTitle())
                 .priority(requestDto.getPriority())
@@ -40,4 +41,31 @@ public class CardService {
 
         return CreateCardResponseDto.of(saveCard, stage, assignor);
     }
+
+    public UpdateCardStageResponseDto updateStage(Stage afterStage, Card card) {
+        card.updateStage(afterStage);
+        return UpdateCardStageResponseDto.of(card);
+    }
+
+    private Card checkCard(Long cardId) {
+        return cardRepository.findById(cardId).orElseThrow(
+                ()-> new NullPointerException("없는 카드입니다."));
+    }
+
+    public Card checkStageCard(Long stageId, Long cardId) {
+        Card card = checkCard(cardId);
+        if (!card.getStage().getId().equals(stageId)) {
+            throw new IllegalArgumentException("해당 카드는 다른 스테이지에 있습니다.");
+        }
+        return card;
+    }
+
+
+    public void checkAssignor(Long cardId, User user) {
+        Card card = checkCard(cardId);
+        if (!card.getAssignor().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("해당 권한이 없습니다");
+        }
+    }
+
 }
