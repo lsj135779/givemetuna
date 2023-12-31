@@ -1,5 +1,6 @@
 package com.sparta.givemetuna.domain.card.entity;
 
+import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.common.BaseEntity;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
@@ -7,6 +8,8 @@ import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,20 +38,18 @@ public class Card extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User creator;
+    private User creator; // 카드 만든 사람
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User assignor;
+    private User assignor; // 카드 받은 사람 = 담당자
 
     @Column(nullable = false)
     private String title;
 
-    @Column
-    private Integer priority;
-
-    @Column
-    private Boolean isDone;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CardPriority cardPriority;
 
     @Column
     private Timestamp startedAt;
@@ -64,15 +65,14 @@ public class Card extends BaseEntity {
     private final List<Checklist> checklists = new ArrayList<>();
 
     @Builder
-    private Card(Long id, User creator, User assignor, Stage stage, String title, Integer priority,
-            Boolean isDone, Timestamp startedAt, Timestamp closedAt) {
+    private Card(Long id, User creator, User assignor, Stage stage, String title,
+            CardPriority cardPriority, Timestamp startedAt, Timestamp closedAt) {
         this.id = id;
         this.creator = creator;
         this.assignor = assignor;
         this.stage = stage;
         this.title = title;
-        this.priority = priority;
-        this.isDone = isDone;
+        this.cardPriority = cardPriority;
         this.startedAt = startedAt;
         this.closedAt = closedAt;
     }

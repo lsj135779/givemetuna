@@ -1,5 +1,6 @@
 package com.sparta.givemetuna.domain.card.dto.response;
 
+import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -16,8 +17,7 @@ public class UpdateCardTitleResponseDto {
     private Long stageId;
     private String title;
     private String assignorAccount;
-    private Integer priority;
-    private Boolean isDone;
+    private CardPriority cardPriority;
     private Timestamp startedAt;
     private Timestamp closedAt;
     private LocalDateTime createdAt;
@@ -25,14 +25,13 @@ public class UpdateCardTitleResponseDto {
 
     @Builder
     private UpdateCardTitleResponseDto(Long boardId, Long stageId, String title, String assignorAccount,
-            Integer priority, Boolean isDone, Timestamp startedAt, Timestamp closedAt,
+            CardPriority cardPriority, Timestamp startedAt, Timestamp closedAt,
             LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.boardId = boardId;
         this.stageId = stageId;
         this.title = title;
         this.assignorAccount = assignorAccount;
-        this.priority = priority;
-        this.isDone = isDone;
+        this.cardPriority = cardPriority;
         this.startedAt = startedAt;
         this.closedAt = closedAt;
         this.createdAt = createdAt;
@@ -45,8 +44,7 @@ public class UpdateCardTitleResponseDto {
                 .stageId(card.getStage().getId())
                 .title(card.getTitle())
                 .assignorAccount(card.getAssignor().getAccount())
-                .priority(card.getPriority())
-                .isDone(card.getIsDone())
+                .cardPriority(card.getCardPriority())
                 .startedAt(card.getStartedAt())
                 .closedAt(card.getClosedAt())
                 .createdAt(card.getCreatedAt())
