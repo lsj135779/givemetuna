@@ -1,6 +1,5 @@
 package com.sparta.givemetuna.domain.card.entity;
 
-import com.sparta.givemetuna.domain.card.dto.request.UpdateCardStageRequestDto;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.common.BaseEntity;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
@@ -80,6 +79,10 @@ public class Card extends BaseEntity {
 
     public void updateStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
     }
 
 //  완성하고나서 쓸모 없으면 지우기

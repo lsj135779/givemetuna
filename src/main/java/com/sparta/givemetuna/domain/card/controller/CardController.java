@@ -4,7 +4,9 @@ import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardStageRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardTitleRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAccountResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardTitleResponseDto;
 import com.sparta.givemetuna.domain.core.service.CardMatcherService;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -28,29 +30,42 @@ public class CardController {
             @PathVariable Long stage_id,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody CreateCardRequestDto requestDto) {
-        CreateCardResponseDto responseDto = cardMatcherService.createCard(board_id, stage_id,
-                userDetails.getUser(), requestDto);
-        return responseDto;
+
+        return cardMatcherService.createCard(board_id, stage_id, userDetails.getUser(), requestDto);
     }
 
     @PatchMapping("/{card_id}/phase")
-    public UpdateCardStageResponseDto updateStage(@PathVariable Long board_id,
+    public UpdateCardStageResponseDto updateCardStage(@PathVariable Long board_id,
             @PathVariable Long stage_id,
             @PathVariable Long card_id,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody UpdateCardStageRequestDto requestDto) {
-        UpdateCardStageResponseDto responseDto = cardMatcherService.updateStage(board_id, stage_id,
-                card_id, userDetails.getUser(), requestDto);
-        return responseDto;
+
+        return cardMatcherService.updateCardStage(board_id, stage_id, card_id,
+                userDetails.getUser(),
+                requestDto);
     }
+
     @PatchMapping("/{card_id}/title")
-    public UpdateCardTitleResponseDto updateTitle(@PathVariable Long board_id,
+    public UpdateCardTitleResponseDto updateCardTitle(@PathVariable Long board_id,
             @PathVariable Long stage_id,
             @PathVariable Long card_id,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody UpdateCardTitleRequestDto requestDto) {
-        UpdateCardTitleResponseDto responseDto = cardMatcherService.updateStage(board_id, stage_id,
-                card_id, userDetails.getUser(), requestDto);
-        return responseDto;
 
+        return cardMatcherService.updateCardTitle(board_id, stage_id, card_id,
+                userDetails.getUser(),
+                requestDto);
+    }
+
+    @PatchMapping("/{card_id}/account")
+    public UpdateCardAccountResponseDto updateCardAccount(@PathVariable Long board_id,
+            @PathVariable Long stage_id,
+            @PathVariable Long card_id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody UpdageCardAccountRequestDto requestDto) {
+
+        return cardMatcherService.updateCardAccount(board_id, stage_id, card_id,
+                userDetails.getUser(), requestDto);
+    }
 }

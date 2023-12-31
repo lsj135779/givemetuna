@@ -5,6 +5,7 @@ import static com.sparta.givemetuna.domain.card.constant.CardConstant.DEFAULT_IS
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardTitleResponseDto;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.checklist.service.ChecklistService;
@@ -45,6 +46,10 @@ public class CardService {
     public UpdateCardStageResponseDto updateStage(Stage afterStage, Card card) {
         card.updateStage(afterStage);
         return UpdateCardStageResponseDto.of(card);
+    }
+    public UpdateCardTitleResponseDto updateTitle(String title, Card card) {
+        card.updateTitle(title);
+        return UpdateCardTitleResponseDto.of(card);
     }
 
     private Card checkCard(Long cardId) {
