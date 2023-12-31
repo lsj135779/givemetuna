@@ -101,6 +101,10 @@ public class CardService {
         return cards.stream().map(SelectCardResponseDto::of).collect(Collectors.toList());
     }
 
+    public void delete(Card card) {
+        cardRepository.delete(card);
+    }
+
     private Card checkCard(Long cardId) {
 
         return cardRepository.findById(cardId)
@@ -125,4 +129,5 @@ public class CardService {
             throw new IllegalArgumentException("해당 권한이 없습니다");
         }
     }
+
 }

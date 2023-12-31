@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -172,6 +173,21 @@ public class CardController {
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDtoList);
     }
+
+    @DeleteMapping("/{cardId}")
+    public ResponseEntity<Long> deleteCard(
+            @PathVariable Long boardId,
+            @PathVariable Long stageId,
+            @PathVariable Long cardId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        Card card = checkAPI(boardId, stageId, cardId);
+        checkClientAuthority(boardId, userDetails.getUser());
+        cardService.delete(card);
+
+        return ResponseEntity.status(HttpStatus.OK).body(cardId);
+    }
+
 
     private Card checkAPI(Long boardId, Long stageId, Long cardId) {
 
