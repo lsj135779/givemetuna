@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.issuecomment.service.cud;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
@@ -10,6 +11,10 @@ import com.sparta.givemetuna.domain.issue.entity.IssueStatus;
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
 import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentCreateRequestDto;
 import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentCreateResponseDto;
+import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentDeleteResponseDto;
+import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentUpdateRequestDto;
+import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentUpdateResponseDto;
+import com.sparta.givemetuna.domain.issuecomment.entity.IssueComment;
 import com.sparta.givemetuna.domain.issuecomment.repository.IssueCommentRepository;
 import com.sparta.givemetuna.domain.support.IntegrationTestSupport;
 import com.sparta.givemetuna.domain.user.entity.User;
@@ -83,4 +88,46 @@ class IssueCommentCudServiceImplTest extends IntegrationTestSupport {
 		assertTrue(hasIssueComment);
 	}
 
+	@Test
+	@DisplayName("주어진 댓글에 대한 내용을 수정합니다.")
+	public void 댓글내용수정() {
+		// GIVEN
+		IssueComment issueComment = IssueComment.builder()
+			.user(savedUser)
+			.issue(savedIssue)
+			.contents("이슈#29의 도메인 이해가 되지 않는다고요??")
+			.build();
+		issueCommentRepository.save(issueComment);
+		IssueCommentUpdateRequestDto requestDto = IssueCommentUpdateRequestDto.builder()
+			.contents("이슈#29의 도메인 이해가 되지 않는다고요?? 이 링크를 다시 한 번 확인해보세요")
+			.build();
+
+		// WHEN
+		IssueCommentUpdateResponseDto responseDto = issueCommentCudService.updateIssueComment(issueComment, requestDto);
+
+		// THEN
+		assertEquals(issueComment.getUser().getId(), responseDto.getUserId());
+		assertEquals(issueComment.getIssue().getId(), responseDto.getIssueId());
+		assertEquals(issueComment.getContents(), responseDto.getContents());
+	}
+
+	@Test
+	@DisplayName("이슈에 대한 이슈 댓글을 삭제합니다.")
+	public void 이슈댓글삭제() {
+		// GIVEN
+		IssueComment issueComment = IssueComment.builder()
+			.user(savedUser)
+			.issue(savedIssue)
+			.contents("이슈#29의 도메인 이해가 되지 않는다고요??")
+			.build();
+		issueCommentRepository.save(issueComment);
+
+		// WHEN
+		IssueCommentDeleteResponseDto responseDto = issueCommentCudService.deleteIssueComment(issueComment);
+
+		// THEN
+		assertFalse(issueCommentRepository.findById(issueComment.getId()).isPresent());
+		assertEquals(issueComment.getId(), responseDto.getIssueCommentId());
+		assertFalse(issueComment.getIssue().getIssueComments().contains(issueComment));
+	}
 }

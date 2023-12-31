@@ -1,4 +1,4 @@
-package com.sparta.givemetuna.domain.issue.service;
+package com.sparta.givemetuna.domain.issue.service.cud;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,7 +14,6 @@ import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.entity.IssueStatus;
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
-import com.sparta.givemetuna.domain.issue.service.cud.IssueCudService;
 import com.sparta.givemetuna.domain.support.IntegrationTestSupport;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;

@@ -22,11 +22,16 @@ public class QCard extends EntityPathBase<Card> {
 
     public static final QCard card = new QCard("card");
 
+    public final com.sparta.givemetuna.domain.common.QBaseEntity _super = new com.sparta.givemetuna.domain.common.QBaseEntity(this);
+
     public final com.sparta.givemetuna.domain.user.entity.QUser assignor;
 
     public final ListPath<com.sparta.givemetuna.domain.checklist.entity.Checklist, com.sparta.givemetuna.domain.checklist.entity.QChecklist> checklists = this.<com.sparta.givemetuna.domain.checklist.entity.Checklist, com.sparta.givemetuna.domain.checklist.entity.QChecklist>createList("checklists", com.sparta.givemetuna.domain.checklist.entity.Checklist.class, com.sparta.givemetuna.domain.checklist.entity.QChecklist.class, PathInits.DIRECT2);
 
     public final DateTimePath<java.sql.Timestamp> closedAt = createDateTime("closedAt", java.sql.Timestamp.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final com.sparta.givemetuna.domain.user.entity.QUser creator;
 
@@ -41,6 +46,9 @@ public class QCard extends EntityPathBase<Card> {
     public final DateTimePath<java.sql.Timestamp> startedAt = createDateTime("startedAt", java.sql.Timestamp.class);
 
     public final StringPath title = createString("title");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public QCard(String variable) {
         this(Card.class, forVariable(variable), INITS);

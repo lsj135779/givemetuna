@@ -4,11 +4,11 @@ import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.service.read.IssueReadService;
 import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentCreateRequestDto;
 import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentCreateResponseDto;
-import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentDeleteRequestDto;
 import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentDeleteResponseDto;
 import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentUpdateRequestDto;
 import com.sparta.givemetuna.domain.issuecomment.dto.cud.IssueCommentUpdateResponseDto;
-import com.sparta.givemetuna.domain.issuecomment.service.cud.IssueCommentCudServiceImpl;
+import com.sparta.givemetuna.domain.issuecomment.entity.IssueComment;
+import com.sparta.givemetuna.domain.issuecomment.service.cud.IssueCommentCudService;
 import com.sparta.givemetuna.domain.issuecomment.service.read.IssueCommentReadService;
 import com.sparta.givemetuna.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +28,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 public class IssueCommentCudController {
 
-	private final IssueCommentReadService commentReadService;
+	private final IssueCommentReadService issueCommentReadService;
 
-	private final IssueCommentCudServiceImpl commentCudService;
+	private final IssueCommentCudService issueCommentCudService;
 
 	private final IssueReadService issueReadService;
 
@@ -44,8 +44,8 @@ public class IssueCommentCudController {
 		// User user = userDetails.getDetails();
 		User user = User.builder().build();
 		Issue issue = issueReadService.selectById(issueId, user);
-		IssueCommentCreateResponseDto responseDto = commentCudService.createIssueComment(user, issue, requestDto);
-		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+		IssueCommentCreateResponseDto responseDto = issueCommentCudService.createIssueComment(user, issue, requestDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
 
 	@PostMapping("/{issue_id}/comments/{comment_id}")
@@ -55,17 +55,26 @@ public class IssueCommentCudController {
 		@RequestBody IssueCommentUpdateRequestDto requestDto
 //		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
-		return null;
+		// User user = userDetails.getDetails();
+		User user = User.builder().build();
+		Issue issue = issueReadService.selectById(issueId, user);
+		IssueComment issueComment = issueCommentReadService.selectBy(commentId, issue, user);
+		IssueCommentUpdateResponseDto responseDto = issueCommentCudService.updateIssueComment(issueComment, requestDto);
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 	}
 
 	@DeleteMapping("/{issue_id}/comments/{comment_id}")
 	public ResponseEntity<IssueCommentDeleteResponseDto> deleteIssueComment(
 		@PathVariable("issue_id") long issueId,
-		@PathVariable("comment_id") long commentId,
-		@RequestBody IssueCommentDeleteRequestDto requestDto
+		@PathVariable("comment_id") long commentId
 //		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
-		return null;
+		// User user = userDetails.getDetails();
+		User user = User.builder().build();
+		Issue issue = issueReadService.selectById(issueId, user);
+		IssueComment issueComment = issueCommentReadService.selectBy(commentId, issue, user);
+		IssueCommentDeleteResponseDto responseDto = issueCommentCudService.deleteIssueComment(issueComment);
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 	}
 }
 

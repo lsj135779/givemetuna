@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.issuecomment.dto.cud;
 
 
+import com.sparta.givemetuna.domain.issuecomment.entity.IssueComment;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,4 +20,13 @@ public class IssueCommentUpdateResponseDto {
 	private String contents;
 
 	private LocalDateTime updatedAt;
+
+	public static IssueCommentUpdateResponseDto of(IssueComment issueComment) {
+		return new IssueCommentUpdateResponseDto(
+			issueComment.getUser().getId(),
+			issueComment.getIssue().getId(),
+			issueComment.getContents(),
+			issueComment.getUpdatedAt()
+		);
+	}
 }
