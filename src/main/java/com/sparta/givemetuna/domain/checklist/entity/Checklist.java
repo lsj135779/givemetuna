@@ -5,6 +5,8 @@ import com.sparta.givemetuna.domain.checklist.dto.ChecklistCreateRequestDto;
 import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,8 +39,8 @@ public class Checklist {
 	@Column
 	private Boolean check;
 
-	@Column
-	private Integer priority;
+	@Enumerated(EnumType.STRING)
+	private Priority priority;
 
 	@Column
 	private Boolean deletable;
@@ -51,7 +53,7 @@ public class Checklist {
 	@JoinColumn(name = "assignee")
 	private User user;
 
-	public Checklist(String contents, boolean check, int priority, boolean deletable, Card card, User user) {
+	public Checklist(String contents, boolean check, Priority priority, boolean deletable, Card card, User user) {
 		this.contents = contents;
 		this.check = check;
 		this.priority = priority;
@@ -60,7 +62,7 @@ public class Checklist {
 		this.user = user;
 	}
 
-	public static Checklist of(ChecklistCreateRequestDto checklistCreateRequestDto, boolean check, int priority, boolean deletable,
+	public static Checklist of(ChecklistCreateRequestDto checklistCreateRequestDto, boolean check, Priority priority, boolean deletable,
 		Card card, User user) {
 		return new Checklist(
 			checklistCreateRequestDto.getContents(),
