@@ -88,4 +88,7 @@ public class Card extends BaseEntity {
     public void updateAssignorAccount(User assignor) {
         this.assignor = assignor;
     }
+    public void updatePriority(CardPriority cardPriority) {
+        this.cardPriority = cardPriority;
+    }
 }

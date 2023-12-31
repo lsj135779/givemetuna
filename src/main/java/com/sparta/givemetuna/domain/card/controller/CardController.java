@@ -47,10 +47,10 @@ public class CardController {
             @Valid @RequestBody CreateCardRequestDto requestDto) {
 
         Stage stage = stageService.checkStage(boardId, stageId);
-        User client = checkClientAuthority(boardId, userDetails.getUser());
+        checkClientAuthority(boardId, userDetails.getUser());
 
         CreateCardResponseDto responseDto = cardMatcherService.createCard(boardId, stage,
-                client, requestDto);
+                userDetails.getUser(), requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
@@ -63,7 +63,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardStageRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        User client = checkClientAuthority(boardId, userDetails.getUser());
+        checkClientAuthority(boardId, userDetails.getUser());
 
         UpdateCardStageResponseDto responseDto = cardMatcherService.updateCardStage(boardId,
                 card, requestDto);
@@ -79,7 +79,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardTitleRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        User client = checkClientAuthority(boardId, userDetails.getUser());
+        checkClientAuthority(boardId, userDetails.getUser());
 
         UpdateCardTitleResponseDto responseDto = cardMatcherService.updateCardTitle(
                 card, requestDto);
@@ -96,7 +96,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardAccountRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        User client = checkClientAuthority(boardId, userDetails.getUser());
+        checkClientAuthority(boardId, userDetails.getUser());
 
         UpdateCardAccountResponseDto responseDto = cardMatcherService.updateCardAccount(
                 boardId, card, requestDto);
@@ -113,10 +113,10 @@ public class CardController {
             @Valid @RequestBody UpdatetCardPriorityRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        User client = checkClientAuthority(boardId, userDetails.getUser());
+        checkClientAuthority(boardId, userDetails.getUser());
 
         UpdateCardPriorityResponseDto responseDto = cardMatcherService.updateCardPriority(
-                card, client, requestDto);
+                card, requestDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
@@ -128,13 +128,12 @@ public class CardController {
         return cardService.checkStageCard(stage.getId(), cardId);
     }
 
-    private User checkClientAuthority(Long boardId, User user) {
+    private void checkClientAuthority(Long boardId, User user) {
 
         User client = userService.checkUser(boardId, user);
 
         if (client.getAccount().equals("일반유저")) {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
-        return client;
     }
 }

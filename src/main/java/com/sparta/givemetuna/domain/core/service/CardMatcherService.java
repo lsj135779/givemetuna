@@ -72,12 +72,14 @@ public class CardMatcherService {
         return cardService.updateAccount(assignor, card);
     }
 
-    public UpdateCardPriorityResponseDto updateCardPriority(Card card, User user,
+    public UpdateCardPriorityResponseDto updateCardPriority(Card card,
             UpdatetCardPriorityRequestDto requestDto) {
-        return null;
+
+        return cardService.updatePriority(card, requestDto.getCardPriority());
     }
 
     private void checkBoardAuthority(User user) {
+
         if (user.getAccount().equals("일반유저")) {
             throw new IllegalArgumentException("권한이 없습니다.");
         }

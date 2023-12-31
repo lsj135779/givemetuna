@@ -4,6 +4,7 @@ import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAccountResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPriorityResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardTitleResponseDto;
 import com.sparta.givemetuna.domain.card.entity.Card;
@@ -52,6 +53,7 @@ public class CardService {
     public UpdateCardStageResponseDto updateStage(Stage afterStage, Card card) {
 
         card.updateStage(afterStage);
+
         return UpdateCardStageResponseDto.of(card);
     }
 
@@ -59,6 +61,7 @@ public class CardService {
     public UpdateCardTitleResponseDto updateTitle(String title, Card card) {
 
         card.updateTitle(title);
+
         return UpdateCardTitleResponseDto.of(card);
     }
 
@@ -66,7 +69,15 @@ public class CardService {
     public UpdateCardAccountResponseDto updateAccount(User assignor, Card card) {
 
         card.updateAssignorAccount(assignor);
+
         return UpdateCardAccountResponseDto.of(card);
+    }
+
+    public UpdateCardPriorityResponseDto updatePriority(Card card, CardPriority cardPriority) {
+
+        card.updatePriority(cardPriority);
+
+        return UpdateCardPriorityResponseDto.of(card);
     }
 
     private Card checkCard(Long cardId) {
@@ -78,6 +89,7 @@ public class CardService {
     public Card checkStageCard(Long stageId, Long cardId) {
 
         Card card = checkCard(cardId);
+
         if (!card.getStage().getId().equals(stageId)) {
             throw new IllegalArgumentException("해당 카드는 다른 스테이지에 있습니다.");
         }
@@ -87,9 +99,9 @@ public class CardService {
     public void checkAssignor(Long cardId, User user) {
 
         Card card = checkCard(cardId);
+
         if (!card.getAssignor().getId().equals(user.getId())) {
             throw new IllegalArgumentException("해당 권한이 없습니다");
         }
     }
-
 }
