@@ -13,7 +13,7 @@ public class CreateCardRequestDto {
     @NotNull
     private String title;
 
-    private String account;
+    private String assignorAccount;
 
     private Integer priority;
 

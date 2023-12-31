@@ -15,7 +15,7 @@ public class UpdateCardStageResponseDto {
     private Long boardId;
     private Long stageId;
     private String title;
-    private String account;
+    private String assignorAccount;
     private Integer priority;
     private Boolean isDone;
     private Timestamp startedAt;
@@ -24,13 +24,13 @@ public class UpdateCardStageResponseDto {
     private LocalDateTime updatedAt;
 
     @Builder
-    private UpdateCardStageResponseDto(Long boardId, Long stageId, String title, String account,
+    private UpdateCardStageResponseDto(Long boardId, Long stageId, String title, String assignorAccount,
             Integer priority, Boolean isDone, Timestamp startedAt, Timestamp closedAt,
             LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.boardId = boardId;
         this.stageId = stageId;
         this.title = title;
-        this.account = account;
+        this.assignorAccount = assignorAccount;
         this.priority = priority;
         this.isDone = isDone;
         this.startedAt = startedAt;
@@ -44,7 +44,7 @@ public class UpdateCardStageResponseDto {
                 .boardId(card.getStage().getBoard().getId())
                 .stageId(card.getStage().getId())
                 .title(card.getTitle())
-                .account(card.getAssignor().getAccount())
+                .assignorAccount(card.getAssignor().getAccount())
                 .priority(card.getPriority())
                 .isDone(card.getIsDone())
                 .startedAt(card.getStartedAt())
