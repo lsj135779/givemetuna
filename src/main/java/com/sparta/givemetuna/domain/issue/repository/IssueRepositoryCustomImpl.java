@@ -2,7 +2,7 @@ package com.sparta.givemetuna.domain.issue.repository;
 
 import static com.sparta.givemetuna.domain.card.entity.QCard.card;
 import static com.sparta.givemetuna.domain.issue.entity.QIssue.issue;
-import static com.sparta.givemetuna.domain.issue.entity.QIssueComment.issueComment;
+import static com.sparta.givemetuna.domain.issuecomment.entity.QIssueComment.issueComment;
 import static com.sparta.givemetuna.domain.user.entity.QUser.user;
 
 import com.querydsl.core.types.OrderSpecifier;
@@ -49,7 +49,7 @@ public class IssueRepositoryCustomImpl implements IssueRepositoryCustom {
 			.where(
 				IssueQueryConditionFactory.titleLike(condition.getTitle()),
 				IssueQueryConditionFactory.contentsLike(condition.getContents()),
-				IssueQueryConditionFactory.statusEq(condition.getStatus())
+				IssueQueryConditionFactory.statusEq(condition.getIssueStatus())
 			);
 	}
 

@@ -5,7 +5,9 @@ import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.common.BaseEntity;
 import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateRequestDto;
 import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateRequestDto;
+import com.sparta.givemetuna.domain.issuecomment.entity.IssueComment;
 import com.sparta.givemetuna.domain.user.entity.User;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,6 +51,7 @@ public class Issue extends BaseEntity {
 	@JoinColumn(name = "card_id")
 	private Card card;
 
+	@Nonnull
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
@@ -64,28 +67,29 @@ public class Issue extends BaseEntity {
 	@Column
 	private String contents;
 
+	@Nonnull
 	@Enumerated(EnumType.STRING)
-	private Status status;
+	private IssueStatus issueStatus;
 
-	public Issue(String title, String contents, Status status, Card card, User user) {
+	public Issue(String title, String contents, IssueStatus issueStatus, Card card, User user) {
 		this.title = title;
 		this.contents = contents;
-		this.status = status;
+		this.issueStatus = issueStatus;
 		this.card = card;
 		this.user = user;
 	}
 
-	public Issue(String title, String contents, Status status) {
+	public Issue(String title, String contents, IssueStatus issueStatus) {
 		this.title = title;
 		this.contents = contents;
-		this.status = status;
+		this.issueStatus = issueStatus;
 	}
 
 	public static Issue of(IssueCreateRequestDto requestDto, Card card, User user) {
 		return new Issue(
 			requestDto.getTitle(),
 			requestDto.getContents(),
-			Status.OPEN,
+			IssueStatus.OPEN,
 			card,
 			user
 		);
@@ -97,7 +101,7 @@ public class Issue extends BaseEntity {
 		this.card = card;
 	}
 
-	public void close(Status status) {
-		this.status = status;
+	public void close(IssueStatus issueStatus) {
+		this.issueStatus = issueStatus;
 	}
 }

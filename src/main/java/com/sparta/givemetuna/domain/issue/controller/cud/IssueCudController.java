@@ -52,7 +52,7 @@ public class IssueCudController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
 
-	@PatchMapping("{issue_id}/contents")
+	@PatchMapping("/{issue_id}/contents")
 	public ResponseEntity<IssueUpdateResponseDto> updateIssue(
 		@PathVariable("issue_id") long issueId,
 		@RequestBody IssueUpdateRequestDto updateRequestDto
@@ -69,7 +69,7 @@ public class IssueCudController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 	}
 
-	@PatchMapping("{issue_id}/status")
+	@PatchMapping("/{issue_id}/status")
 	public ResponseEntity<IssueStatusUpdateResponseDto> closeIssue(
 		@PathVariable("issue_id") long issueId,
 		@RequestBody IssueStatusUpdateRequestDto updateRequestDto
@@ -87,7 +87,7 @@ public class IssueCudController {
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 	}
 
-	@DeleteMapping("{issue_id}")
+	@DeleteMapping("/{issue_id}")
 	public ResponseEntity<IssueDeleteResponseDto> deleteIssue(
 		@PathVariable("issue_id") long issueId
 //		@AuthenticationPrincipal UserDetailsImpl userDetails

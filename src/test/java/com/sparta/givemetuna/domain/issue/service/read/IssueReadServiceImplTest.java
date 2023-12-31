@@ -6,7 +6,7 @@ import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueReadResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
-import com.sparta.givemetuna.domain.issue.entity.Status;
+import com.sparta.givemetuna.domain.issue.entity.IssueStatus;
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
 import com.sparta.givemetuna.domain.support.IntegrationTestSupport;
 import com.sparta.givemetuna.domain.user.entity.User;
@@ -41,7 +41,7 @@ class IssueReadServiceImplTest extends IntegrationTestSupport {
 			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
 			.user(user)
 			.card(card)
-			.status(Status.OPEN)
+			.issueStatus(IssueStatus.OPEN)
 			.build();
 		issueRepository.save(issue);
 

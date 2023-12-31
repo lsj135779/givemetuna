@@ -1,6 +1,6 @@
 package com.sparta.givemetuna.domain.issue.dto.cud;
 
-import com.sparta.givemetuna.domain.issue.entity.Status;
+import com.sparta.givemetuna.domain.issue.entity.IssueStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class IssueStatusUpdateRequestDto {
 
-	private Status status;
+	private IssueStatus issueStatus;
 }

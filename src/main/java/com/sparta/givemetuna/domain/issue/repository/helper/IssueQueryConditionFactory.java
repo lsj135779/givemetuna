@@ -3,7 +3,7 @@ package com.sparta.givemetuna.domain.issue.repository.helper;
 import static com.sparta.givemetuna.domain.issue.entity.QIssue.issue;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.sparta.givemetuna.domain.issue.entity.Status;
+import com.sparta.givemetuna.domain.issue.entity.IssueStatus;
 import java.util.Objects;
 
 public final class IssueQueryConditionFactory {
@@ -22,11 +22,11 @@ public final class IssueQueryConditionFactory {
 		return issue.user.id.eq(userId);
 	}
 
-	public static BooleanExpression statusEq(Status status) {
-		if (status == null) {
+	public static BooleanExpression statusEq(IssueStatus issueStatus) {
+		if (issueStatus == null) {
 			return null;
 		}
-		return issue.status.eq(status);
+		return issue.issueStatus.eq(issueStatus);
 	}
 
 	public static BooleanExpression contentsLike(String contents) {

@@ -9,7 +9,7 @@ import com.sparta.givemetuna.domain.configuration.QueryDslConfig;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueReadResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueSelectCondition;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
-import com.sparta.givemetuna.domain.issue.entity.Status;
+import com.sparta.givemetuna.domain.issue.entity.IssueStatus;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
 import com.sparta.givemetuna.global.config.JpaAuditingConfig;
@@ -60,7 +60,7 @@ class IssueRepositoryCustomImplTest {
 				.contents(String.format("요청 업무 프로세스 이슈 #%d 에 관하여 여쭤보고 싶습니다.", l))
 				.user(user)
 				.card(card)
-				.status(Status.OPEN)
+				.issueStatus(IssueStatus.OPEN)
 				.build();
 			issueRepository.save(issue);
 		}
@@ -71,11 +71,12 @@ class IssueRepositoryCustomImplTest {
 	public void 조건조회_쿼리_issue리스트반환() {
 		// WHEN
 		IssueSelectCondition condition = IssueSelectCondition.builder()
-			.status(Status.OPEN)
+			.issueStatus(IssueStatus.OPEN)
 			.build();
 		JPAQuery<Issue> issuesByCondition = ReflectionTestUtils.invokeMethod(issueRepositoryCustom, "queryAllBy", condition);
 
 		// THEN
+		assert issuesByCondition != null;
 		assertEquals(9, issuesByCondition.fetch().size());
 	}
 
@@ -84,10 +85,10 @@ class IssueRepositoryCustomImplTest {
 	public void 조건조회_쿼리_dto리스트반환() {
 		// WHEN
 		IssueSelectCondition conditionOfStatus = IssueSelectCondition.builder()
-			.status(Status.OPEN)
+			.issueStatus(IssueStatus.OPEN)
 			.build();
 		IssueSelectCondition conditionOfStatusAndTitle = IssueSelectCondition.builder()
-			.status(Status.OPEN)
+			.issueStatus(IssueStatus.OPEN)
 			.title("도메인이슈 #3")
 			.build();
 		List<IssueReadResponseDto> dtosOfStatus = issueRepositoryCustom.selectByCondition(conditionOfStatus);

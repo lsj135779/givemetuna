@@ -12,7 +12,7 @@ import com.sparta.givemetuna.domain.issue.dto.cud.IssueStatusUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateRequestDto;
 import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
-import com.sparta.givemetuna.domain.issue.entity.Status;
+import com.sparta.givemetuna.domain.issue.entity.IssueStatus;
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
 import com.sparta.givemetuna.domain.issue.service.cud.IssueCudService;
 import com.sparta.givemetuna.domain.support.IntegrationTestSupport;
@@ -75,7 +75,7 @@ class IssueCudServiceTest extends IntegrationTestSupport {
 		Issue issue = Issue.builder()
 			.title("도메인이슈 : 업무 프로세스 수정요청드립니다.")
 			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
-			.status(Status.OPEN)
+			.issueStatus(IssueStatus.OPEN)
 			.card(card)
 			.user(user)
 			.build();
@@ -103,20 +103,20 @@ class IssueCudServiceTest extends IntegrationTestSupport {
 		Issue issue = Issue.builder()
 			.title("도메인이슈 : 업무 프로세스가 이상합니다")
 			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
-			.status(Status.OPEN)
+			.issueStatus(IssueStatus.OPEN)
 			.card(card)
 			.user(user)
 			.build();
 		issueRepository.save(issue);
 		IssueStatusUpdateRequestDto requestDto = IssueStatusUpdateRequestDto.builder()
-			.status(Status.CLOSED)
+			.issueStatus(IssueStatus.CLOSED)
 			.build();
 
 		// WHEN
 		IssueStatusUpdateResponseDto responseDto = issueCudService.closeIssue(requestDto, issue);
 
 		// THEN
-		assertEquals(Status.CLOSED, responseDto.getStatus());
+		assertEquals(IssueStatus.CLOSED, responseDto.getIssueStatus());
 	}
 
 	@Test
@@ -128,7 +128,7 @@ class IssueCudServiceTest extends IntegrationTestSupport {
 		Issue issue = Issue.builder()
 			.title("도메인이슈 : 업무 프로세스가 이상합니다")
 			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
-			.status(Status.OPEN)
+			.issueStatus(IssueStatus.OPEN)
 			.card(card1)
 			.user(user)
 			.build();
