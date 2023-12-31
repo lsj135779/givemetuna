@@ -132,10 +132,9 @@ public class CardController {
 
         User client = userService.checkUser(boardId, user);
 
-        if (user.getAccount().equals("일반유저")) {
+        if (client.getAccount().equals("일반유저")) {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
-
         return client;
     }
 }

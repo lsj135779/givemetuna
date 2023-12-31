@@ -24,9 +24,10 @@ public class UpdateCardAccountResponseDto {
     private LocalDateTime updatedAt;
 
     @Builder
-    private UpdateCardAccountResponseDto(Long boardId, Long stageId, String title, String assignorAccount,
-            CardPriority cardPriority, Timestamp startedAt, Timestamp closedAt,
-            LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private UpdateCardAccountResponseDto(Long boardId, Long stageId, String title,
+            String assignorAccount, CardPriority cardPriority, Timestamp startedAt,
+            Timestamp closedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+
         this.boardId = boardId;
         this.stageId = stageId;
         this.title = title;
@@ -39,6 +40,7 @@ public class UpdateCardAccountResponseDto {
     }
 
     public static UpdateCardAccountResponseDto of(Card card) {
+
         return UpdateCardAccountResponseDto.builder()
                 .boardId(card.getStage().getBoard().getId())
                 .stageId(card.getStage().getId())

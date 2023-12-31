@@ -72,8 +72,8 @@ public class CardMatcherService {
         return cardService.updateAccount(assignor, card);
     }
 
-    public UpdateCardPriorityResponseDto updateCardPriority(Card card,
-            User user, UpdatetCardPriorityRequestDto requestDto) {
+    public UpdateCardPriorityResponseDto updateCardPriority(Card card, User user,
+            UpdatetCardPriorityRequestDto requestDto) {
         return null;
     }
 

@@ -39,6 +39,7 @@ public class UpdateCardTitleResponseDto {
     }
 
     public static UpdateCardTitleResponseDto of(Card card) {
+
         return UpdateCardTitleResponseDto.builder()
                 .boardId(card.getStage().getBoard().getId())
                 .stageId(card.getStage().getId())

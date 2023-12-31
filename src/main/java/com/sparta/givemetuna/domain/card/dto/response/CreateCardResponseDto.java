@@ -28,6 +28,7 @@ public class CreateCardResponseDto {
     private CreateCardResponseDto(Long boardId, Long stageId, String title, String account,
             CardPriority cardPriority, Timestamp startedAt, Timestamp closedAt,
             LocalDateTime createdAt) {
+
         this.boardId = boardId;
         this.stageId = stageId;
         this.title = title;
@@ -39,6 +40,7 @@ public class CreateCardResponseDto {
     }
 
     public static CreateCardResponseDto of(Card card, Stage stage, User assignor) {
+
         return CreateCardResponseDto.builder()
                 .boardId(stage.getBoard().getId())
                 .stageId(card.getStage().getId())
