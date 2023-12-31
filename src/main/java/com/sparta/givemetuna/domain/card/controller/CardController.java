@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.card.controller;
 
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
+import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAccountRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardStageRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardTitleRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
@@ -63,7 +64,7 @@ public class CardController {
             @PathVariable Long stage_id,
             @PathVariable Long card_id,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody UpdageCardAccountRequestDto requestDto) {
+            @RequestBody UpdateCardAccountRequestDto requestDto) {
 
         return cardMatcherService.updateCardAccount(board_id, stage_id, card_id,
                 userDetails.getUser(), requestDto);

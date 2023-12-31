@@ -4,6 +4,7 @@ import static com.sparta.givemetuna.domain.card.constant.CardConstant.DEFAULT_IS
 
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAccountResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardTitleResponseDto;
 import com.sparta.givemetuna.domain.card.entity.Card;
@@ -47,11 +48,16 @@ public class CardService {
         card.updateStage(afterStage);
         return UpdateCardStageResponseDto.of(card);
     }
+
     public UpdateCardTitleResponseDto updateTitle(String title, Card card) {
         card.updateTitle(title);
         return UpdateCardTitleResponseDto.of(card);
     }
 
+    public UpdateCardAccountResponseDto updateAccount(User assignor, Card card) {
+        card.updateAssignorAccount(assignor);
+        return UpdateCardAccountResponseDto.of(card);
+    }
     private Card checkCard(Long cardId) {
         return cardRepository.findById(cardId).orElseThrow(
                 ()-> new NullPointerException("없는 카드입니다."));

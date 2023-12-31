@@ -1,9 +1,11 @@
 package com.sparta.givemetuna.domain.core.service;
 
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
+import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAccountRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardStageRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardTitleRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAccountResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardTitleResponseDto;
 import com.sparta.givemetuna.domain.card.entity.Card;
@@ -37,12 +39,12 @@ public class CardMatcherService {
         // requestDto account(매니저) 체킹 // requestDto account 가 null 일 수 있음
         User assignor;
         // requestDto account 가 null 이면
-        if (requestDto.getAccount() == null && requestDto.getAccount().isEmpty()) {
+        if (requestDto.getAssignorAccount() == null && requestDto.getAssignorAccount().isEmpty()) {
 
             return cardService.createCard(stage, creator, null, requestDto);
         }
         // requestDto account 가 null 이 아닌 경우 유저 찾기
-        User checkedUser = userService.findbyAccount(requestDto.getAccount());
+        User checkedUser = userService.findbyAccount(requestDto.getAssignorAccount());
 
         // 보드에 매니저 유저 & 매니저 유저의 권한 확인
         assignor = userService.checkUser(boardId, checkedUser.getId());
@@ -73,6 +75,18 @@ public class CardMatcherService {
         Card card = cardService.checkStageCard(stage.getId(), cardId);
         cardService.checkAssignor(card.getId(), user);
         return cardService.updateTitle(requestDto.getTitle(), card);
+    }
+
+    public UpdateCardAccountResponseDto updateCardAccount(Long boardId, Long stageId, Long cardId,
+            User user, UpdateCardAccountRequestDto requestDto) {
+
+        Stage stage = stageService.checkStage(boardId, stageId);
+        Card card = cardService.checkStageCard(stage.getId(), cardId);
+        cardService.checkAssignor(card.getId(), user);
+        User checkedUser = userService.findbyAccount(requestDto.getAssignorAccount());
+        User assignor = userService.checkUser(boardId, checkedUser);
+        checkBoardAuthority(assignor);
+        return cardService.updateAccount(assignor, card);
     }
 
     private void checkBoardAuthority(User user) {

@@ -85,17 +85,7 @@ public class Card extends BaseEntity {
         this.title = title;
     }
 
-//  완성하고나서 쓸모 없으면 지우기
-//    public static Card of(Card card) {
-//        return Card.builder()
-//                .creator(card.getCreator())
-//                .assignor(card.getAssignor())
-//                .stage(card.getStage())
-//                .title(card.getTitle())
-//                .priority(card.getPriority())
-//                .isDone(card.getIsDone())
-//                .startedAt(card.getStartedAt())
-//                .closedAt(card.getClosedAt())
-//                .build();
-//    }
+    public void updateAssignorAccount(User assignor) {
+        this.assignor = assignor;
+    }
 }
