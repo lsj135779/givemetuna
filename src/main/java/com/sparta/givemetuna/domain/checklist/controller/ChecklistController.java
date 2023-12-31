@@ -1,5 +1,6 @@
 package com.sparta.givemetuna.domain.checklist.controller;
 
+import com.sparta.givemetuna.domain.CommonResponseDTO;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistCheckUpdateResponseDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistContentsUpdateRequestDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistContentsUpdateResponseDto;
@@ -12,14 +13,20 @@ import com.sparta.givemetuna.domain.checklist.service.ChecklistService;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,16 +37,16 @@ public class ChecklistController {
 	private final ChecklistService checklistService;
 
 	// Valid 작성
-//	@ExceptionHandler(MethodArgumentNotValidException.class)
-//	@ResponseStatus(HttpStatus.BAD_REQUEST)
-//	public ResponseEntity<CommonResponseDto> handleValidationException(MethodArgumentNotValidException ex) {
-//		BindingResult result = ex.getBindingResult();
-//		FieldError fieldError = result.getFieldError();
-//		String errorMessage = fieldError.getDefaultMessage();
-//
-//		CommonResponseDto responseDto = new CommonResponseDto(errorMessage, HttpStatus.BAD_REQUEST.value());
-//		return ResponseEntity.badRequest().body(responseDto);
-//	}
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<CommonResponseDTO> handleValidationException(MethodArgumentNotValidException ex) {
+		BindingResult result = ex.getBindingResult();
+		FieldError fieldError = result.getFieldError();
+		String errorMessage = fieldError.getDefaultMessage();
+
+		CommonResponseDTO responseDto = new CommonResponseDTO(errorMessage, HttpStatus.BAD_REQUEST.value());
+		return ResponseEntity.badRequest().body(responseDto);
+	}
 
 	@PostMapping
 	public ResponseEntity<ChecklistCreateResponseDto> createChecklist(
@@ -86,7 +93,7 @@ public class ChecklistController {
 
 	@PatchMapping("/{checklist_id}/priorities")
 	public ResponseEntity<ChecklistPriorityUpdateResponseDto> updateChecklistPriorities(
-		@RequestBody ChecklistPriorityUpdateRequestDto checklistPriorityUpdateRequestDto,
+		@RequestBody @Valid ChecklistPriorityUpdateRequestDto checklistPriorityUpdateRequestDto,
 		@PathVariable Long board_id,
 		@PathVariable Long stage_id, @PathVariable Long card_id,
 		@PathVariable Long checklist_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
