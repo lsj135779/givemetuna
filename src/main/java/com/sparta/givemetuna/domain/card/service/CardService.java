@@ -15,6 +15,8 @@ import com.sparta.givemetuna.domain.checklist.service.ChecklistService;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.user.entity.User;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,6 +91,13 @@ public class CardService {
         card.updatePeriod(startedAt, closedAt);
 
         return UpdateCardPeriodResponseDto.of(card);
+    }
+
+    public List<SelectCardResponseDto> getCards(Stage stage) {
+
+        List<Card> cards = cardRepository.findAllByStageId(stage);
+
+        return cards.stream().map(SelectCardResponseDto::of).collect(Collectors.toList());
     }
 
     private Card checkCard(Long cardId) {

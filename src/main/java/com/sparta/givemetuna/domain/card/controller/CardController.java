@@ -22,6 +22,7 @@ import com.sparta.givemetuna.domain.stage.service.StageService;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.service.UserService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -156,6 +157,18 @@ public class CardController {
         SelectCardResponseDto responseDto = SelectCardResponseDto.of(card);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<SelectCardResponseDto>> getCards(
+            @PathVariable Long boardId,
+            @PathVariable Long stageId) {
+
+        Stage stage = stageService.checkStage(boardId, stageId);
+
+        List<SelectCardResponseDto> responseDtoList = cardService.getCards(stage);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDtoList);
     }
 
     private Card checkAPI(Long boardId, Long stageId, Long cardId) {
