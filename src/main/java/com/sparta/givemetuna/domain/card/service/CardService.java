@@ -18,6 +18,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,9 +94,9 @@ public class CardService {
         return UpdateCardPeriodResponseDto.of(card);
     }
 
-    public List<SelectCardResponseDto> getCards(Stage stage) {
+    public List<SelectCardResponseDto> getCardPage(Pageable pageable, Stage stage) {
 
-        List<Card> cards = cardRepository.findAllByStageId(stage);
+        List<Card> cards = cardRepository.findAllByStageId(pageable, stage);
 
         return cards.stream().map(SelectCardResponseDto::of).collect(Collectors.toList());
     }
