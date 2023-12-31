@@ -4,6 +4,7 @@ import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAccountResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPeriodResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPriorityResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardTitleResponseDto;
@@ -12,6 +13,7 @@ import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.checklist.service.ChecklistService;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.user.entity.User;
+import java.sql.Timestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +80,14 @@ public class CardService {
         card.updatePriority(cardPriority);
 
         return UpdateCardPriorityResponseDto.of(card);
+    }
+
+    public UpdateCardPeriodResponseDto updatePeriod(Card card, Timestamp startedAt,
+            Timestamp closedAt) {
+
+        card.updatePeriod(startedAt, closedAt);
+
+        return UpdateCardPeriodResponseDto.of(card);
     }
 
     private Card checkCard(Long cardId) {

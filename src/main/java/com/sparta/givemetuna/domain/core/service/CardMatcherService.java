@@ -2,11 +2,13 @@ package com.sparta.givemetuna.domain.core.service;
 
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAccountRequestDto;
+import com.sparta.givemetuna.domain.card.dto.request.UpdateCardPeriodRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardStageRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardTitleRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdatetCardPriorityRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAccountResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPeriodResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPriorityResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardTitleResponseDto;
@@ -76,6 +78,12 @@ public class CardMatcherService {
             UpdatetCardPriorityRequestDto requestDto) {
 
         return cardService.updatePriority(card, requestDto.getCardPriority());
+    }
+
+    public UpdateCardPeriodResponseDto updateCardPeriod(Card card,
+            UpdateCardPeriodRequestDto requestDto) {
+
+        return cardService.updatePeriod(card, requestDto.getStartedAt(), requestDto.getClosedAt());
     }
 
     private void checkBoardAuthority(User user) {

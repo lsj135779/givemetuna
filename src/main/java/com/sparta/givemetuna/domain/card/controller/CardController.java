@@ -2,11 +2,13 @@ package com.sparta.givemetuna.domain.card.controller;
 
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAccountRequestDto;
+import com.sparta.givemetuna.domain.card.dto.request.UpdateCardPeriodRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardStageRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardTitleRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdatetCardPriorityRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAccountResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPeriodResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPriorityResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardTitleResponseDto;
@@ -116,6 +118,23 @@ public class CardController {
         checkClientAuthority(boardId, userDetails.getUser());
 
         UpdateCardPriorityResponseDto responseDto = cardMatcherService.updateCardPriority(
+                card, requestDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
+    @PatchMapping("/{cardId}/period")
+    public ResponseEntity<UpdateCardPeriodResponseDto> updateCardPeriod(
+            @PathVariable Long boardId,
+            @PathVariable Long stageId,
+            @PathVariable Long cardId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @Valid @RequestBody UpdateCardPeriodRequestDto requestDto) {
+
+        Card card = checkAPI(boardId, stageId, cardId);
+        checkClientAuthority(boardId, userDetails.getUser());
+
+        UpdateCardPeriodResponseDto responseDto = cardMatcherService.updateCardPeriod(
                 card, requestDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
