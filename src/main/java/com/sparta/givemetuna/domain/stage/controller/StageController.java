@@ -1,13 +1,12 @@
 package com.sparta.givemetuna.domain.stage.controller;
 
+import com.sparta.givemetuna.domain.stage.dto.CreateStageRequestDto;
+import com.sparta.givemetuna.domain.stage.dto.CreateStageResponseDto;
+import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.stage.service.StageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,8 +16,10 @@ public class StageController {
 	private final StageService stageService;
 
 	@PostMapping("/{board_id}/stages")
-	public void createStage() {
-
+	public ResponseEntity<CreateStageResponseDto> createStage(@RequestBody CreateStageRequestDto requestDto) {
+		Stage stage = stageService.createStage(requestDto);
+		CreateStageResponseDto response = new CreateStageResponseDto(stage);
+		return ResponseEntity.ok().body(response);
 	}
 
 	@PatchMapping("/{stage_id}")
