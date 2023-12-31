@@ -3,6 +3,7 @@ package com.sparta.givemetuna.domain.user.entity;
 import com.sparta.givemetuna.domain.card.entity.UserCard;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
+import com.sparta.givemetuna.domain.user.dto.UserInfoRequestDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -69,5 +70,35 @@ public class User {
 		this.nickname = nickname;
 		this.github = github;
 		this.description = description;
+	}
+
+    public void updateEmail(UserInfoRequestDTO userInfoRequestDTO) {
+		if(userInfoRequestDTO.getEmail() !=null) {
+			this.email = userInfoRequestDTO.getEmail();
+		}
+    }
+
+	public void updateNickname(UserInfoRequestDTO userInfoRequestDTO) {
+		if(userInfoRequestDTO.getNickname() !=null) {
+			this.nickname = userInfoRequestDTO.getNickname();
+		}
+	}
+
+	public void updateGithub(UserInfoRequestDTO userInfoRequestDTO) {
+		if(userInfoRequestDTO.getGithub() !=null) {
+			this.github = userInfoRequestDTO.getGithub();
+		}
+	}
+
+	public void updatedescription(UserInfoRequestDTO userInfoRequestDTO) {
+		if(userInfoRequestDTO.getDescription() !=null) {
+			this.description = userInfoRequestDTO.getDescription();
+		}
+	}
+
+	public void updatePassword(String password) {
+		if(password !=null) {
+			this.password = password;
+		}
 	}
 }
