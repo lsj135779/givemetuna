@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.card.entity;
 
 import com.sparta.givemetuna.domain.card.constant.CardPriority;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.common.BaseEntity;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -61,8 +63,13 @@ public class Card extends BaseEntity {
     @JoinColumn(name = "stage_id")
     private Stage stage;
 
+    @EqualsAndHashCode(of = "id", callSuper = false)
+    public class Card extends BaseEntity {
+
+    @JsonIgnore
     @OneToMany(mappedBy = "card", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Checklist> checklists = new ArrayList<>();
+
 
     @Builder
     private Card(Long id, User creator, User assignor, Stage stage, String title,
