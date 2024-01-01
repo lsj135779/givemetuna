@@ -8,7 +8,7 @@ import com.sparta.givemetuna.domain.configuration.QueryDslConfig;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueReadResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueSelectCondition;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
-import com.sparta.givemetuna.domain.issue.entity.Status;
+import com.sparta.givemetuna.domain.issue.entity.IssueStatus;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
 import com.sparta.givemetuna.global.config.JpaAuditingConfig;
@@ -56,7 +56,7 @@ class IssueRepositoryTest {
 				.contents(String.format("요청 업무 프로세스 이슈 #%d 에 관하여 여쭤보고 싶습니다.", l))
 				.user(user)
 				.card(card)
-				.status(Status.OPEN)
+				.issueStatus(IssueStatus.OPEN)
 				.build();
 			issueRepository.save(issue);
 		}
@@ -66,7 +66,7 @@ class IssueRepositoryTest {
 				.contents(String.format("요청 업무 프로세스 이슈 #%d 를 잘 이해하지 못 하겠습니다.", l))
 				.user(user)
 				.card(card)
-				.status(Status.CLOSED)
+				.issueStatus(IssueStatus.CLOSED)
 				.build();
 			issueRepository.save(issue);
 		}
@@ -87,7 +87,7 @@ class IssueRepositoryTest {
 			.title("도메인이슈 : 업무 프로세스가 이상합니다")
 			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
 			.user(user)
-			.status(Status.OPEN)
+			.issueStatus(IssueStatus.OPEN)
 			.build();
 		issueRepository.save(issue);
 
@@ -105,13 +105,13 @@ class IssueRepositoryTest {
 	public void 회원_이슈_리스트_조건조회() {
 		// WHEN
 		IssueSelectCondition condition = IssueSelectCondition.builder()
-			.status(Status.CLOSED)
+			.issueStatus(IssueStatus.CLOSED)
 			.build();
 		List<IssueReadResponseDto> selectedReadResponseDtos = issueRepository.selectByCondition(condition);
 
 		// THEN
 		List<IssueReadResponseDto> filteredReadResponseDtos = issueRepository.findAll().stream()
-			.filter(issue -> issue.getStatus().equals(Status.CLOSED))
+			.filter(issue -> issue.getIssueStatus().equals(IssueStatus.CLOSED))
 			.map(IssueReadResponseDto::of)
 			.toList();
 		assertEquals(selectedReadResponseDtos, filteredReadResponseDtos);
@@ -129,7 +129,7 @@ class IssueRepositoryTest {
 				.and(Sort.by("id").ascending())
 		);
 		IssueSelectCondition condition = IssueSelectCondition.builder()
-			.status(Status.OPEN)
+			.issueStatus(IssueStatus.OPEN)
 			.build();
 		Page<IssueReadResponseDto> issueReadResponseDtos = issueRepository.selectByConditionPaging(condition, pageable);
 

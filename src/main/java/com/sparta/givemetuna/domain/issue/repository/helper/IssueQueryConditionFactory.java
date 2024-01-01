@@ -3,43 +3,42 @@ package com.sparta.givemetuna.domain.issue.repository.helper;
 import static com.sparta.givemetuna.domain.issue.entity.QIssue.issue;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.sparta.givemetuna.domain.issue.entity.Status;
-import java.util.Objects;
+import com.sparta.givemetuna.domain.issue.entity.IssueStatus;
 
 public final class IssueQueryConditionFactory {
 
-	public static BooleanExpression cardEq(long cardId) {
-		if (Objects.isNull(cardId)) {
+	public static BooleanExpression cardEq(Long cardId) {
+		if (cardId == 0) {
 			return null;
 		}
 		return issue.card.id.eq(cardId);
 	}
 
-	public static BooleanExpression userEq(long userId) {
-		if (Objects.isNull(userId)) {
+	public static BooleanExpression userEq(Long userId) {
+		if (userId == 0) {
 			return null;
 		}
 		return issue.user.id.eq(userId);
 	}
 
-	public static BooleanExpression statusEq(Status status) {
-		if (status == null) {
+	public static BooleanExpression statusEq(IssueStatus issueStatus) {
+		if (issueStatus == null) {
 			return null;
 		}
-		return issue.status.eq(status);
+		return issue.issueStatus.eq(issueStatus);
 	}
 
-	public static BooleanExpression contentsLike(String contents) {
+	public static BooleanExpression contentsContains(String contents) {
 		if (contents == null) {
 			return null;
 		}
-		return issue.contents.like(contents);
+		return issue.contents.contains(contents);
 	}
 
-	public static BooleanExpression titleLike(String title) {
+	public static BooleanExpression titleContains(String title) {
 		if (title == null) {
 			return null;
 		}
-		return issue.title.like(title);
+		return issue.title.contains(title);
 	}
 }

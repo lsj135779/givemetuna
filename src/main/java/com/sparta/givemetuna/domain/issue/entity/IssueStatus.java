@@ -1,5 +1,5 @@
 package com.sparta.givemetuna.domain.issue.entity;
 
-public enum Status {
+public enum IssueStatus {
 	OPEN, CLOSED
 }

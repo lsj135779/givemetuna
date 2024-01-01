@@ -88,15 +88,15 @@ create table if not exists checklist
 
 create table if not exists issue
 (
-    id         bigint auto_increment
+    id          bigint auto_increment
         primary key,
-    created_at datetime(6)             not null,
-    updated_at datetime(6)             null,
-    contents   varchar(255)            null,
-    status     enum ('OPEN', 'CLOSED') null,
-    title      varchar(255)            null,
-    card_id    bigint                  null,
-    user_id    bigint                  null,
+    created_at  datetime(6)             not null,
+    updated_at  datetime(6)             null,
+    contents    varchar(255)            null,
+    issueStatus enum ('OPEN', 'CLOSED') null,
+    title       varchar(255)            null,
+    card_id     bigint                  null,
+    user_id     bigint                  null,
     constraint FK982imwo9u48aat97rx6hkwfnj
         foreign key (card_id) references card (id),
     constraint FKolnmum5mws2x3nb2hh9vk523b

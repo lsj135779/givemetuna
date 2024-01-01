@@ -33,9 +33,9 @@ public class QIssue extends EntityPathBase<Issue> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final ListPath<IssueComment, QIssueComment> issueComments = this.<IssueComment, QIssueComment>createList("issueComments", IssueComment.class, QIssueComment.class, PathInits.DIRECT2);
+    public final ListPath<com.sparta.givemetuna.domain.issuecomment.entity.IssueComment, com.sparta.givemetuna.domain.issuecomment.entity.QIssueComment> issueComments = this.<com.sparta.givemetuna.domain.issuecomment.entity.IssueComment, com.sparta.givemetuna.domain.issuecomment.entity.QIssueComment>createList("issueComments", com.sparta.givemetuna.domain.issuecomment.entity.IssueComment.class, com.sparta.givemetuna.domain.issuecomment.entity.QIssueComment.class, PathInits.DIRECT2);
 
-    public final EnumPath<Status> status = createEnum("status", Status.class);
+    public final EnumPath<IssueStatus> issueStatus = createEnum("issueStatus", IssueStatus.class);
 
     public final StringPath title = createString("title");
 

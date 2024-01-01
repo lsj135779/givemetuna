@@ -49,7 +49,7 @@ public class IssueCudServiceImpl implements IssueCudService {
 
 	@Override
 	public IssueStatusUpdateResponseDto closeIssue(IssueStatusUpdateRequestDto updateRequestDto, Issue issue) {
-		issue.close(updateRequestDto.getStatus());
+		issue.close(updateRequestDto.getIssueStatus());
 
 		return IssueStatusUpdateResponseDto.of(issue);
 	}

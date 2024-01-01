@@ -1,6 +1,8 @@
 package com.sparta.givemetuna.domain.card.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
+import com.sparta.givemetuna.domain.common.BaseEntity;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
@@ -29,8 +31,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-public class Card {
+public class Card extends BaseEntity {
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "card", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<Checklist> checklists = new ArrayList<>();
 

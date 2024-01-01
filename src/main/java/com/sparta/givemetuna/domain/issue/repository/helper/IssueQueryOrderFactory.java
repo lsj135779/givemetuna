@@ -19,7 +19,7 @@ public final class IssueQueryOrderFactory {
 	 * @return 정렬기준치 리스트
 	 * @author 임지훈
 	 */
-	public static List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
+	static List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
 
 		List<OrderSpecifier> ORDERS = new ArrayList<>();
 
