@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UpdateCardAccountResponseDto {
+public class UpdateCardAssignorResponseDto {
 
     private Long boardId;
     private Long stageId;
@@ -24,7 +24,7 @@ public class UpdateCardAccountResponseDto {
     private LocalDateTime updatedAt;
 
     @Builder
-    private UpdateCardAccountResponseDto(Long boardId, Long stageId, String title,
+    private UpdateCardAssignorResponseDto(Long boardId, Long stageId, String title,
             String assignorAccount, CardPriority cardPriority, Timestamp startedAt,
             Timestamp closedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
 
@@ -39,9 +39,9 @@ public class UpdateCardAccountResponseDto {
         this.updatedAt = updatedAt;
     }
 
-    public static UpdateCardAccountResponseDto of(Card card) {
+    public static UpdateCardAssignorResponseDto of(Card card) {
 
-        return UpdateCardAccountResponseDto.builder()
+        return UpdateCardAssignorResponseDto.builder()
                 .boardId(card.getStage().getBoard().getId())
                 .stageId(card.getStage().getId())
                 .title(card.getTitle())
