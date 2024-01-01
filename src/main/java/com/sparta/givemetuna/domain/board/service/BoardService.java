@@ -4,6 +4,9 @@ import com.sparta.givemetuna.domain.board.dto.*;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.repository.BoardRepository;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
+import com.sparta.givemetuna.domain.stage.dto.StageResponseDto;
+import com.sparta.givemetuna.domain.stage.entity.Stage;
+import com.sparta.givemetuna.domain.stage.repository.StageRepository;
 import com.sparta.givemetuna.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final StageRepository stageRepository;
 
     // board 생성
     public CreateBoardResponseDto createBoard(CreateBoardRequestDto requestDto, User user) {
@@ -48,9 +52,17 @@ public class BoardService {
     }
 
     // 단일 board 찾기
-    public Board getBoard(Long boardId) {
-        return boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("The board does not exist"));
+    public void getBoard(Long boardId) {
+//
+//
+//        Board board = boardRepository.findById(boardId)
+//                .orElseThrow(() -> new IllegalArgumentException("The board does not exist"));
+//        List<StageResponseDto> stageList = stageRepository.findAllByBoardId(boardId)
+//                .stream()
+//                .map(StageRepository::new)
+//                .toList();
+//
+//        return new BoardDetailsResponseDto(board);
     }
 
     // 모든 board 찾기
@@ -86,6 +98,10 @@ public class BoardService {
     private Board getBoardById(Long id) {
         return boardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("The board does not exist"));
+    }
+
+    // board 총 책임자 권한 설정
+    private void setUserBoardManager(User user) {
     }
 
 }

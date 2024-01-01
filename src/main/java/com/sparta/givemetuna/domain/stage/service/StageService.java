@@ -33,6 +33,7 @@ public class StageService {
     // stage 수정
     @Transactional
     public UpdateStageResponseDto updateStage(Long stage_id, UpdateStageRequestDto requestDto, User user) {
+
         Stage stage = getStageById(stage_id);
 
         checkStageAuth(stage, user);
@@ -57,7 +58,7 @@ public class StageService {
     //작성자만 수정가능한 stage
     public void checkStageAuth(Stage stage, User user) {
         if(!user.getId().equals(stage.getUser().getId())) {
-            throw new RejectedExecutionException("총 책임자만 접근할 수 있습니다.")
+            throw new RejectedExecutionException("총 책임자만 접근할 수 있습니다.");
         }
     }
 

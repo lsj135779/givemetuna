@@ -62,10 +62,10 @@ public class Card extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stage_id")
     private Stage stage;
-
-    @EqualsAndHashCode(of = "id", callSuper = false)
-    public class Card extends BaseEntity {
-
+//
+//    @EqualsAndHashCode(of = "id", callSuper = false)
+//    public class Card extends BaseEntity {
+//
     @JsonIgnore
     @OneToMany(mappedBy = "card", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Checklist> checklists = new ArrayList<>();
