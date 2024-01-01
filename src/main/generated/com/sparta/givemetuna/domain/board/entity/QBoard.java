@@ -24,6 +24,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final ListPath<com.sparta.givemetuna.domain.user.entity.BoardUserRole, com.sparta.givemetuna.domain.user.entity.QBoardUserRole> invitedUserRole = this.<com.sparta.givemetuna.domain.user.entity.BoardUserRole, com.sparta.givemetuna.domain.user.entity.QBoardUserRole>createList("invitedUserRole", com.sparta.givemetuna.domain.user.entity.BoardUserRole.class, com.sparta.givemetuna.domain.user.entity.QBoardUserRole.class, PathInits.DIRECT2);
+
     public final StringPath name = createString("name");
 
     public final ListPath<com.sparta.givemetuna.domain.stage.entity.Stage, com.sparta.givemetuna.domain.stage.entity.QStage> stages = this.<com.sparta.givemetuna.domain.stage.entity.Stage, com.sparta.givemetuna.domain.stage.entity.QStage>createList("stages", com.sparta.givemetuna.domain.stage.entity.Stage.class, com.sparta.givemetuna.domain.stage.entity.QStage.class, PathInits.DIRECT2);

@@ -4,6 +4,7 @@ import com.sparta.givemetuna.domain.user.dto.SignUpRequestDTO;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -64,5 +65,14 @@ public class UserService {
 
 	public User findbyAccount(String assignorAccount) {
 		return null;
+	}
+
+	public List<User> findbyAccounts(List<String> userAccounts) {
+		return userAccounts.stream()
+			.map(userAccount -> userRepository
+				.findByAccount(userAccount)
+				.orElseThrow(() -> new RuntimeException(String.format("%s에 관련된 유저를 찾을 수 없습니다.")))
+			)
+			.toList();
 	}
 }
