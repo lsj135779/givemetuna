@@ -30,7 +30,7 @@ public class BoardService {
         Board board = new Board(requestDto);
 
         // ***board에 user 넣기
-//        Board.setUser(user);
+        board.setUser(user);
 
         // board에 user 권한 총책임자 설정
         // board.setBoardRole("총책임자");
@@ -52,17 +52,17 @@ public class BoardService {
     }
 
     // 단일 board 찾기
-    public void getBoard(Long boardId) {
-//
-//
-//        Board board = boardRepository.findById(boardId)
-//                .orElseThrow(() -> new IllegalArgumentException("The board does not exist"));
-//        List<StageResponseDto> stageList = stageRepository.findAllByBoardId(boardId)
-//                .stream()
-//                .map(StageRepository::new)
-//                .toList();
-//
-//        return new BoardDetailsResponseDto(board);
+    public StageReadResponseDto getBoard(Long boardId) {
+
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("The board does not exist"));
+
+        List<StageResponseDto> stageList = stageRepository.findByBoardId(boardId)
+                .stream()
+                .map(stage -> StageReadResponseDto::new)
+                .toList();
+
+        return new StageReadResponseDto(stageList);
     }
 
     // 모든 board 찾기
