@@ -8,11 +8,9 @@ import lombok.Getter;
 @Getter
 public class UpdateCardPeriodRequestDto {
 
-    @NotNull
     @NotBlank
     private Timestamp startedAt;
 
-    @NotNull
     @NotBlank
     private Timestamp closedAt;
 }

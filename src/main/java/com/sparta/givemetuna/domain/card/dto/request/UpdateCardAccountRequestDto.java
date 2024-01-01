@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 public class UpdateCardAccountRequestDto {
 
-    @NotNull
     @NotBlank
     private String assignorAccount;
 }

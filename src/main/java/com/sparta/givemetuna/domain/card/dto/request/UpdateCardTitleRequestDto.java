@@ -9,7 +9,6 @@ import lombok.Getter;
 public class UpdateCardTitleRequestDto {
 
     @Size(min = 1 ,max = 500)
-    @NotNull
     @NotBlank
     private String title;
 }

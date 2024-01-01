@@ -2,16 +2,10 @@ package com.sparta.givemetuna.domain.core.service;
 
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAccountRequestDto;
-import com.sparta.givemetuna.domain.card.dto.request.UpdateCardPeriodRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardStageRequestDto;
-import com.sparta.givemetuna.domain.card.dto.request.UpdateCardTitleRequestDto;
-import com.sparta.givemetuna.domain.card.dto.request.UpdatetCardPriorityRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAccountResponseDto;
-import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPeriodResponseDto;
-import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPriorityResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
-import com.sparta.givemetuna.domain.card.dto.response.UpdateCardTitleResponseDto;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.service.CardService;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
@@ -35,7 +29,7 @@ public class CardMatcherService {
 
         // requestDto account(매니저) 체킹 // requestDto account 가 null 일 수 있음
         // requestDto account 가 null 이면
-        if (requestDto.getAssignorAccount() == null && requestDto.getAssignorAccount().isEmpty()) {
+        if (requestDto.getAssignorAccount() == null || requestDto.getAssignorAccount().isEmpty()) {
 
             return cardService.createCard(stage, client, client, requestDto);
         }

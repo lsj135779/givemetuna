@@ -162,7 +162,7 @@ public class CardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SelectCardResponseDto>> getCards(
+    public ResponseEntity<List<SelectCardResponseDto>> getCardPage(
             Pageable pageable,
             @PathVariable Long boardId,
             @PathVariable Long stageId) {

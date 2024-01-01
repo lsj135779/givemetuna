@@ -8,7 +8,6 @@ import lombok.Getter;
 @Getter
 public class UpdatetCardPriorityRequestDto {
 
-    @NotNull
     @NotBlank
     private CardPriority cardPriority;
 }

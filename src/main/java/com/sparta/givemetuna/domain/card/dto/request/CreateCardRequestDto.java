@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.card.dto.request;
 
 import com.sparta.givemetuna.domain.card.constant.CardPriority;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.sql.Timestamp;
@@ -14,7 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class CreateCardRequestDto {
 
     @Size(max = 500)
-    @NotNull
+    @NotBlank
     private String title;
 
     private String assignorAccount;
