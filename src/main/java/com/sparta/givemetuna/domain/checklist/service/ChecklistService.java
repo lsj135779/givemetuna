@@ -27,6 +27,7 @@ public class ChecklistService {
 	private final ChecklistRepository checklistRepository;
 
 	private final CardTempService cardTempService;
+
 	private final BoardTempService boardTempService;
 
 	public ChecklistCreateResponseDto createChecklist(ChecklistCreateRequestDto checklistCreateRequestDto, Long boardId, Long stageId,
@@ -130,7 +131,7 @@ public class ChecklistService {
 
 		// 체크리스트 생성한 유저 가능
 		if (role.equals("user")) {
-			if (!Objects.equals(checklist.getUser().getId(), user.getId())) {
+			if (!Objects.equals(checklist.getAssignee().getId(), user.getId())) {
 				throw new IllegalArgumentException("체크리스트 생성자만 삭제가 가능합니다.");
 			}
 		}
@@ -156,7 +157,7 @@ public class ChecklistService {
 
 		// 체크리스트 생성한 유저 가능
 		if (role.equals("user")) {
-			if (!Objects.equals(checklist.getUser().getId(), user.getId())) {
+			if (!Objects.equals(checklist.getAssignee().getId(), user.getId())) {
 				throw new IllegalArgumentException("체크리스트 생성자만 수정이 가능합니다.");
 			}
 		}
@@ -171,7 +172,7 @@ public class ChecklistService {
 			.priority(Priority.없음)
 			.deletable(false)
 			.card(card)
-			.user(user).build();
+			.assignee(user).build();
 		checklistRepository.save(checklist);
 	}
 }

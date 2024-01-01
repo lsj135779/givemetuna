@@ -1,7 +1,7 @@
 package com.sparta.givemetuna.domain.card.entity;
 
-import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.common.BaseEntity;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,74 +33,71 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Card extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@JsonIgnore
+	@OneToMany(mappedBy = "card", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<Checklist> checklists = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User creator; // 카드 만든 사람
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User assignor; // 카드 받은 사람 = 담당자
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User creator; // 카드 만든 사람
 
-    @Column(nullable = false)
-    private String title;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User assignor; // 카드 받은 사람 = 담당자
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private CardPriority cardPriority;
+	@Column(nullable = false)
+	private String title;
 
-    @Column
-    private Timestamp startedAt;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private CardPriority cardPriority;
 
-    @Column
-    private Timestamp closedAt;
+	@Column
+	private Timestamp startedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stage_id")
-    private Stage stage;
+	@Column
+	private Timestamp closedAt;
 
-    @EqualsAndHashCode(of = "id", callSuper = false)
-    public class Card extends BaseEntity {
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "card", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Checklist> checklists = new ArrayList<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "stage_id")
+	private Stage stage;
 
 
-    @Builder
-    private Card(Long id, User creator, User assignor, Stage stage, String title,
-            CardPriority cardPriority, Timestamp startedAt, Timestamp closedAt) {
-        this.id = id;
-        this.creator = creator;
-        this.assignor = assignor;
-        this.stage = stage;
-        this.title = title;
-        this.cardPriority = cardPriority;
-        this.startedAt = startedAt;
-        this.closedAt = closedAt;
-    }
+	@Builder
+	private Card(Long id, User creator, User assignor, Stage stage, String title,
+		CardPriority cardPriority, Timestamp startedAt, Timestamp closedAt) {
+		this.id = id;
+		this.creator = creator;
+		this.assignor = assignor;
+		this.stage = stage;
+		this.title = title;
+		this.cardPriority = cardPriority;
+		this.startedAt = startedAt;
+		this.closedAt = closedAt;
+	}
 
-    public void updateStage(Stage stage) {
-        this.stage = stage;
-    }
+	public void updateStage(Stage stage) {
+		this.stage = stage;
+	}
 
-    public void updateTitle(String title) {
-        this.title = title;
-    }
+	public void updateTitle(String title) {
+		this.title = title;
+	}
 
-    public void updateAssignorAccount(User assignor) {
-        this.assignor = assignor;
-    }
+	public void updateAssignorAccount(User assignor) {
+		this.assignor = assignor;
+	}
 
-    public void updatePriority(CardPriority cardPriority) {
-        this.cardPriority = cardPriority;
-    }
+	public void updatePriority(CardPriority cardPriority) {
+		this.cardPriority = cardPriority;
+	}
 
-    public void updatePeriod(Timestamp startedAt, Timestamp closedAt) {
-        this.startedAt = startedAt;
-        this.closedAt = closedAt;
-    }
+	public void updatePeriod(Timestamp startedAt, Timestamp closedAt) {
+		this.startedAt = startedAt;
+		this.closedAt = closedAt;
+	}
 }

@@ -51,7 +51,7 @@ public class Checklist {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assignee")
-	private User user;
+	private User assignee;
 
 	public Checklist(String contents, boolean check, Priority priority, boolean deletable, Card card, User user) {
 		this.contents = contents;

@@ -3,6 +3,7 @@ package com.sparta.givemetuna.domain.board.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.givemetuna.domain.board.dto.CreateBoardRequestDto;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
+import com.sparta.givemetuna.domain.user.entity.BoardUserRole;
 import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -26,6 +27,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "board")
 public class Board {
 
+	@OneToMany(mappedBy = "board", targetEntity = Stage.class, cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<Stage> stages = new ArrayList<>();
+
+	@OneToMany(mappedBy = "board", targetEntity = BoardUserRole.class, cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<BoardUserRole> invitedUserRole = new ArrayList<>();
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -37,9 +44,6 @@ public class Board {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	@OneToMany(mappedBy = "board", targetEntity = Stage.class, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Stage> stages = new ArrayList<>();
 
 	public Board(CreateBoardRequestDto requestDto) {
 		this.name = requestDto.getName();

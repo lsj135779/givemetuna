@@ -47,7 +47,7 @@ public class User {
 	@JsonIgnore
 	private final List<Card> cardsAssignedTo = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
 	private final List<BoardUserRole> boardUserRoles = new ArrayList<>();
 
@@ -84,32 +84,32 @@ public class User {
 		this.description = description;
 	}
 
-    public void updateEmail(UserInfoRequestDTO userInfoRequestDTO) {
-		if(userInfoRequestDTO.getEmail() !=null) {
+	public void updateEmail(UserInfoRequestDTO userInfoRequestDTO) {
+		if (userInfoRequestDTO.getEmail() != null) {
 			this.email = userInfoRequestDTO.getEmail();
 		}
-    }
+	}
 
 	public void updateNickname(UserInfoRequestDTO userInfoRequestDTO) {
-		if(userInfoRequestDTO.getNickname() !=null) {
+		if (userInfoRequestDTO.getNickname() != null) {
 			this.nickname = userInfoRequestDTO.getNickname();
 		}
 	}
 
 	public void updateGithub(UserInfoRequestDTO userInfoRequestDTO) {
-		if(userInfoRequestDTO.getGithub() !=null) {
+		if (userInfoRequestDTO.getGithub() != null) {
 			this.github = userInfoRequestDTO.getGithub();
 		}
 	}
 
 	public void updatedescription(UserInfoRequestDTO userInfoRequestDTO) {
-		if(userInfoRequestDTO.getDescription() !=null) {
+		if (userInfoRequestDTO.getDescription() != null) {
 			this.description = userInfoRequestDTO.getDescription();
 		}
 	}
 
 	public void updatePassword(String password) {
-		if(password !=null) {
+		if (password != null) {
 			this.password = password;
 		}
 	}

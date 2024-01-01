@@ -6,6 +6,7 @@ import com.sparta.givemetuna.domain.board.dto.CreateBoardRequestDto;
 import com.sparta.givemetuna.domain.board.dto.CreateBoardResponseDto;
 import com.sparta.givemetuna.domain.board.dto.DeleteBoardResponseDto;
 import com.sparta.givemetuna.domain.board.dto.InviteUserRequestDto;
+import com.sparta.givemetuna.domain.board.dto.InviteUserResponseDto;
 import com.sparta.givemetuna.domain.board.dto.UpdateBoardRequestDto;
 import com.sparta.givemetuna.domain.board.dto.UpdateBoardResponseDto;
 import com.sparta.givemetuna.domain.board.entity.Board;
@@ -39,7 +40,9 @@ public class BoardController {
 
 	// user 추가하는 기능 필요
 	@PostMapping("/{boardId}/invite")
-	public void inviteUser(@RequestBody InviteUserRequestDto requestDto) {
+	public ResponseEntity<InviteUserResponseDto> inviteUser(@RequestBody InviteUserRequestDto requestDto) {
+		InviteUserResponseDto reponseDto = boardService.inviteUser(requestDto);
+		return ResponseEntity.ok().body(reponseDto);
 	}
 
 	// 모든 board 조회

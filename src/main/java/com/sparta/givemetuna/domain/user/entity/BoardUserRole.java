@@ -24,10 +24,10 @@ public class BoardUserRole {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@Enumerated(EnumType.STRING)
-	private Role role;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "board_id")
 	private Board board;
+
+	@Enumerated(EnumType.STRING)
+	private Role role;
 }
