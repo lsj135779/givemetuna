@@ -3,10 +3,14 @@ package com.sparta.givemetuna.domain.core.service;
 import static com.sparta.givemetuna.domain.user.entity.Role.WORKER;
 
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
-import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAccountRequestDto;
+import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAllAssignRequestDto;
+import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAssigneeRequestDto;
+import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAssignorRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardStageRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
-import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAccountResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAllAssignResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAssigneeResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAssignorResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.service.CardService;
@@ -37,7 +41,7 @@ public class CardMatcherService {
             return cardService.createCard(stage, client, client, requestDto);
         }
         User checkedUser = userInfoService.getUser(requestDto.getAssignorAccount());
-        User assignor = checkUserRole(boardId, checkedUser);
+        User assignor = checkBoardUserRole(boardId, checkedUser);
 
         return cardService.createCard(stage, client, assignor, requestDto);
     }
@@ -51,16 +55,37 @@ public class CardMatcherService {
         return cardService.updateStage(afterStage, card);
     }
 
-    public UpdateCardAccountResponseDto updateCardAccount(Long boardId, Card card,
-            UpdateCardAccountRequestDto requestDto) {
+    public UpdateCardAllAssignResponseDto updateCardAllAssign(Long boardId, Card card,
+            UpdateCardAllAssignRequestDto requestDto) {
 
-        User checkedUser = userInfoService.getUser(requestDto.getAssignorAccount());
-        User assignor = checkUserRole(boardId, checkedUser);
+        User checkAssignor = userInfoService.getUser(requestDto.getAssignor());
+        User checkAssignee = userInfoService.getUser(requestDto.getAssignee());
 
-        return cardService.updateAccount(assignor, card);
+        User nextAssignor = checkBoardUserRole(boardId, checkAssignor);
+        User assignee = checkBoardUserRole(boardId, checkAssignee);
+
+        return cardService.updateAllAssign(card, nextAssignor, assignee);
+
     }
 
-    private User checkUserRole(Long boardId, User user) {
+    public UpdateCardAssignorResponseDto updateCardAssignor(Long boardId, Card card,
+            UpdateCardAssignorRequestDto requestDto) {
+
+        User checkedUser = userInfoService.getUser(requestDto.getAssignor());
+        User assignor = checkBoardUserRole(boardId, checkedUser);
+
+        return cardService.updateAssignor(card, assignor);
+    }
+
+    public UpdateCardAssigneeResponseDto updateCardAssignee(Card card,
+            UpdateCardAssigneeRequestDto requestDto) {
+
+        User assignee = userInfoService.getUser(requestDto.getAssignee());
+
+        return cardService.updateAssignee(card, assignee);
+    }
+
+    private User checkBoardUserRole(Long boardId, User user) {
 
         BoardUserRole clientRole = boardUserRoleService.checkBoardUser(boardId,
                 user.getId());

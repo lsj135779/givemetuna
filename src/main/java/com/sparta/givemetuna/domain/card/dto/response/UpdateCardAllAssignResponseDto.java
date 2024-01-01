@@ -11,12 +11,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UpdateCardAccountResponseDto {
+public class UpdateCardAllAssignResponseDto {
+
 
     private Long boardId;
     private Long stageId;
     private String title;
-    private String assignorAccount;
+    private String assignor;
     private CardPriority cardPriority;
     private Timestamp startedAt;
     private Timestamp closedAt;
@@ -24,14 +25,14 @@ public class UpdateCardAccountResponseDto {
     private LocalDateTime updatedAt;
 
     @Builder
-    private UpdateCardAccountResponseDto(Long boardId, Long stageId, String title,
-            String assignorAccount, CardPriority cardPriority, Timestamp startedAt,
+    private UpdateCardAllAssignResponseDto(Long boardId, Long stageId, String title,
+            String assignor, CardPriority cardPriority, Timestamp startedAt,
             Timestamp closedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
 
         this.boardId = boardId;
         this.stageId = stageId;
         this.title = title;
-        this.assignorAccount = assignorAccount;
+        this.assignor = assignor;
         this.cardPriority = cardPriority;
         this.startedAt = startedAt;
         this.closedAt = closedAt;
@@ -39,13 +40,13 @@ public class UpdateCardAccountResponseDto {
         this.updatedAt = updatedAt;
     }
 
-    public static UpdateCardAccountResponseDto of(Card card) {
+    public static UpdateCardAllAssignResponseDto of(Card card) {
 
-        return UpdateCardAccountResponseDto.builder()
+        return UpdateCardAllAssignResponseDto.builder()
                 .boardId(card.getStage().getBoard().getId())
                 .stageId(card.getStage().getId())
                 .title(card.getTitle())
-                .assignorAccount(card.getAssignor().getAccount())
+                .assignor(card.getAssignor().getAccount())
                 .cardPriority(card.getCardPriority())
                 .startedAt(card.getStartedAt())
                 .closedAt(card.getClosedAt())
