@@ -11,7 +11,6 @@ import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
 import com.sparta.givemetuna.domain.user.entity.User;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,15 +25,15 @@ public class IssueCudServiceImpl implements IssueCudService {
 	private final IssueRepository issueRepository;
 
 	@Override
-	public IssueCreateResponseDto createIssue(IssueCreateRequestDto issueCreateRequestDto, Card card, User user, LocalDateTime createdAt) {
-		Issue issue = Issue.of(issueCreateRequestDto, card, user, createdAt);
+	public IssueCreateResponseDto createIssue(IssueCreateRequestDto issueCreateRequestDto, Card card, User user) {
+		Issue issue = Issue.of(issueCreateRequestDto, card, user);
 		Issue savedIssue = issueRepository.save(issue);
 
 		return IssueCreateResponseDto.of(savedIssue);
 	}
 
 	@Override
-	public IssueUpdateResponseDto updateIssue(IssueUpdateRequestDto updateRequestDto, Issue issue, LocalDateTime updatedAt) {
+	public IssueUpdateResponseDto updateIssue(IssueUpdateRequestDto updateRequestDto, Issue issue) {
 		// 요청에 대하여 card를 찾는다. 없는 경우 예외처리를 한다.
 		// Card card = cardService.selectById(updateRequestDto.getCardId());
 		Card card = Card.builder()
@@ -42,15 +41,15 @@ public class IssueCudServiceImpl implements IssueCudService {
 			.build();
 
 		// 찾은 Issue에 대해 request에 대한 update를 호출한다.
-		issue.update(updateRequestDto, card, updatedAt);
+		issue.update(updateRequestDto, card);
 
 		// 수정한 issue를 responsedto로 변환 후 반환한다.
 		return IssueUpdateResponseDto.of(issue);
 	}
 
 	@Override
-	public IssueStatusUpdateResponseDto closeIssue(IssueStatusUpdateRequestDto updateRequestDto, Issue issue, LocalDateTime updatedAt) {
-		issue.close(updateRequestDto.getStatus(), updatedAt);
+	public IssueStatusUpdateResponseDto closeIssue(IssueStatusUpdateRequestDto updateRequestDto, Issue issue) {
+		issue.close(updateRequestDto.getStatus());
 
 		return IssueStatusUpdateResponseDto.of(issue);
 	}

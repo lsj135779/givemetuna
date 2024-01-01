@@ -44,8 +44,7 @@ public class Checklist {
 	private Card card;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+	private User assignee;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "stage_id")
@@ -56,7 +55,7 @@ public class Checklist {
 		this.check = b;
 		this.priority = i;
 		this.card = card;
-		this.user = user;
+		this.assignee = user;
 	}
 
 	public static Checklist of(ChecklistCreateRequestDto checklistCreateRequestDto, boolean b, int i, Card card, User user) {

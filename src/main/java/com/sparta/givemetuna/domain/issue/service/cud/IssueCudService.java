@@ -10,15 +10,14 @@ import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateRequestDto;
 import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.user.entity.User;
-import java.time.LocalDateTime;
 
 public interface IssueCudService {
 
-	IssueCreateResponseDto createIssue(IssueCreateRequestDto issueCreateRequestDto, Card card, User user, LocalDateTime createdAt);
+	IssueCreateResponseDto createIssue(IssueCreateRequestDto issueCreateRequestDto, Card card, User user);
 
-	IssueUpdateResponseDto updateIssue(IssueUpdateRequestDto updateRequestDto, Issue issue, LocalDateTime updatedAt);
+	IssueUpdateResponseDto updateIssue(IssueUpdateRequestDto updateRequestDto, Issue issue);
 
-	IssueStatusUpdateResponseDto closeIssue(IssueStatusUpdateRequestDto updateRequestDto, Issue issue, LocalDateTime now);
+	IssueStatusUpdateResponseDto closeIssue(IssueStatusUpdateRequestDto updateRequestDto, Issue issue);
 
 	IssueDeleteResponseDto deleteIssue(Issue issue);
 }

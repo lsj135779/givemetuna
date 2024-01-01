@@ -12,7 +12,6 @@ import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.service.cud.IssueCudService;
 import com.sparta.givemetuna.domain.issue.service.read.IssueReadService;
 import com.sparta.givemetuna.domain.user.entity.User;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +47,7 @@ public class IssueCudController {
 		IssueCreateResponseDto responseDto = issueCudService.createIssue(
 			createRequestDto,
 			Card.builder().build(),
-			User.builder().build(),
-			LocalDateTime.now()
+			User.builder().build()
 		);
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 	}
@@ -62,12 +60,11 @@ public class IssueCudController {
 	) {
 		/* Header 검증 :: Issue 작성자 검증 */
 		// User user = userDetails.getUser();
-		Issue issue = issueReadService.selectByIdAndUser(issueId, User.builder().build());
+		Issue issue = issueReadService.selectById(issueId, User.builder().build());
 
 		IssueUpdateResponseDto responseDto = issueCudService.updateIssue(
 			updateRequestDto,
-			issue,
-			LocalDateTime.now()
+			issue
 		);
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
 	}
@@ -80,12 +77,11 @@ public class IssueCudController {
 	) {
 		/* Header 검증 :: Issue 작성자 검증 */
 		// User user = userDetails.getUser();
-		Issue issue = issueReadService.selectByIdAndUser(issueId, User.builder().build());
+		Issue issue = issueReadService.selectById(issueId, User.builder().build());
 
 		IssueStatusUpdateResponseDto responseDto = issueCudService.closeIssue(
 			updateRequestDto,
-			issue,
-			LocalDateTime.now()
+			issue
 		);
 
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
@@ -98,7 +94,7 @@ public class IssueCudController {
 	) {
 		/* Header 검증 :: Issue 작성자 검증 */
 		// User user = userDetails.getUser();
-		Issue issue = issueReadService.selectByIdAndUser(issueId, User.builder().build());
+		Issue issue = issueReadService.selectById(issueId, User.builder().build());
 
 		IssueDeleteResponseDto responseDto = issueCudService.deleteIssue(
 			issue
