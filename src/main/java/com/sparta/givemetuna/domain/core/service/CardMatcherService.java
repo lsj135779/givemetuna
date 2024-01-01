@@ -58,12 +58,6 @@ public class CardMatcherService {
         return cardService.updateStage(afterStage, card);
     }
 
-    public UpdateCardTitleResponseDto updateCardTitle(Card card,
-            UpdateCardTitleRequestDto requestDto) {
-
-        return cardService.updateTitle(requestDto.getTitle(), card);
-    }
-
     public UpdateCardAccountResponseDto updateCardAccount(Long boardId, Card card,
             UpdateCardAccountRequestDto requestDto) {
 
@@ -72,18 +66,6 @@ public class CardMatcherService {
         checkBoardAuthority(assignor);
 
         return cardService.updateAccount(assignor, card);
-    }
-
-    public UpdateCardPriorityResponseDto updateCardPriority(Card card,
-            UpdatetCardPriorityRequestDto requestDto) {
-
-        return cardService.updatePriority(card, requestDto.getCardPriority());
-    }
-
-    public UpdateCardPeriodResponseDto updateCardPeriod(Card card,
-            UpdateCardPeriodRequestDto requestDto) {
-
-        return cardService.updatePeriod(card, requestDto.getStartedAt(), requestDto.getClosedAt());
     }
 
     private void checkBoardAuthority(User user) {

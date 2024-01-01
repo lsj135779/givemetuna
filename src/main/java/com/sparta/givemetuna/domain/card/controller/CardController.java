@@ -91,8 +91,8 @@ public class CardController {
         Card card = checkAPI(boardId, stageId, cardId);
         checkClientAuthority(boardId, userDetails.getUser());
 
-        UpdateCardTitleResponseDto responseDto = cardMatcherService.updateCardTitle(
-                card, requestDto);
+        UpdateCardTitleResponseDto responseDto = cardService.updateTitle(card,
+                requestDto.getTitle());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
@@ -125,8 +125,8 @@ public class CardController {
         Card card = checkAPI(boardId, stageId, cardId);
         checkClientAuthority(boardId, userDetails.getUser());
 
-        UpdateCardPriorityResponseDto responseDto = cardMatcherService.updateCardPriority(
-                card, requestDto);
+        UpdateCardPriorityResponseDto responseDto = cardService.updatePriority(
+                card, requestDto.getCardPriority());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
@@ -142,8 +142,8 @@ public class CardController {
         Card card = checkAPI(boardId, stageId, cardId);
         checkClientAuthority(boardId, userDetails.getUser());
 
-        UpdateCardPeriodResponseDto responseDto = cardMatcherService.updateCardPeriod(
-                card, requestDto);
+        UpdateCardPeriodResponseDto responseDto = cardService.updatePeriod(
+                card, requestDto.getStartedAt(), requestDto.getClosedAt());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }

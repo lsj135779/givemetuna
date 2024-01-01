@@ -64,7 +64,7 @@ public class CardService {
     }
 
     @Transactional
-    public UpdateCardTitleResponseDto updateTitle(String title, Card card) {
+    public UpdateCardTitleResponseDto updateTitle(Card card, String title) {
 
         card.updateTitle(title);
 
@@ -129,5 +129,4 @@ public class CardService {
             throw new IllegalArgumentException("해당 권한이 없습니다");
         }
     }
-
 }
