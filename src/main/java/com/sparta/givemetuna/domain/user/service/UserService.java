@@ -1,8 +1,8 @@
 package com.sparta.givemetuna.domain.user.service;
 
+import com.sparta.givemetuna.domain.user.dto.SignUpRequestDTO;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
-import com.sparta.givemetuna.domain.user.dto.SignUpRequestDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class UserService {
 
     //회원가입
     @Transactional
-    public void signup(SignUpRequestDTO signUpRequestDTO){
+    public void signup(SignUpRequestDTO signUpRequestDTO) {
         String account = signUpRequestDTO.getAccount();
         String password = passwordEncoder.encode(signUpRequestDTO.getPassword());
         String email = signUpRequestDTO.getEmail();
@@ -53,7 +53,7 @@ public class UserService {
         User user = userRepository.findByAccount(account)
                 .orElseThrow(() -> new IllegalArgumentException("등록된 유저가 없습니다."));
 
-        if(!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
     }

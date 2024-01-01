@@ -1,15 +1,15 @@
 package com.sparta.givemetuna.domain.board.service;
 
-import com.sparta.givemetuna.domain.board.dto.*;
+import com.sparta.givemetuna.domain.board.dto.BoardListResponseDto;
+import com.sparta.givemetuna.domain.board.dto.CreateBoardRequestDto;
+import com.sparta.givemetuna.domain.board.dto.UpdateBoardRequestDto;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.repository.BoardRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
