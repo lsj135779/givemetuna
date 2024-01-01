@@ -7,6 +7,7 @@ import com.sparta.givemetuna.domain.board.dto.InviteUserResponseDto;
 import com.sparta.givemetuna.domain.board.dto.UpdateBoardRequestDto;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.repository.BoardRepository;
+import com.sparta.givemetuna.domain.user.repository.BoardUserRoleRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
 
 	private final BoardRepository boardRepository;
+
+	private final BoardUserRoleRepository boardUserRoleRepository;
 
 	// board 생성
 	public Board createBoard(CreateBoardRequestDto requestDto) {
@@ -60,6 +63,7 @@ public class BoardService {
 	}
 
 	public InviteUserResponseDto inviteUser(InviteUserRequestDto requestDto) {
+
 		return null;
 	}
 }
