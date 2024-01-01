@@ -47,8 +47,8 @@ public class IssueRepositoryCustomImpl implements IssueRepositoryCustom {
 			.leftJoin(issue.user, user) // fetch join of "issue" & "card"
 			.leftJoin(issue.issueComments, issueComment) // fetch join of "issue" & "card"
 			.where(
-				IssueQueryConditionFactory.titleLike(condition.getTitle()),
-				IssueQueryConditionFactory.contentsLike(condition.getContents()),
+				IssueQueryConditionFactory.titleContains(condition.getTitle()),
+				IssueQueryConditionFactory.contentsContains(condition.getContents()),
 				IssueQueryConditionFactory.statusEq(condition.getIssueStatus())
 			);
 	}
@@ -81,7 +81,8 @@ public class IssueRepositoryCustomImpl implements IssueRepositoryCustom {
 		OrderSpecifier[] orderSpecifiers = IssueQueryOrderFactory.getAllOrderSpecifiersArr(pageable);
 
 		// Dynamic Query + Order By + Paging
-		List<Issue> issues = queryAllBy(condition)
+		JPAQuery<Issue> issueJPAQuery = queryAllBy(condition);
+		List<Issue> issues = issueJPAQuery
 			.fetchJoin()
 			.orderBy(orderSpecifiers)
 			.offset(pageable.getOffset())
@@ -90,6 +91,6 @@ public class IssueRepositoryCustomImpl implements IssueRepositoryCustom {
 		// Mapping :: Issue -> IssueReadResponseDto
 		List<IssueReadResponseDto> readResponseDtos = getReadResponseDtosFrom(issues.stream());
 
-		return PageableExecutionUtils.getPage(readResponseDtos, pageable, () -> queryAllBy(condition).fetch().size());
+		return PageableExecutionUtils.getPage(readResponseDtos, pageable, () -> issueJPAQuery.fetch().size());
 	}
 }

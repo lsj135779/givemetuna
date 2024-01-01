@@ -43,9 +43,6 @@ class IssueRepositoryCustomImplTest {
 	private IssueRepository issueRepository;
 
 	@Autowired
-	private QueryDslConfig qd;
-
-	@Autowired
 	private IssueRepositoryCustomImpl issueRepositoryCustom;
 
 	@BeforeEach
@@ -69,10 +66,12 @@ class IssueRepositoryCustomImplTest {
 	@Test
 	@DisplayName("조건에 따른 조회쿼리에 따른 Issue 리스트를 구합니다.")
 	public void 조건조회_쿼리_issue리스트반환() {
-		// WHEN
+		// GIVEN
 		IssueSelectCondition condition = IssueSelectCondition.builder()
 			.issueStatus(IssueStatus.OPEN)
 			.build();
+
+		// WHEN
 		JPAQuery<Issue> issuesByCondition = ReflectionTestUtils.invokeMethod(issueRepositoryCustom, "queryAllBy", condition);
 
 		// THEN
@@ -83,7 +82,7 @@ class IssueRepositoryCustomImplTest {
 	@Test
 	@DisplayName("조건에 따른 조회쿼리에 따른 IssueReadResponseDto 리스트를 구합니다.")
 	public void 조건조회_쿼리_dto리스트반환() {
-		// WHEN
+		// GIVEN
 		IssueSelectCondition conditionOfStatus = IssueSelectCondition.builder()
 			.issueStatus(IssueStatus.OPEN)
 			.build();
@@ -91,6 +90,8 @@ class IssueRepositoryCustomImplTest {
 			.issueStatus(IssueStatus.OPEN)
 			.title("도메인이슈 #3")
 			.build();
+
+		// WHEN
 		List<IssueReadResponseDto> dtosOfStatus = issueRepositoryCustom.selectByCondition(conditionOfStatus);
 		List<IssueReadResponseDto> dtosOfStatusAndTitle = issueRepositoryCustom.selectByCondition(conditionOfStatusAndTitle);
 

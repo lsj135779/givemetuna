@@ -1,11 +1,15 @@
 package com.sparta.givemetuna.domain.issuecomment.service.read;
 
 import com.sparta.givemetuna.domain.issue.entity.Issue;
+import com.sparta.givemetuna.domain.issuecomment.controller.read.IssueCommentReadResponseDto;
+import com.sparta.givemetuna.domain.issuecomment.dto.read.IssueCommentSelectCondition;
 import com.sparta.givemetuna.domain.issuecomment.entity.IssueComment;
 import com.sparta.givemetuna.domain.issuecomment.repository.IssueCommentRepository;
 import com.sparta.givemetuna.domain.user.entity.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,5 +29,10 @@ public class IssueCommentReadServiceImpl implements IssueCommentReadService {
 	public List<IssueComment> selectBy(Issue issue, User user) {
 		return issueCommentRepository
 			.findByIssueAndUser(issue, user);
+	}
+
+	@Override
+	public Page<IssueCommentReadResponseDto> getIssueComments(Long issueId, IssueCommentSelectCondition condition, Pageable pageable) {
+		return issueCommentRepository.selectByConditionPaging(issueId, condition, pageable);
 	}
 }

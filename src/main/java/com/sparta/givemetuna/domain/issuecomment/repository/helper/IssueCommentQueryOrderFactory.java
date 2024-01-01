@@ -1,19 +1,20 @@
-package com.sparta.givemetuna.domain.issue.repository.helper;
+package com.sparta.givemetuna.domain.issuecomment.repository.helper;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.sparta.givemetuna.domain.common.helper.QueryDslUtil;
-import com.sparta.givemetuna.domain.issue.entity.QIssue;
+import com.sparta.givemetuna.domain.issuecomment.entity.QIssueComment;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.ObjectUtils;
 
-public final class IssueQueryOrderFactory {
+public final class IssueCommentQueryOrderFactory {
+
 
 	/**
-	 * 페이징 인스턴스로부터 Issue 컬럼에 따라 정렬기준치 리스트를 생성,반환
+	 * 페이징 인스턴스로부터 IssueComment 컬럼에 따라 정렬기준치 리스트를 생성,반환
 	 *
 	 * @param pageable 페이징 인스턴스
 	 * @return 정렬기준치 리스트
@@ -29,11 +30,11 @@ public final class IssueQueryOrderFactory {
 
 				switch (order.getProperty()) {
 					case "id" -> {
-						OrderSpecifier<?> orderId = QueryDslUtil.getSortedColumn(direction, QIssue.issue, "id");
+						OrderSpecifier<?> orderId = QueryDslUtil.getSortedColumn(direction, QIssueComment.issueComment, "id");
 						ORDERS.add(orderId);
 					}
-					case "title" -> {
-						OrderSpecifier<?> orderUser = QueryDslUtil.getSortedColumn(direction, QIssue.issue, "title");
+					case "userId" -> {
+						OrderSpecifier<?> orderUser = QueryDslUtil.getSortedColumn(direction, QIssueComment.issueComment.user, "id");
 						ORDERS.add(orderUser);
 					}
 					default -> {
@@ -46,14 +47,14 @@ public final class IssueQueryOrderFactory {
 	}
 
 	/**
-	 * 페이징 인스턴스로부터 Issue 컬럼에 따라 정렬기준치를 배열화하여 반환
+	 * 페이징 인스턴스로부터 IssueComment 컬럼에 따라 정렬기준치를 배열화하여 반환
 	 *
 	 * @param pageable 페이징 인스턴스
 	 * @return 정렬기준치 배열
 	 * @author 임지훈
 	 */
 	public static OrderSpecifier[] getAllOrderSpecifiersArr(Pageable pageable) {
-		return IssueQueryOrderFactory
+		return IssueCommentQueryOrderFactory
 			.getAllOrderSpecifiers(pageable)
 			.toArray(OrderSpecifier[]::new);
 	}
