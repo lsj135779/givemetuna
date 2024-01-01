@@ -1,8 +1,10 @@
 package com.sparta.givemetuna.domain.board.dto;
 
-import java.util.List;
+
+import com.sparta.givemetuna.domain.user.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class InviteUserRequestDto {
+@EqualsAndHashCode
+public class Invitation {
 
-	private List<Invitation> invitations;
+	private String userAccount;
+
+	private Role role;
 }
