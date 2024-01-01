@@ -24,7 +24,10 @@ import com.sparta.givemetuna.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -162,14 +165,14 @@ public class CardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SelectCardResponseDto>> getCardPage(
-            Pageable pageable,
+    public ResponseEntity<Page<SelectCardResponseDto>> getCardPage(
+            @PageableDefault(size=5, sort="card_id", direction = Sort.Direction.DESC)Pageable pageable,
             @PathVariable Long boardId,
             @PathVariable Long stageId) {
 
         Stage stage = stageService.checkStage(boardId, stageId);
 
-        List<SelectCardResponseDto> responseDtoList = cardService.getCardPage(pageable, stage);
+        Page<SelectCardResponseDto> responseDtoList = cardService.getCardPage(stage, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDtoList);
     }

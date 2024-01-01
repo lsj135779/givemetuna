@@ -15,9 +15,11 @@ import com.sparta.givemetuna.domain.checklist.service.ChecklistService;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.user.entity.User;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,11 +96,17 @@ public class CardService {
         return UpdateCardPeriodResponseDto.of(card);
     }
 
-    public List<SelectCardResponseDto> getCardPage(Pageable pageable, Stage stage) {
+    public Page<SelectCardResponseDto> getCardPage(Stage stage, Pageable pageable) {
 
-        List<Card> cards = cardRepository.findAllByStageId(pageable, stage);
+        Page<Card> allCardByStageId = cardRepository.findAllByStageId(stage.getId(), pageable);
+        List<SelectCardResponseDto> responseDtoList = new ArrayList<>();
 
-        return cards.stream().map(SelectCardResponseDto::of).collect(Collectors.toList());
+        for (Card card : allCardByStageId) {
+            SelectCardResponseDto responseDto = SelectCardResponseDto.of(card);
+            responseDtoList.add(responseDto);
+        }
+
+        return new PageImpl<> (responseDtoList, pageable, allCardByStageId.getTotalElements());
     }
 
     public void delete(Card card) {
