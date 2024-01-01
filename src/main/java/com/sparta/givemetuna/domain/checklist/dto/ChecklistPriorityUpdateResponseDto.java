@@ -26,7 +26,7 @@ public class ChecklistPriorityUpdateResponseDto {
 	public static ChecklistPriorityUpdateResponseDto of(Checklist checklist) {
 		return new ChecklistPriorityUpdateResponseDto(
 			checklist.getId(),
-			checklist.getAssignee().getId(),
+			checklist.getUser().getId(),
 			checklist.getCard().getId(),
 			checklist.getContents(),
 			checklist.getCheck(),

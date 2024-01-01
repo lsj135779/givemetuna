@@ -35,7 +35,7 @@ public class User {
 	@JsonIgnore
 	private final List<Issue> issues = new ArrayList<>();
 
-	@OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
 	private final List<Checklist> checklists = new ArrayList<>();
 

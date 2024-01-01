@@ -26,7 +26,7 @@ public class ChecklistContentsUpdateResponseDto {
 	public static ChecklistContentsUpdateResponseDto of(Checklist checklist) {
 		return new ChecklistContentsUpdateResponseDto(
 			checklist.getId(),
-			checklist.getAssignee().getId(),
+			checklist.getUser().getId(),
 			checklist.getCard().getId(),
 			checklist.getContents(),
 			checklist.getCheck(),

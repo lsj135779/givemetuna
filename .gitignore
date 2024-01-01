@@ -39,3 +39,6 @@ out/
 ### application.yml ###
 application.yml
 application-test.yml
+
+### lock ###
+.lock

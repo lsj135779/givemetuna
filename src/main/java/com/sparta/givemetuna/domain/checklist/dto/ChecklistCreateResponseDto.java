@@ -26,7 +26,7 @@ public class ChecklistCreateResponseDto {
 	public static ChecklistCreateResponseDto of(Checklist checklist) {
 		return new ChecklistCreateResponseDto(
 			checklist.getId(),
-			checklist.getAssignee().getId(),
+			checklist.getUser().getId(),
 			checklist.getCard().getId(),
 			checklist.getContents(),
 			checklist.getCheck(),

@@ -131,7 +131,7 @@ public class ChecklistService {
 
 		// 체크리스트 생성한 유저 가능
 		if (role.equals("user")) {
-			if (!Objects.equals(checklist.getAssignee().getId(), user.getId())) {
+			if (!Objects.equals(checklist.getUser().getId(), user.getId())) {
 				throw new IllegalArgumentException("체크리스트 생성자만 삭제가 가능합니다.");
 			}
 		}
@@ -157,7 +157,7 @@ public class ChecklistService {
 
 		// 체크리스트 생성한 유저 가능
 		if (role.equals("user")) {
-			if (!Objects.equals(checklist.getAssignee().getId(), user.getId())) {
+			if (!Objects.equals(checklist.getUser().getId(), user.getId())) {
 				throw new IllegalArgumentException("체크리스트 생성자만 수정이 가능합니다.");
 			}
 		}
@@ -172,7 +172,7 @@ public class ChecklistService {
 			.priority(Priority.없음)
 			.deletable(false)
 			.card(card)
-			.assignee(user).build();
+			.user(user).build();
 		checklistRepository.save(checklist);
 	}
 }
