@@ -22,8 +22,6 @@ public class QChecklist extends EntityPathBase<Checklist> {
 
     public static final QChecklist checklist = new QChecklist("checklist");
 
-    public final com.sparta.givemetuna.domain.user.entity.QUser assignee;
-
     public final com.sparta.givemetuna.domain.card.entity.QCard card;
 
     public final BooleanPath check = createBoolean("check");
@@ -35,6 +33,8 @@ public class QChecklist extends EntityPathBase<Checklist> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final EnumPath<Priority> priority = createEnum("priority", Priority.class);
+
+    public final com.sparta.givemetuna.domain.user.entity.QUser user;
 
     public QChecklist(String variable) {
         this(Checklist.class, forVariable(variable), INITS);
@@ -54,8 +54,8 @@ public class QChecklist extends EntityPathBase<Checklist> {
 
     public QChecklist(Class<? extends Checklist> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.assignee = inits.isInitialized("assignee") ? new com.sparta.givemetuna.domain.user.entity.QUser(forProperty("assignee")) : null;
         this.card = inits.isInitialized("card") ? new com.sparta.givemetuna.domain.card.entity.QCard(forProperty("card"), inits.get("card")) : null;
+        this.user = inits.isInitialized("user") ? new com.sparta.givemetuna.domain.user.entity.QUser(forProperty("user")) : null;
     }
 
 }

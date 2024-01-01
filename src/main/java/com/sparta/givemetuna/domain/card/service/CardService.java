@@ -108,7 +108,7 @@ public class CardService {
             responseDtoList.add(responseDto);
         }
 
-        return new PageImpl<> (responseDtoList, pageable, allCardByStageId.getTotalElements());
+        return new PageImpl<>(responseDtoList, pageable, allCardByStageId.getTotalElements());
     }
 
     @Transactional

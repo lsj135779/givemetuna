@@ -29,48 +29,50 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Checklist {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column
-	private String contents;
+    @Column
+    private String contents;
 
-	@Column
-	private Boolean check;
+    @Column
+    private Boolean check;
 
-	@Enumerated(EnumType.STRING)
-	private Priority priority;
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
 
-	@Column
-	private Boolean deletable;
+    @Column
+    private Boolean deletable;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "card_id")
-	private Card card;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "card_id")
+    private Card card;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "assignee")
-	private User assignee;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assignee")
+    private User user;
 
-	public Checklist(String contents, boolean check, Priority priority, boolean deletable, Card card, User user) {
-		this.contents = contents;
-		this.check = check;
-		this.priority = priority;
-		this.deletable = deletable;
-		this.card = card;
-		this.assignee = user;
-	}
+    public Checklist(String contents, boolean check, Priority priority, boolean deletable,
+            Card card, User assignee) {
+        this.contents = contents;
+        this.check = check;
+        this.priority = priority;
+        this.deletable = deletable;
+        this.card = card;
+        this.user = assignee;
+    }
 
-	public static Checklist of(ChecklistCreateRequestDto checklistCreateRequestDto, boolean check, Priority priority, boolean deletable,
-		Card card, User user) {
-		return new Checklist(
-			checklistCreateRequestDto.getContents(),
-			check,
-			priority,
-			deletable,
-			card,
-			user
-		);
-	}
+    public static Checklist of(ChecklistCreateRequestDto checklistCreateRequestDto, boolean check,
+            Priority priority, boolean deletable,
+            Card card, User user) {
+        return new Checklist(
+                checklistCreateRequestDto.getContents(),
+                check,
+                priority,
+                deletable,
+                card,
+                user
+        );
+    }
 }
