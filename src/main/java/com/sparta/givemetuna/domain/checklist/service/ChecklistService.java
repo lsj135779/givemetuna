@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class ChecklistService {
 
 	private final ChecklistRepository checklistRepository;
+
 	private final CardTempService cardTempService;
 	private final BoardTempService boardTempService;
 

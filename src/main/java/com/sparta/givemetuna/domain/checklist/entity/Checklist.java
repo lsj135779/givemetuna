@@ -59,7 +59,7 @@ public class Checklist {
 		this.priority = priority;
 		this.deletable = deletable;
 		this.card = card;
-		this.user = user;
+		this.assignee = user;
 	}
 
 	public static Checklist of(ChecklistCreateRequestDto checklistCreateRequestDto, boolean check, Priority priority, boolean deletable,

@@ -1,7 +1,10 @@
 package com.sparta.givemetuna.domain.card.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
+import com.sparta.givemetuna.domain.common.BaseEntity;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
+import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,16 +30,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Getter
-public class Card {
+@EqualsAndHashCode(of = "id", callSuper = false)
+public class Card extends BaseEntity {
 
-	@OneToMany(mappedBy = "card", targetEntity = UserCard.class, cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<UserCard> userCards = new ArrayList<>();
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "card", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<Checklist> checklists = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Stage stage;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private User creator;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private User assignor;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
