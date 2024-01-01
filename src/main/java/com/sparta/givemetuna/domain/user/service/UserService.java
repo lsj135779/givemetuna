@@ -1,10 +1,14 @@
 package com.sparta.givemetuna.domain.user.service;
 
+import com.sparta.givemetuna.domain.board.dto.Invitation;
 import com.sparta.givemetuna.domain.user.dto.SignUpRequestDTO;
+import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,12 +71,19 @@ public class UserService {
 		return null;
 	}
 
-	public List<User> findbyAccounts(List<String> userAccounts) {
-		return userAccounts.stream()
-			.map(userAccount -> userRepository
-				.findByAccount(userAccount)
-				.orElseThrow(() -> new RuntimeException(String.format("%s에 관련된 유저를 찾을 수 없습니다.")))
-			)
-			.toList();
+	public User findByAccount(String account) {
+		return userRepository.findByAccount(account)
+			.orElseThrow(
+				() -> new RuntimeException(String.format("%s에 해당하는 유저가 존재하지 않습니다.", account)));
+	}
+
+	public Map<User, Role> findbyAccountsWithRole(List<Invitation> invitations) {
+		Map<User, Role> users = new HashMap<>();
+		invitations.forEach(invitation ->
+			users.put(
+				findByAccount(invitation.getUserAccount()),
+				invitation.getRole()
+			));
+		return users;
 	}
 }
