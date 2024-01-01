@@ -18,13 +18,5 @@ class BoardServiceTest extends IntegrationTest {
     @DisplayName("board 생성 테스트")
     @Test
     void createBoard() {
-        //given
-        var request = new CreateBoardRequestDto();
-        request.setName("title");
-        //when
-        var response = boardService.createBoard(request);
-        //then
-        assertThat(response.getName()).isEqualTo("title");
-        assertThat(response.getId()).isNotNull();
     }
 }

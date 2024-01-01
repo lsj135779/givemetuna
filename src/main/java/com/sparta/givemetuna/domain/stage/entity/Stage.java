@@ -3,6 +3,8 @@ package com.sparta.givemetuna.domain.stage.entity;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
+import com.sparta.givemetuna.domain.stage.dto.CreateStageRequestDto;
+import com.sparta.givemetuna.domain.stage.dto.UpdateStageRequestDto;
 import com.sparta.givemetuna.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,12 +17,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "stage")
 public class Stage {
 
@@ -44,4 +50,14 @@ public class Stage {
 
 	@OneToMany(mappedBy = "stage", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Checklist> checklists = new ArrayList<>();
+
+	public Stage(Board board, String category, User user) {
+		this.board = board;
+		this.category = category;
+		this.user = user;
+	}
+
+	public void setCategory(UpdateStageRequestDto requestDto) {
+		this.category = requestDto.getCategory();
+	}
 }
