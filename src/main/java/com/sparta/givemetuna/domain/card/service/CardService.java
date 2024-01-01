@@ -81,6 +81,7 @@ public class CardService {
         return UpdateCardAccountResponseDto.of(card);
     }
 
+    @Transactional
     public UpdateCardPriorityResponseDto updatePriority(Card card, CardPriority cardPriority) {
 
         card.updatePriority(cardPriority);
@@ -88,6 +89,7 @@ public class CardService {
         return UpdateCardPriorityResponseDto.of(card);
     }
 
+    @Transactional
     public UpdateCardPeriodResponseDto updatePeriod(Card card, Timestamp startedAt,
             Timestamp closedAt) {
 
@@ -109,6 +111,7 @@ public class CardService {
         return new PageImpl<> (responseDtoList, pageable, allCardByStageId.getTotalElements());
     }
 
+    @Transactional
     public void delete(Card card) {
         cardRepository.delete(card);
     }
@@ -127,14 +130,5 @@ public class CardService {
             throw new IllegalArgumentException("해당 카드는 다른 스테이지에 있습니다.");
         }
         return card;
-    }
-
-    public void checkAssignor(Long cardId, User user) {
-
-        Card card = checkCard(cardId);
-
-        if (!card.getAssignor().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("해당 권한이 없습니다");
-        }
     }
 }
