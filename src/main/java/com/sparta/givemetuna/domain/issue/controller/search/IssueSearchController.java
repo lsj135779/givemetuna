@@ -1,8 +1,7 @@
-package com.sparta.givemetuna.domain.issue.controller;
+package com.sparta.givemetuna.domain.issue.controller.search;
 
-import com.sparta.givemetuna.domain.issue.service.IssueSearchService;
+import com.sparta.givemetuna.domain.issue.service.search.IssueSearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -13,7 +12,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 public class IssueSearchController {
 
-	@Qualifier("issueJpaSearchService")
+	//	@Qualifier("issueJpaSearchService")
 	private final IssueSearchService issueSearchService;
+
+
 }
 

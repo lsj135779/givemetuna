@@ -1,4 +1,4 @@
-package com.sparta.givemetuna.domain.issue.dto;
+package com.sparta.givemetuna.domain.issue.dto.cud;
 
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import java.time.LocalDateTime;
@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class IssueCreateResponseDto {
 
+	private long issueId;
+
 	private String title;
 
 	private String contents;
@@ -22,6 +24,7 @@ public class IssueCreateResponseDto {
 
 	public static IssueCreateResponseDto of(Issue issue) {
 		return new IssueCreateResponseDto(
+			issue.getId(),
 			issue.getTitle(),
 			issue.getContents(),
 			issue.getCard().getId(),
