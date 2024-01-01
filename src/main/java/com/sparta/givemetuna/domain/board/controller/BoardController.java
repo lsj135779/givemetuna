@@ -12,9 +12,11 @@ import com.sparta.givemetuna.domain.board.dto.UpdateBoardResponseDto;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.service.BoardService;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
+import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.service.UserService;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -47,11 +49,15 @@ public class BoardController {
 
 	// user 초대
 	// todo: user 추가하는 기능 필요
-	@PostMapping("/{boardId}/invite")
-	public ResponseEntity<InviteUserResponseDto> inviteUser(@RequestBody InviteUserRequestDto requestDto) {
-		List<User> users = userService.findbyAccounts(requestDto.getUserAccounts());
-		InviteUserResponseDto reponseDto = boardService.inviteUser(requestDto);
-		return ResponseEntity.ok().body(reponseDto);
+	@PostMapping("/{board_id}/invite")
+	public ResponseEntity<InviteUserResponseDto> inviteUser(
+		@PathVariable("board_id") Long boardId,
+		@RequestBody InviteUserRequestDto requestDto
+	) {
+		Map<User, Role> users = userService.findbyAccountsWithRole(requestDto.getInvitations());
+		Board board = boardService.inviteUser(boardId, users);
+		InviteUserResponseDto responseDto = InviteUserResponseDto.of(board);
+		return ResponseEntity.ok().body(responseDto);
 	}
 
 	// 모든 board 조회
@@ -68,7 +74,8 @@ public class BoardController {
 	@GetMapping("/{boardId}")
 	public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
 		Board board = boardService.getBoard(boardId);
-		return ResponseEntity.ok().body(new BoardResponseDto(board));
+		BoardResponseDto responseDto = BoardResponseDto.of(board);
+		return ResponseEntity.ok().body(responseDto);
 	}
 
 	// board 삭제

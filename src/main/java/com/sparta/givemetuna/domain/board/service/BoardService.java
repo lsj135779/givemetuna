@@ -3,14 +3,14 @@ package com.sparta.givemetuna.domain.board.service;
 import com.sparta.givemetuna.domain.board.dto.BoardListResponseDto;
 import com.sparta.givemetuna.domain.board.dto.CreateBoardRequestDto;
 import com.sparta.givemetuna.domain.board.dto.CreateBoardResponseDto;
-import com.sparta.givemetuna.domain.board.dto.InviteUserRequestDto;
-import com.sparta.givemetuna.domain.board.dto.InviteUserResponseDto;
 import com.sparta.givemetuna.domain.board.dto.UpdateBoardRequestDto;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.repository.BoardRepository;
 import com.sparta.givemetuna.domain.stage.repository.StageRepository;
+import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -56,17 +56,9 @@ public class BoardService {
 	// 단일 board 찾기
 	@Transactional(readOnly = true)
 	public Board getBoard(Long boardId) {
-//
-//
-//        Board board = boardRepository.findById(boardId)
-//                .orElseThrow(() -> new IllegalArgumentException("The board does not exist"));
-//        List<StageResponseDto> stageList = stageRepository.findAllByBoardId(boardId)
-//                .stream()
-//                .map(StageRepository::new)
-//                .toList();
-//
-//        return new BoardDetailsResponseDto(board);
-		return null;
+		Board board = boardRepository.findById(boardId)
+			.orElseThrow(() -> new IllegalArgumentException("The board does not exist"));
+		return board;
 	}
 
 	// 모든 board 찾기
@@ -109,7 +101,9 @@ public class BoardService {
 	private void setUserBoardManager(User user) {
 	}
 
-	public InviteUserResponseDto inviteUser(InviteUserRequestDto requestDto) {
-		return null;
+	public Board inviteUser(Long boardId, Map<User, Role> users) {
+		Board board = getBoard(boardId);
+		board.addUsersWithRole(users);
+		return board;
 	}
 }
