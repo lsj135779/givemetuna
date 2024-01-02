@@ -1,4 +1,4 @@
-package com.sparta.givemetuna.domain.checklist.temp.cardTemp;
+package com.sparta.givemetuna.domain.core.service;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
@@ -7,12 +7,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CardTempService {
+public class ChecklistMatcherService {
 
 	private final CardRepository cardRepository;
 
 	public Card getCard(Long cardId) {
-		Card card = cardRepository.findById(cardId).orElseThrow(() -> new IllegalArgumentException("해당하는 카드정보가 없습니다."));
-		return card;
+
+		return cardRepository.findById(cardId)
+			.orElseThrow(() -> new NullPointerException("없는 카드입니다."));
 	}
 }
