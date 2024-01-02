@@ -1,12 +1,11 @@
 package com.sparta.givemetuna.domain.security;
 
-import java.util.Collection;
-
 import com.sparta.givemetuna.domain.user.entity.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.Getter;
+import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
 

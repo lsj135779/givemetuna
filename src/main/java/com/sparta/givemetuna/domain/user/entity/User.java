@@ -57,8 +57,6 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Checklist> checklists = new ArrayList<>();
 
-	private Long kakaoId;
-
 	@OneToMany(mappedBy = "user")
 	private List<UserCard> userCards = new ArrayList<>();
 
@@ -74,15 +72,7 @@ public class User {
 		this.description = description;
 	}
 
-	public User(Long id, String encodedPassword, String email, String nickname) {
-		this.kakaoId = id;
-		this.password = encodedPassword;
-		this.email = email;
-		this.nickname = nickname;
-	}
-
-
-	public void updateEmail(UserInfoRequestDTO userInfoRequestDTO) {
+    public void updateEmail(UserInfoRequestDTO userInfoRequestDTO) {
 		if(userInfoRequestDTO.getEmail() !=null) {
 			this.email = userInfoRequestDTO.getEmail();
 		}
@@ -110,10 +100,5 @@ public class User {
 		if(password !=null) {
 			this.password = password;
 		}
-	}
-
-	public User kakaoIdUpdate(Long kakaoId) {
-		this.kakaoId = kakaoId;
-		return this;
 	}
 }
