@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 
-import static com.sparta.givemetuna.domain.user.entity.Role.GENERAL_MANAGER;
+import static com.sparta.givemetuna.domain.user.entity.Role.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ public class BoardService {
 
     private final StageRepository stageRepository;
 
-    private final BoardUserRoleRepository boardUserRoleRepository;
+    private final BoardUserRoleValidator boardUserRoleValidator;
 
     // board 생성
     public CreateBoardResponseDto createBoard(CreateBoardRequestDto requestDto, User user) {
@@ -126,5 +126,21 @@ public class BoardService {
     // board 생성자 총관리자 설정
     private void setBoardManager(Board board, User user) {
         board.addUserWithRole(user, GENERAL_MANAGER);
+    }
+
+    // 권한을 가진 board만 검색
+    public List<BoardListResponseDto> checkAvailableBoard(User user) {
+        List<Board> boardList = boardRepository.findAll();
+        List<Board> availableBoardList = new ArrayList<>();
+
+        for (Board board : boardList) {
+            Role role = boardUserRoleValidator.getRole(board.getId(), user.getId());
+            if (role.equals(GENERAL_MANAGER) || role.equals(TEAM_MANAGER) || !role.equals(WORKER)) {
+                availableBoardList.add(board);
+            }
+        }
+        return boardList.stream()
+                .map(board -> new BoardListResponseDto(board.getName()))
+                .collect(Collectors.toList());
     }
 }

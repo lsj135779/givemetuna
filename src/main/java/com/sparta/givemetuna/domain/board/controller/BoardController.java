@@ -55,10 +55,9 @@ public class BoardController {
 	// 모든 board 조회
 	// todo:생성한 사람과 초대받은 사람 이외의 사람들에겐 접근권한 없어야함
 	@GetMapping
-	public ResponseEntity<List<BoardListResponseDto>> getBoards() {
+	public ResponseEntity<List<BoardListResponseDto>> getBoards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-
-		List<BoardListResponseDto> boardList = boardService.getAllBoards();
+		List<BoardListResponseDto> boardList = boardService.checkAvailableBoard(userDetails.getUser());
 		return ResponseEntity.ok().body(boardList);
 	}
 	
