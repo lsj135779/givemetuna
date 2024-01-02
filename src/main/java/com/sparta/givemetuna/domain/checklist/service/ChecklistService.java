@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.checklist.service;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
+import com.sparta.givemetuna.domain.card.exception.CardAssigneeInvalidAuthorizationException;
 import com.sparta.givemetuna.domain.card.exception.CardAssignorInvalidAuthorizationException;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistCheckUpdateResponseDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistContentsUpdateRequestDto;
@@ -52,8 +53,9 @@ public class ChecklistService {
 
 		// role이 user인 경우
 		if (role.equals(Role.WORKER)) {
-			checklistRepository.findFirstByAssigneeAndCardId(user.getId(), cardId)
-				.orElseThrow(SelectChecklistNotFoundException::new);
+			if (!Objects.equals(card.getChecklists().get(0).getUser().getId(), user.getId())) {
+				throw new CardAssigneeInvalidAuthorizationException();
+			}
 		}
 
 		Checklist newChecklist = Checklist.of(checklistCreateRequestDto, false, Priority.NON, true,
