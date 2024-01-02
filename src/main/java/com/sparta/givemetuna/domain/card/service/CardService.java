@@ -32,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CardService {
 
 	private final CardRepository cardRepository;
-
 	private final ChecklistService checklistService;
 
 

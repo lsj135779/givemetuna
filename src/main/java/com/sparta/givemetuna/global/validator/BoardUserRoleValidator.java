@@ -34,11 +34,10 @@ public class BoardUserRoleValidator {
 	);
 
 
-	public String getRole(Long boardId, Long userId) {
+	public Role getRole(Long boardId, Long userId) {
 		BoardUserRole boardUserRole = boardUserRoleRepository.findByBoardIdAndUserId(boardId, userId)
 			.orElseThrow(() -> new IllegalArgumentException("보드에 권한이 없는 유저입니다."));
-//		return boardUserRole.getRole();
-		return "";
+		return boardUserRole.getRole();
 	}
 
 	/*

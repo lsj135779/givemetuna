@@ -1,6 +1,6 @@
 package com.sparta.givemetuna.domain.card.controller;
 
-import static com.sparta.givemetuna.domain.user.entity.Role.WORKER;
+import static com.sparta.givemetuna.domain.user.entity.Role.GENERAL_MANAGER;
 
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAllAssignRequestDto;
@@ -25,9 +25,7 @@ import com.sparta.givemetuna.domain.core.service.CardMatcherService;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.stage.service.StageService;
-import com.sparta.givemetuna.domain.user.entity.BoardUserRole;
-import com.sparta.givemetuna.domain.user.entity.User;
-import com.sparta.givemetuna.domain.user.service.BoardUserRoleService;
+import com.sparta.givemetuna.global.validator.BoardUserRoleValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,9 +49,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/boards/{boardId}/stage/{stageId}/cards")
 public class CardController {
 
+    private final BoardUserRoleValidator boardUserRoleValidator;
     private final CardMatcherService cardMatcherService;
     private final StageService stageService;
-    private final BoardUserRoleService boardUserRoleService;
     private final CardService cardService;
 
     @PostMapping
@@ -62,7 +60,8 @@ public class CardController {
             @Valid @RequestBody CreateCardRequestDto requestDto) {
 
         Stage stage = stageService.checkStage(boardId, stageId);
-        checkBoardClientRole(boardId, userDetails.getUser());
+        boardUserRoleValidator.validateRole(CardController.class, userDetails.getUser().getId(),
+                boardId);
 
         CreateCardResponseDto responseDto = cardMatcherService.createCard(boardId, stage,
                 userDetails.getUser(), requestDto);
@@ -77,7 +76,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardStageRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, card);
+        checkCardAssignor(userDetails, boardId, card);
 
         UpdateCardStageResponseDto responseDto = cardMatcherService.updateCardStage(boardId, card,
                 requestDto);
@@ -92,7 +91,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardTitleRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, card);
+        checkCardAssignor(userDetails, boardId, card);
 
         UpdateCardTitleResponseDto responseDto = cardService.updateTitle(card,
                 requestDto.getTitle());
@@ -107,8 +106,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardAllAssignRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-
-        checkCardAssignor(userDetails, card);
+        checkCardAssignor(userDetails, boardId, card);
 
         UpdateCardAllAssignResponseDto responseDto = cardMatcherService.updateCardAllAssign(boardId,
                 card, requestDto);
@@ -123,7 +121,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardAssignorRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, card);
+        checkCardAssignor(userDetails, boardId, card);
 
         UpdateCardAssignorResponseDto responseDto = cardMatcherService.updateCardAssignor(boardId,
                 card, requestDto);
@@ -138,7 +136,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardAssigneeRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, card);
+        checkCardAssignor(userDetails, boardId, card);
 
         UpdateCardAssigneeResponseDto responseDto = cardMatcherService.updateCardAssignee(card,
                 requestDto);
@@ -153,7 +151,7 @@ public class CardController {
             @Valid @RequestBody UpdatetCardPriorityRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, card);
+        checkCardAssignor(userDetails, boardId, card);
 
         UpdateCardPriorityResponseDto responseDto = cardService.updatePriority(card,
                 requestDto.getCardPriority());
@@ -168,7 +166,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardPeriodRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, card);
+        checkCardAssignor(userDetails, boardId, card);
 
         UpdateCardPeriodResponseDto responseDto = cardService.updatePeriod(card,
                 requestDto.getStartedAt(), requestDto.getClosedAt());
@@ -204,14 +202,16 @@ public class CardController {
             @PathVariable Long cardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, card);
+        checkCardAssignor(userDetails, boardId, card);
         cardService.delete(card);
 
         return ResponseEntity.status(HttpStatus.OK).body(cardId);
     }
 
-    private void checkCardAssignor(UserDetailsImpl userDetails, Card card) {
-        if (!card.getAssignor().getId().equals(userDetails.getUser().getId())) {
+    private void checkCardAssignor(UserDetailsImpl userDetails, Long boardId, Card card) {
+        if (!card.getAssignor().getId().equals(userDetails.getUser().getId()) ||
+                !boardUserRoleValidator.getRole(boardId, userDetails.getUser().getId())
+                        .equals(GENERAL_MANAGER)) {
             throw new IllegalArgumentException("카드에 대한 권한이 없습니다.");
         }
     }
@@ -221,14 +221,5 @@ public class CardController {
         Stage stage = stageService.checkStage(boardId, stageId);
 
         return cardService.checkStageCard(stage.getId(), cardId);
-    }
-
-    private void checkBoardClientRole(Long boardId, User user) {
-
-        BoardUserRole clientRole = boardUserRoleService.checkBoardUser(boardId, user.getId());
-
-        if (clientRole.getRole().equals(WORKER)) {
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
     }
 }
