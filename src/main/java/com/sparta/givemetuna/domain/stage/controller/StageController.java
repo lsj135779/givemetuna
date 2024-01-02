@@ -16,41 +16,43 @@ public class StageController {
 
 	private final StageService stageService;
 
-	@PostMapping("/{board_id}/stages")
-	public ResponseEntity<CreateStageResponseDto> createStage(@PathVariable Long board_id,
+	// stage 생성
+	@PostMapping("/{boardId}/stages")
+	public ResponseEntity<CreateStageResponseDto> createStage(@PathVariable(name = "boardId") Long boardId,
 															  @RequestBody CreateStageRequestDto requestDto,
 															  @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		CreateStageResponseDto response = stageService.createStage(board_id, requestDto, userDetails.getUser());
+		CreateStageResponseDto response = stageService.createStage(boardId, requestDto, userDetails.getUser());
 		return ResponseEntity.ok().body(response);
 	}
 
-	//stage 수정
-	@PatchMapping("/{stage_id}")
-	public ResponseEntity<UpdateStageResponseDto> updateStage(@PathVariable Long stage_id,
+	// stage 수정
+	@PatchMapping("/{stageId}")
+	public ResponseEntity<UpdateStageResponseDto> updateStage(@PathVariable(name = "stageId") Long stageId,
 							@RequestBody UpdateStageRequestDto requestDto,
 							@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-		UpdateStageResponseDto response = stageService.updateStage(stage_id, requestDto, userDetails.getUser());
+		UpdateStageResponseDto response = stageService.updateStage(stageId, requestDto, userDetails.getUser());
 		return ResponseEntity.ok().body(response);
 	}
 
 	// 페이징 및 정렬
+	@GetMapping
+	public void getStages() {
+	}
 
-	//stage 삭제
-	@DeleteMapping("/{stage_id}")
-	public ResponseEntity<DeleteStageResponseDto> deleteStage(@PathVariable Long stage_id,
+	// stage 삭제
+	@DeleteMapping("/{stageId}")
+	public ResponseEntity<DeleteStageResponseDto> deleteStage(@PathVariable(name = "stageId") Long stageId,
 															  @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		stageService.deleteStage(stage_id, userDetails.getUser());
+		stageService.deleteStage(stageId, userDetails.getUser());
 		return ResponseEntity.ok().body(new DeleteStageResponseDto("Stage deleted successfully"));
 	}
 
-	@GetMapping("/{stage_id}")
-	public void getStage() {
-
-	}
-
-	@GetMapping
-	public void getStages() {
-
+	// stage 단건 조회
+	@GetMapping("/{stageId}")
+	public ResponseEntity<SingleStageResponseDto> getStage(@PathVariable(name = "stageId") Long stageId) {
+		Stage stage = stageService.getStageById(stageId);
+		SingleStageResponseDto response = SingleStageResponseDto.of(stage);
+		return ResponseEntity.ok().body(response);
 	}
 }
