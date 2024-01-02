@@ -40,6 +40,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<com.sparta.givemetuna.domain.issue.entity.Issue, com.sparta.givemetuna.domain.issue.entity.QIssue> issues = this.<com.sparta.givemetuna.domain.issue.entity.Issue, com.sparta.givemetuna.domain.issue.entity.QIssue>createList("issues", com.sparta.givemetuna.domain.issue.entity.Issue.class, com.sparta.givemetuna.domain.issue.entity.QIssue.class, PathInits.DIRECT2);
 
+    public final NumberPath<Long> kakaoId = createNumber("kakaoId", Long.class);
+
     public final StringPath nickname = createString("nickname");
 
     public final StringPath password = createString("password");

@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.user.entity;
 
-import com.sparta.givemetuna.domain.card.entity.UserCard;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.user.dto.UserInfoRequestDTO;
@@ -52,16 +53,24 @@ public class User {
 	private String description;
 
 	@OneToMany(mappedBy = "user")
-	private List<Issue> issues = new ArrayList<>();
+	@JsonIgnore
+	private final List<Issue> issues = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Checklist> checklists = new ArrayList<>();
+	@JsonIgnore
+	private final List<Checklist> checklists = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user")
-	private List<UserCard> userCards = new ArrayList<>();
+	@OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+	private final List<Card> cardsCreated = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user")
-	private List<BoardUserRole> boardUserRoles = new ArrayList<>();
+	@OneToMany(mappedBy = "assignor", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+	private final List<Card> cardsAssignedTo = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+	private final List<BoardUserRole> boardUserRoles = new ArrayList<>();
 
 	public User(String account, String password, String email, String nickname, String github, String description){
 		this.account = account;

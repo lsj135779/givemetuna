@@ -7,6 +7,7 @@ import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.user.dto.SignUpRequestDTO;
 import com.sparta.givemetuna.domain.user.dto.UserInfoRequestDTO;
 import com.sparta.givemetuna.domain.user.dto.UserInfoResponseDTO;
+import com.sparta.givemetuna.domain.user.exception.*;
 import com.sparta.givemetuna.domain.user.service.UserInfoService;
 import com.sparta.givemetuna.domain.user.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -35,13 +36,9 @@ public class UserController {
 
     //회원가입
     @PostMapping("/users/signup")
-    public ResponseEntity<CommonResponseDTO> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO){
+    public ResponseEntity<CommonResponseDTO> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) throws SignUpDuplicatedUserNicknameException, SignUpDuplicatedUserAccountException {
 
-        try {
-            userService.signup(signUpRequestDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new CommonResponseDTO(e.getMessage(), HttpStatus.CONFLICT.value()));
-        }
+        userService.signup(signUpRequestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED.value())
                 .body(new CommonResponseDTO("회원가입 성공", HttpStatus.CREATED.value()));
@@ -49,12 +46,10 @@ public class UserController {
 
     //로그인
     @PostMapping("/users/login")
-    public ResponseEntity<CommonResponseDTO> login(@RequestBody SignUpRequestDTO signUpRequestDTO, HttpServletResponse httpServletResponse) {
-        try {
-            userService.login(signUpRequestDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new CommonResponseDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
+    public ResponseEntity<CommonResponseDTO> login(@RequestBody SignUpRequestDTO signUpRequestDTO, HttpServletResponse httpServletResponse) throws LoginInvalidAccountException, LoginInvalidPasswordException {
+
+        userService.login(signUpRequestDTO);
+
 
         httpServletResponse.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(signUpRequestDTO.getAccount()));
 
@@ -71,7 +66,8 @@ public class UserController {
     //사용자 정보 수정
     @PatchMapping ("/users/{account}")
     public ResponseEntity<UserInfoResponseDTO> updateUserProfile(@PathVariable String account, @RequestBody UserInfoRequestDTO userInfoRequestDTO,
-                                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                       @AuthenticationPrincipal UserDetailsImpl userDetails) throws SignUpDuplicatedUserNicknameException,
+                                                                                SignUpDuplicatedUserEmailException, UpdateIdenticalIntroductionException {
 
         UserInfoResponseDTO userInfoResponseDTO = userInfoService.updateUser(account, userInfoRequestDTO, userDetails.getUser());
         return ResponseEntity.ok().body(userInfoResponseDTO);

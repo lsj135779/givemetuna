@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.user.service;
 
 import com.sparta.givemetuna.domain.board.entity.Board;
+import com.sparta.givemetuna.domain.board.repository.BoardRepository;
 import com.sparta.givemetuna.domain.user.dto.UserInfoRequestDTO;
 import com.sparta.givemetuna.domain.user.dto.UserInfoResponseDTO;
 import com.sparta.givemetuna.domain.user.entity.User;

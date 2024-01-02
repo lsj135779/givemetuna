@@ -10,7 +10,6 @@ public class SignUpDuplicatedUserNicknameException extends DomainException {
 	public SignUpDuplicatedUserNicknameException(String field, String value) {
 		super(ErrorCode.SIGNUP_DUPLICATED_USER_NICKNAME, new ErrorDetail(field, value));
 	}
-
 	public SignUpDuplicatedUserNicknameException() {
 		super(ErrorCode.SIGNUP_DUPLICATED_USER_NICKNAME, new ErrorDetail());
 	}
