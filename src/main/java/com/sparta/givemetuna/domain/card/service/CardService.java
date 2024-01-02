@@ -4,7 +4,9 @@ import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.response.CreateCardResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.SelectCardResponseDto;
-import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAccountResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAllAssignResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAssigneeResponseDto;
+import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAssignorResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPeriodResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardPriorityResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
@@ -74,11 +76,29 @@ public class CardService {
     }
 
     @Transactional
-    public UpdateCardAccountResponseDto updateAccount(User assignor, Card card) {
+    public UpdateCardAllAssignResponseDto updateAllAssign(Card card, User nextAssignor,
+            User assignee) {
 
-        card.updateAssignorAccount(assignor);
+        card.updateAssignor(nextAssignor);
+        checklistService.firstCreateChecklist(card, assignee);
 
-        return UpdateCardAccountResponseDto.of(card);
+        return UpdateCardAllAssignResponseDto.of(card);
+    }
+
+    @Transactional
+    public UpdateCardAssignorResponseDto updateAssignor(Card card, User assignor) {
+
+        card.updateAssignor(assignor);
+
+        return UpdateCardAssignorResponseDto.of(card);
+    }
+
+    @Transactional
+    public UpdateCardAssigneeResponseDto updateAssignee(Card card, User assignee) {
+
+        checklistService.firstCreateChecklist(card, assignee);
+
+        return UpdateCardAssigneeResponseDto.of(assignee);
     }
 
     @Transactional
@@ -108,7 +128,7 @@ public class CardService {
             responseDtoList.add(responseDto);
         }
 
-        return new PageImpl<> (responseDtoList, pageable, allCardByStageId.getTotalElements());
+        return new PageImpl<>(responseDtoList, pageable, allCardByStageId.getTotalElements());
     }
 
     @Transactional

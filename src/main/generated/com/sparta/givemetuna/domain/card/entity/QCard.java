@@ -26,6 +26,8 @@ public class QCard extends EntityPathBase<Card> {
 
     public final com.sparta.givemetuna.domain.user.entity.QUser assignor;
 
+    public final EnumPath<com.sparta.givemetuna.domain.card.constant.CardPriority> cardPriority = createEnum("cardPriority", com.sparta.givemetuna.domain.card.constant.CardPriority.class);
+
     public final ListPath<com.sparta.givemetuna.domain.checklist.entity.Checklist, com.sparta.givemetuna.domain.checklist.entity.QChecklist> checklists = this.<com.sparta.givemetuna.domain.checklist.entity.Checklist, com.sparta.givemetuna.domain.checklist.entity.QChecklist>createList("checklists", com.sparta.givemetuna.domain.checklist.entity.Checklist.class, com.sparta.givemetuna.domain.checklist.entity.QChecklist.class, PathInits.DIRECT2);
 
     public final DateTimePath<java.sql.Timestamp> closedAt = createDateTime("closedAt", java.sql.Timestamp.class);
@@ -36,10 +38,6 @@ public class QCard extends EntityPathBase<Card> {
     public final com.sparta.givemetuna.domain.user.entity.QUser creator;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
-
-    public final BooleanPath isDone = createBoolean("isDone");
-
-    public final NumberPath<Integer> priority = createNumber("priority", Integer.class);
 
     public final com.sparta.givemetuna.domain.stage.entity.QStage stage;
 

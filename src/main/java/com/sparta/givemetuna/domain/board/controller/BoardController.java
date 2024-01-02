@@ -59,12 +59,13 @@ public class BoardController {
 	// board 단일 조회
 	// todo: stage와 card까지 보여져야함
 	// todo:생성한 사람과 초대받은 사람 이외의 사람들에겐 접근권한 없어야함
-//	@GetMapping("/{boardId}")
-//	public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
-//		Board board = boardService.getBoard(boardId);
-//		return ResponseEntity.ok().body(new BoardResponseDto(board));
-//	}
-	
+	@GetMapping("/{boardId}")
+	public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
+		Board board = boardService.getBoard(boardId);
+		BoardResponseDto responseDto = BoardResponseDto.of(board);
+		return ResponseEntity.ok().body(responseDto);
+	}
+
 	// board 삭제
 	// todo: user 권한 확인 필요
 	@DeleteMapping("/{boardId}")
