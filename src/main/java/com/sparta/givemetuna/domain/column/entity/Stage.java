@@ -37,7 +37,7 @@ public class Stage {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@OneToMany(mappedBy = "stage", targetEntity = UserCard.class, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "stage", targetEntity = User.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<UserCard> userCards = new ArrayList<>();
 
 	@OneToMany(mappedBy = "stage", targetEntity = Checklist.class, cascade = CascadeType.ALL, orphanRemoval = true)
