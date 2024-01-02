@@ -40,7 +40,7 @@ public class BoardService {
 		// board에 user 권한 총책임자 설정
 		// board.setBoardRole("총책임자");
 
-		// 3가지 stage 만들어서 넣기
+		// 4가지 stage 만들어서 넣기
 		createDefaultStages(board, user);
 
 		// board 저장
