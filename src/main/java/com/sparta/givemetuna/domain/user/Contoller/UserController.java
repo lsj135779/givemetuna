@@ -80,17 +80,4 @@ public class UserController {
         userInfoService.deleteUser(account, userDetails.getUser());
         return ResponseEntity.ok().body(new CommonResponseDTO("유저 삭제 성공", HttpStatus.OK.value()));
     }
-
-    //카카오 로그인
-    @GetMapping("/users/kakao/callback")
-    public ResponseEntity<CommonResponseDTO> kakaoLogin(@RequestParam(required = false) String code, HttpServletResponse httpServletResponse) throws JsonProcessingException {
-
-        String token = userInfoService.kakaoLogin(code);
-
-        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token.substring(7));
-        cookie.setPath("/");
-        httpServletResponse.addCookie(cookie);
-
-        return ResponseEntity.ok().body(new CommonResponseDTO("카카오 로그인 성공", HttpStatus.OK.value()));
-    }
 }
