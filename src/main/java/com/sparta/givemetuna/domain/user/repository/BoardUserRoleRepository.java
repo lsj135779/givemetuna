@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BoardUserRoleRepository extends JpaRepository<BoardUserRole, Long> {
 
-    Optional<BoardUserRole> findByBoardIdAndUserId(Long boardId, Long userId);
+	Optional<BoardUserRole> findByBoardIdAndUserId(Long boardId, Long userId);
 }

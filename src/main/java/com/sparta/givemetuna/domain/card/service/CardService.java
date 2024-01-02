@@ -28,127 +28,131 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CardService {
 
-    private final CardRepository cardRepository;
-    private final ChecklistService checklistService;
+	private final CardRepository cardRepository;
 
-    @Transactional
-    public CreateCardResponseDto createCard(Stage stage, User creator, User assignor,
-            CreateCardRequestDto requestDto) {
+	private final ChecklistService checklistService;
 
-        if (requestDto.getCardPriority() == null) {
 
-            Card saveCard = Card.builder().creator(creator).assignor(assignor).stage(stage)
-                    .title(requestDto.getTitle()).cardPriority(CardPriority.NON)
-                    .startedAt(requestDto.getStartedAt()).closedAt(requestDto.getClosedAt())
-                    .build();
+	public CreateCardResponseDto createCard(Stage stage, User creator, User assignor,
+		CreateCardRequestDto requestDto) {
 
-            cardRepository.save(saveCard);
+		if (requestDto.getCardPriority() == null) {
 
-            return CreateCardResponseDto.of(saveCard, stage, assignor);
-        }
+			Card saveCard = Card.builder().creator(creator).assignor(assignor).stage(stage)
+				.title(requestDto.getTitle()).cardPriority(CardPriority.NON)
+				.startedAt(requestDto.getStartedAt()).closedAt(requestDto.getClosedAt())
+				.build();
 
-        Card saveCard = Card.builder().creator(creator).assignor(assignor).stage(stage)
-                .title(requestDto.getTitle()).cardPriority(requestDto.getCardPriority())
-                .startedAt(requestDto.getStartedAt()).closedAt(requestDto.getClosedAt()).build();
+			cardRepository.save(saveCard);
 
-        cardRepository.save(saveCard);
+			return CreateCardResponseDto.of(saveCard, stage, assignor);
+		}
 
-        return CreateCardResponseDto.of(saveCard, stage, assignor);
-    }
+		Card saveCard = Card.builder().creator(creator).assignor(assignor).stage(stage)
+			.title(requestDto.getTitle()).cardPriority(requestDto.getCardPriority())
+			.startedAt(requestDto.getStartedAt()).closedAt(requestDto.getClosedAt()).build();
 
-    @Transactional
-    public UpdateCardStageResponseDto updateStage(Stage afterStage, Card card) {
+		cardRepository.save(saveCard);
 
-        card.updateStage(afterStage);
+		return CreateCardResponseDto.of(saveCard, stage, assignor);
+	}
 
-        return UpdateCardStageResponseDto.of(card);
-    }
 
-    @Transactional
-    public UpdateCardTitleResponseDto updateTitle(Card card, String title) {
+	public UpdateCardStageResponseDto updateStage(Stage afterStage, Card card) {
 
-        card.updateTitle(title);
+		card.updateStage(afterStage);
 
-        return UpdateCardTitleResponseDto.of(card);
-    }
+		return UpdateCardStageResponseDto.of(card);
+	}
 
-    @Transactional
-    public UpdateCardAllAssignResponseDto updateAllAssign(Card card, User nextAssignor,
-            User assignee) {
 
-        card.updateAssignor(nextAssignor);
-        checklistService.firstCreateChecklist(card, assignee);
+	public UpdateCardTitleResponseDto updateTitle(Card card, String title) {
 
-        return UpdateCardAllAssignResponseDto.of(card);
-    }
+		card.updateTitle(title);
 
-    @Transactional
-    public UpdateCardAssignorResponseDto updateAssignor(Card card, User assignor) {
+		return UpdateCardTitleResponseDto.of(card);
+	}
 
-        card.updateAssignor(assignor);
 
-        return UpdateCardAssignorResponseDto.of(card);
-    }
+	public UpdateCardAllAssignResponseDto updateAllAssign(Card card, User nextAssignor,
+		User assignee) {
 
-    @Transactional
-    public UpdateCardAssigneeResponseDto updateAssignee(Card card, User assignee) {
+		card.updateAssignor(nextAssignor);
+		checklistService.firstCreateChecklist(card, assignee);
 
-        checklistService.firstCreateChecklist(card, assignee);
+		return UpdateCardAllAssignResponseDto.of(card);
+	}
 
-        return UpdateCardAssigneeResponseDto.of(assignee);
-    }
 
-    @Transactional
-    public UpdateCardPriorityResponseDto updatePriority(Card card, CardPriority cardPriority) {
+	public UpdateCardAssignorResponseDto updateAssignor(Card card, User assignor) {
 
-        card.updatePriority(cardPriority);
+		card.updateAssignor(assignor);
 
-        return UpdateCardPriorityResponseDto.of(card);
-    }
+		return UpdateCardAssignorResponseDto.of(card);
+	}
 
-    @Transactional
-    public UpdateCardPeriodResponseDto updatePeriod(Card card, Timestamp startedAt,
-            Timestamp closedAt) {
 
-        card.updatePeriod(startedAt, closedAt);
+	public UpdateCardAssigneeResponseDto updateAssignee(Card card, User assignee) {
 
-        return UpdateCardPeriodResponseDto.of(card);
-    }
+		checklistService.firstCreateChecklist(card, assignee);
 
-    public Page<SelectCardResponseDto> getCardPage(Stage stage, Pageable pageable) {
+		return UpdateCardAssigneeResponseDto.of(assignee);
+	}
 
-        Page<Card> allCardByStageId = cardRepository.findAllByStageId(stage.getId(), pageable);
-        List<SelectCardResponseDto> responseDtoList = new ArrayList<>();
 
-        for (Card card : allCardByStageId) {
-            SelectCardResponseDto responseDto = SelectCardResponseDto.of(card);
-            responseDtoList.add(responseDto);
-        }
+	public UpdateCardPriorityResponseDto updatePriority(Card card, CardPriority cardPriority) {
 
-        return new PageImpl<>(responseDtoList, pageable, allCardByStageId.getTotalElements());
-    }
+		card.updatePriority(cardPriority);
 
-    @Transactional
-    public void delete(Card card) {
-        cardRepository.delete(card);
-    }
+		return UpdateCardPriorityResponseDto.of(card);
+	}
 
-    private Card checkCard(Long cardId) {
 
-        return cardRepository.findById(cardId)
-                .orElseThrow(() -> new NullPointerException("없는 카드입니다."));
-    }
+	public UpdateCardPeriodResponseDto updatePeriod(Card card, Timestamp startedAt,
+		Timestamp closedAt) {
 
-    public Card checkStageCard(Long stageId, Long cardId) {
+		card.updatePeriod(startedAt, closedAt);
 
-        Card card = checkCard(cardId);
+		return UpdateCardPeriodResponseDto.of(card);
+	}
 
-        if (!card.getStage().getId().equals(stageId)) {
-            throw new IllegalArgumentException("해당 카드는 다른 스테이지에 있습니다.");
-        }
-        return card;
-    }
+	@Transactional(readOnly = true)
+	public Page<SelectCardResponseDto> getCardPage(Stage stage, Pageable pageable) {
+
+		Page<Card> allCardByStageId = cardRepository.findAllByStageId(stage.getId(), pageable);
+		List<SelectCardResponseDto> responseDtoList = new ArrayList<>();
+
+		for (Card card : allCardByStageId) {
+			SelectCardResponseDto responseDto = SelectCardResponseDto.of(card);
+			responseDtoList.add(responseDto);
+		}
+
+		return new PageImpl<>(responseDtoList, pageable, allCardByStageId.getTotalElements());
+	}
+
+
+	public void delete(Card card) {
+		cardRepository.delete(card);
+	}
+
+	@Transactional(readOnly = true)
+	public Card checkCard(Long cardId) {
+
+		return cardRepository.findById(cardId)
+			.orElseThrow(() -> new NullPointerException("없는 카드입니다."));
+	}
+
+	@Transactional(readOnly = true)
+	public Card checkStageCard(Long stageId, Long cardId) {
+
+		Card card = checkCard(cardId);
+
+		if (!card.getStage().getId().equals(stageId)) {
+			throw new IllegalArgumentException("해당 카드는 다른 스테이지에 있습니다.");
+		}
+		return card;
+	}
 }
