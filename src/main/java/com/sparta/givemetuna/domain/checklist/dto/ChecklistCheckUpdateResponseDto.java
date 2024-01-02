@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.checklist.dto;
 
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
+import com.sparta.givemetuna.domain.checklist.entity.Priority;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,12 +21,12 @@ public class ChecklistCheckUpdateResponseDto {
 
 	private Boolean check;
 
-	private Integer priority;
+	private Priority priority;
 
 	public static ChecklistCheckUpdateResponseDto of(Checklist checklist) {
 		return new ChecklistCheckUpdateResponseDto(
 			checklist.getId(),
-			checklist.getAssignee().getId(),
+			checklist.getUser().getId(),
 			checklist.getCard().getId(),
 			checklist.getContents(),
 			checklist.getCheck(),

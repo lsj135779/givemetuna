@@ -26,8 +26,6 @@ public class QStage extends EntityPathBase<Stage> {
 
     public final StringPath category = createString("category");
 
-    public final ListPath<com.sparta.givemetuna.domain.checklist.entity.Checklist, com.sparta.givemetuna.domain.checklist.entity.QChecklist> checklists = this.<com.sparta.givemetuna.domain.checklist.entity.Checklist, com.sparta.givemetuna.domain.checklist.entity.QChecklist>createList("checklists", com.sparta.givemetuna.domain.checklist.entity.Checklist.class, com.sparta.givemetuna.domain.checklist.entity.QChecklist.class, PathInits.DIRECT2);
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final com.sparta.givemetuna.domain.user.entity.QUser user;

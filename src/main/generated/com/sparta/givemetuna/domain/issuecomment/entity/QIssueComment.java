@@ -1,15 +1,13 @@
 package com.sparta.givemetuna.domain.issuecomment.entity;
 
-import static com.querydsl.core.types.PathMetadataFactory.forVariable;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.*;
+
 import com.querydsl.core.types.PathMetadata;
-import com.querydsl.core.types.dsl.DateTimePath;
-import com.querydsl.core.types.dsl.EntityPathBase;
-import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.core.types.dsl.PathInits;
-import com.querydsl.core.types.dsl.StringPath;
 import javax.annotation.processing.Generated;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -24,8 +22,7 @@ public class QIssueComment extends EntityPathBase<IssueComment> {
 
     public static final QIssueComment issueComment = new QIssueComment("issueComment");
 
-    public final com.sparta.givemetuna.domain.common.QBaseEntity _super = new com.sparta.givemetuna.domain.common.QBaseEntity(
-            this);
+    public final com.sparta.givemetuna.domain.common.QBaseEntity _super = new com.sparta.givemetuna.domain.common.QBaseEntity(this);
 
     public final StringPath contents = createString("contents");
 
@@ -57,15 +54,10 @@ public class QIssueComment extends EntityPathBase<IssueComment> {
         this(IssueComment.class, metadata, inits);
     }
 
-    public QIssueComment(Class<? extends IssueComment> type, PathMetadata metadata,
-            PathInits inits) {
+    public QIssueComment(Class<? extends IssueComment> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.issue =
-                inits.isInitialized("issue") ? new com.sparta.givemetuna.domain.issue.entity.QIssue(
-                        forProperty("issue"), inits.get("issue")) : null;
-        this.user =
-                inits.isInitialized("user") ? new com.sparta.givemetuna.domain.user.entity.QUser(
-                        forProperty("user")) : null;
+        this.issue = inits.isInitialized("issue") ? new com.sparta.givemetuna.domain.issue.entity.QIssue(forProperty("issue"), inits.get("issue")) : null;
+        this.user = inits.isInitialized("user") ? new com.sparta.givemetuna.domain.user.entity.QUser(forProperty("user")) : null;
     }
 
 }
