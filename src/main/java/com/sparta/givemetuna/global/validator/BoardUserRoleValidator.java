@@ -1,8 +1,10 @@
 package com.sparta.givemetuna.global.validator;
 
 import com.sparta.givemetuna.domain.board.controller.BoardController;
+import com.sparta.givemetuna.domain.board.exception.BoardInvalidAuthorizationException;
 import com.sparta.givemetuna.domain.board.service.BoardService;
 import com.sparta.givemetuna.domain.card.controller.CardController;
+import com.sparta.givemetuna.domain.card.exception.CardInvalidAuthorizationException;
 import com.sparta.givemetuna.domain.card.service.CardService;
 import com.sparta.givemetuna.domain.core.service.CardMatcherService;
 import com.sparta.givemetuna.domain.user.entity.BoardUserRole;
@@ -47,28 +49,34 @@ public class BoardUserRoleValidator {
 	 * <p>
 	 * Checklist,Issue, IssueComment : 총관리자 or 매니저 or 워커
 	 */
-	public void validateRole(Class<?> controllerClass, Long userId, Long boardId) { // 보드에 대한 정보를 입력
+
+	/**
+	 * @param apiClass api 호출 클래스 정보
+	 * @param userId   회원ID
+	 * @param boardId  보드ID
+	 * @apiNote depends {@link #getRole(Long, Long)}
+	 * @implNote 각 API에 대한 권한은 다음과 같습니다. Board : 총관리자 Card : 총관리자 or 매니저 Checklist,Issue, IssueComment : 총관리자 or 매니저 or 워커
+	 * @author @임지훈
+	 */
+	public void validateRole(Class<?> apiClass, Long userId, Long boardId) { // 보드에 대한 정보를 입력
 		// 보드에 따른 사용자의 권한을 가져온다.
-		BoardUserRole userRole = boardUserRoleRepository
-			.findByBoardIdAndUserId(boardId, userId)
-			.orElseThrow(() -> new RuntimeException("해당 보드의 권한이 없는 유저입니다."));
+		Role role = getRole(boardId, userId);
 
 		// Check Role of Board API
-		if (boardApiCaller.contains(controllerClass)) {
-			if (userRole.getRole().equals(Role.GENERAL_MANAGER)) {
+		if (boardApiCaller.contains(apiClass)) {
+			if (role.equals(Role.GENERAL_MANAGER)) {
 				return;
 			} else {
-				throw new RuntimeException("Board 요청 처리 시, 총 관리자만 접근할 수 있습니다.");
+				throw new BoardInvalidAuthorizationException();
 			}
 		}
 		// Check Role of Card API
-		if (cardApiCaller.contains(controllerClass)) {
-			if (userRole.getRole().equals(Role.GENERAL_MANAGER) || userRole.getRole().equals(Role.TEAM_MANAGER)) {
+		if (cardApiCaller.contains(apiClass)) {
+			if (role.equals(Role.GENERAL_MANAGER) || role.equals(Role.TEAM_MANAGER)) {
 				return;
 			} else {
-				throw new RuntimeException("Card 요청 처리 시, 총 관리자 혹은 팀 매니저만 접근할 수 있습니다.");
+				throw new CardInvalidAuthorizationException();
 			}
 		}
-		throw new RuntimeException("요청 처리에 대한 필요한 권한이 없습니다.");
 	}
 }
