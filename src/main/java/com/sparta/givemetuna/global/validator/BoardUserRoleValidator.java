@@ -4,7 +4,6 @@ import com.sparta.givemetuna.domain.board.controller.BoardController;
 import com.sparta.givemetuna.domain.board.service.BoardService;
 import com.sparta.givemetuna.domain.card.controller.CardController;
 import com.sparta.givemetuna.domain.card.service.CardService;
-import com.sparta.givemetuna.domain.checklist.temp.cardTemp.CardTempService;
 import com.sparta.givemetuna.domain.core.service.CardMatcherService;
 import com.sparta.givemetuna.domain.user.entity.BoardUserRole;
 import com.sparta.givemetuna.domain.user.entity.Role;
@@ -23,7 +22,6 @@ public class BoardUserRoleValidator {
 	List<Class<?>> cardApiCaller = List.of(
 		CardController.class,
 		CardService.class,
-		CardTempService.class,
 		CardMatcherService.class
 	);
 
@@ -34,11 +32,10 @@ public class BoardUserRoleValidator {
 	);
 
 
-	public String getRole(Long boardId, Long userId) {
+	public Role getRole(Long boardId, Long userId) {
 		BoardUserRole boardUserRole = boardUserRoleRepository.findByBoardIdAndUserId(boardId, userId)
 			.orElseThrow(() -> new IllegalArgumentException("보드에 권한이 없는 유저입니다."));
-//		return boardUserRole.getRole();
-		return "";
+		return boardUserRole.getRole();
 	}
 
 	/*
