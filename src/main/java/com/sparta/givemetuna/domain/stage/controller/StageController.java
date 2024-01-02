@@ -30,11 +30,13 @@ public class StageController {
 
 	private final StageService stageService;
 
-	@PostMapping("/{board_id}/stages")
-	public ResponseEntity<CreateStageResponseDto> createStage(@PathVariable Long board_id,
-		@RequestBody CreateStageRequestDto requestDto,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		CreateStageResponseDto response = stageService.createStage(board_id, requestDto, userDetails.getUser());
+	// stage 생성
+	@PostMapping("/{boardId}/stages")
+	public ResponseEntity<CreateStageResponseDto> createStage(@PathVariable(name = "boardId") Long boardId,
+															  @RequestBody CreateStageRequestDto requestDto,
+															  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+		CreateStageResponseDto response = stageService.createStage(boardId, requestDto, userDetails.getUser());
 		return ResponseEntity.ok().body(response);
 	}
 
