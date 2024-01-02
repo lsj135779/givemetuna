@@ -138,8 +138,8 @@ public class CardController {
         Card card = checkAPI(boardId, stageId, cardId);
         checkCardAssignor(userDetails, boardId, card);
 
-        UpdateCardAssigneeResponseDto responseDto = cardMatcherService.updateCardAssignee(card,
-                requestDto);
+        UpdateCardAssigneeResponseDto responseDto = cardMatcherService.updateCardAssignee(boardId,
+                card, requestDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }

@@ -17,6 +17,7 @@ import com.sparta.givemetuna.domain.card.service.CardService;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.stage.service.StageService;
 import com.sparta.givemetuna.domain.user.entity.BoardUserRole;
+import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.service.UserInfoService;
 import com.sparta.givemetuna.global.validator.BoardUserRoleValidator;
@@ -62,7 +63,7 @@ public class CardMatcherService {
         User assignee = userInfoService.getUser(requestDto.getAssignee());
 
         boardUserRoleValidator.validateRole(CardMatcherService.class, nextAssignor.getId(), boardId);
-        boardUserRoleValidator.validateRole(CardMatcherService.class, assignee.getId(), boardId);
+        Role role = boardUserRoleValidator.getRole(boardId, assignee.getId());
 
         return cardService.updateAllAssign(card, nextAssignor, assignee);
 
@@ -77,10 +78,11 @@ public class CardMatcherService {
         return cardService.updateAssignor(card, assignor);
     }
 
-    public UpdateCardAssigneeResponseDto updateCardAssignee(Card card,
+    public UpdateCardAssigneeResponseDto updateCardAssignee(Long boardId, Card card,
             UpdateCardAssigneeRequestDto requestDto) {
 
         User assignee = userInfoService.getUser(requestDto.getAssignee());
+        Role role = boardUserRoleValidator.getRole(boardId, assignee.getId());
 
         return cardService.updateAssignee(card, assignee);
     }
