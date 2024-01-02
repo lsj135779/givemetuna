@@ -49,177 +49,183 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/boards/{boardId}/stage/{stageId}/cards")
 public class CardController {
 
-    private final BoardUserRoleValidator boardUserRoleValidator;
-    private final CardMatcherService cardMatcherService;
-    private final StageService stageService;
-    private final CardService cardService;
+	private final BoardUserRoleValidator boardUserRoleValidator;
 
-    @PostMapping
-    public ResponseEntity<CreateCardResponseDto> createCard(@PathVariable Long boardId,
-            @PathVariable Long stageId, @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody CreateCardRequestDto requestDto) {
+	private final CardMatcherService cardMatcherService;
 
-        Stage stage = stageService.checkStage(boardId, stageId);
-        boardUserRoleValidator.validateRole(CardController.class, userDetails.getUser().getId(),
-                boardId);
+	private final StageService stageService;
 
-        CreateCardResponseDto responseDto = cardMatcherService.createCard(boardId, stage,
-                userDetails.getUser(), requestDto);
+	private final CardService cardService;
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-    }
+	@PostMapping
+	public ResponseEntity<CreateCardResponseDto> createCard(
+		@PathVariable Long boardId,
+		@PathVariable Long stageId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@Valid @RequestBody CreateCardRequestDto requestDto
+	) {
 
-    @PatchMapping("/{cardId}/phase")
-    public ResponseEntity<UpdateCardStageResponseDto> updateCardStage(@PathVariable Long boardId,
-            @PathVariable Long stageId, @PathVariable Long cardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody UpdateCardStageRequestDto requestDto) {
+		Stage stage = stageService.checkStage(boardId, stageId);
+		boardUserRoleValidator.validateRole(CardController.class, userDetails.getUser().getId(),
+			boardId);
 
-        Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, boardId, card);
+		CreateCardResponseDto responseDto = cardMatcherService.createCard(boardId, stage,
+			userDetails.getUser(), requestDto);
 
-        UpdateCardStageResponseDto responseDto = cardMatcherService.updateCardStage(boardId, card,
-                requestDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+	}
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-    }
+	@PatchMapping("/{cardId}/phase")
+	public ResponseEntity<UpdateCardStageResponseDto> updateCardStage(@PathVariable Long boardId,
+		@PathVariable Long stageId, @PathVariable Long cardId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@Valid @RequestBody UpdateCardStageRequestDto requestDto) {
 
-    @PatchMapping("/{cardId}/title")
-    public ResponseEntity<UpdateCardTitleResponseDto> updateCardTitle(@PathVariable Long boardId,
-            @PathVariable Long stageId, @PathVariable Long cardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody UpdateCardTitleRequestDto requestDto) {
+		Card card = checkAPI(boardId, stageId, cardId);
+		checkCardAssignor(userDetails, boardId, card);
 
-        Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, boardId, card);
+		UpdateCardStageResponseDto responseDto = cardMatcherService.updateCardStage(boardId, card,
+			requestDto);
 
-        UpdateCardTitleResponseDto responseDto = cardService.updateTitle(card,
-                requestDto.getTitle());
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-    }
+	@PatchMapping("/{cardId}/title")
+	public ResponseEntity<UpdateCardTitleResponseDto> updateCardTitle(@PathVariable Long boardId,
+		@PathVariable Long stageId, @PathVariable Long cardId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@Valid @RequestBody UpdateCardTitleRequestDto requestDto) {
 
-    @PatchMapping("/{cardId}/all-assign")
-    public ResponseEntity<UpdateCardAllAssignResponseDto> updateCardAllAssign(
-            @PathVariable Long boardId, @PathVariable Long stageId, @PathVariable Long cardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody UpdateCardAllAssignRequestDto requestDto) {
+		Card card = checkAPI(boardId, stageId, cardId);
+		checkCardAssignor(userDetails, boardId, card);
 
-        Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, boardId, card);
+		UpdateCardTitleResponseDto responseDto = cardService.updateTitle(card,
+			requestDto.getTitle());
 
-        UpdateCardAllAssignResponseDto responseDto = cardMatcherService.updateCardAllAssign(boardId,
-                card, requestDto);
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-    }
+	@PatchMapping("/{cardId}/all-assign")
+	public ResponseEntity<UpdateCardAllAssignResponseDto> updateCardAllAssign(
+		@PathVariable Long boardId, @PathVariable Long stageId, @PathVariable Long cardId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@Valid @RequestBody UpdateCardAllAssignRequestDto requestDto) {
 
-    @PatchMapping("/{cardId}/assignor")
-    public ResponseEntity<UpdateCardAssignorResponseDto> updateCardAssignor(
-            @PathVariable Long boardId, @PathVariable Long stageId, @PathVariable Long cardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody UpdateCardAssignorRequestDto requestDto) {
+		Card card = checkAPI(boardId, stageId, cardId);
+		checkCardAssignor(userDetails, boardId, card);
 
-        Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, boardId, card);
+		UpdateCardAllAssignResponseDto responseDto = cardMatcherService.updateCardAllAssign(boardId,
+			card, requestDto);
 
-        UpdateCardAssignorResponseDto responseDto = cardMatcherService.updateCardAssignor(boardId,
-                card, requestDto);
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-    }
+	@PatchMapping("/{cardId}/assignor")
+	public ResponseEntity<UpdateCardAssignorResponseDto> updateCardAssignor(
+		@PathVariable Long boardId, @PathVariable Long stageId, @PathVariable Long cardId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@Valid @RequestBody UpdateCardAssignorRequestDto requestDto) {
 
-    @PatchMapping("/{cardId}/assignee")
-    public ResponseEntity<UpdateCardAssigneeResponseDto> updateCardAssignee(
-            @PathVariable Long boardId, @PathVariable Long stageId, @PathVariable Long cardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody UpdateCardAssigneeRequestDto requestDto) {
+		Card card = checkAPI(boardId, stageId, cardId);
+		checkCardAssignor(userDetails, boardId, card);
 
-        Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, boardId, card);
+		UpdateCardAssignorResponseDto responseDto = cardMatcherService.updateCardAssignor(boardId,
+			card, requestDto);
 
-        UpdateCardAssigneeResponseDto responseDto = cardMatcherService.updateCardAssignee(boardId,
-                card, requestDto);
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-    }
+	@PatchMapping("/{cardId}/assignee")
+	public ResponseEntity<UpdateCardAssigneeResponseDto> updateCardAssignee(
+		@PathVariable Long boardId, @PathVariable Long stageId, @PathVariable Long cardId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@Valid @RequestBody UpdateCardAssigneeRequestDto requestDto) {
 
-    @PatchMapping("/{cardId}/priority")
-    public ResponseEntity<UpdateCardPriorityResponseDto> updateCardPriority(
-            @PathVariable Long boardId, @PathVariable Long stageId, @PathVariable Long cardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody UpdatetCardPriorityRequestDto requestDto) {
+		Card card = checkAPI(boardId, stageId, cardId);
+		checkCardAssignor(userDetails, boardId, card);
 
-        Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, boardId, card);
+		UpdateCardAssigneeResponseDto responseDto = cardMatcherService.updateCardAssignee(boardId,
+			card, requestDto);
 
-        UpdateCardPriorityResponseDto responseDto = cardService.updatePriority(card,
-                requestDto.getCardPriority());
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-    }
+	@PatchMapping("/{cardId}/priority")
+	public ResponseEntity<UpdateCardPriorityResponseDto> updateCardPriority(
+		@PathVariable Long boardId, @PathVariable Long stageId, @PathVariable Long cardId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@Valid @RequestBody UpdatetCardPriorityRequestDto requestDto) {
 
-    @PatchMapping("/{cardId}/period")
-    public ResponseEntity<UpdateCardPeriodResponseDto> updateCardPeriod(@PathVariable Long boardId,
-            @PathVariable Long stageId, @PathVariable Long cardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody UpdateCardPeriodRequestDto requestDto) {
+		Card card = checkAPI(boardId, stageId, cardId);
+		checkCardAssignor(userDetails, boardId, card);
 
-        Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, boardId, card);
+		UpdateCardPriorityResponseDto responseDto = cardService.updatePriority(card,
+			requestDto.getCardPriority());
 
-        UpdateCardPeriodResponseDto responseDto = cardService.updatePeriod(card,
-                requestDto.getStartedAt(), requestDto.getClosedAt());
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-    }
+	@PatchMapping("/{cardId}/period")
+	public ResponseEntity<UpdateCardPeriodResponseDto> updateCardPeriod(@PathVariable Long boardId,
+		@PathVariable Long stageId, @PathVariable Long cardId,
+		@AuthenticationPrincipal UserDetailsImpl userDetails,
+		@Valid @RequestBody UpdateCardPeriodRequestDto requestDto) {
 
-    @GetMapping("/{cardId}")
-    public ResponseEntity<SelectCardResponseDto> getCard(@PathVariable Long boardId,
-            @PathVariable Long stageId, @PathVariable Long cardId) {
+		Card card = checkAPI(boardId, stageId, cardId);
+		checkCardAssignor(userDetails, boardId, card);
 
-        Card card = checkAPI(boardId, stageId, cardId);
+		UpdateCardPeriodResponseDto responseDto = cardService.updatePeriod(card,
+			requestDto.getStartedAt(), requestDto.getClosedAt());
 
-        SelectCardResponseDto responseDto = SelectCardResponseDto.of(card);
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-    }
+	@GetMapping("/{cardId}")
+	public ResponseEntity<SelectCardResponseDto> getCard(@PathVariable Long boardId,
+		@PathVariable Long stageId, @PathVariable Long cardId) {
 
-    @GetMapping
-    public ResponseEntity<Page<SelectCardResponseDto>> getCardPage(
-            @PageableDefault(size = 5, sort = "card_id", direction = Sort.Direction.DESC) Pageable pageable,
-            @PathVariable Long boardId, @PathVariable Long stageId) {
+		Card card = checkAPI(boardId, stageId, cardId);
 
-        Stage stage = stageService.checkStage(boardId, stageId);
+		SelectCardResponseDto responseDto = SelectCardResponseDto.of(card);
 
-        Page<SelectCardResponseDto> responseDtoList = cardService.getCardPage(stage, pageable);
+		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+	}
 
-        return ResponseEntity.status(HttpStatus.OK).body(responseDtoList);
-    }
+	@GetMapping
+	public ResponseEntity<Page<SelectCardResponseDto>> getCardPage(
+		@PageableDefault(size = 5, sort = "card_id", direction = Sort.Direction.DESC) Pageable pageable,
+		@PathVariable Long boardId, @PathVariable Long stageId) {
 
-    @DeleteMapping("/{cardId}")
-    public ResponseEntity<Long> deleteCard(@PathVariable Long boardId, @PathVariable Long stageId,
-            @PathVariable Long cardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		Stage stage = stageService.checkStage(boardId, stageId);
 
-        Card card = checkAPI(boardId, stageId, cardId);
-        checkCardAssignor(userDetails, boardId, card);
-        cardService.delete(card);
+		Page<SelectCardResponseDto> responseDtoList = cardService.getCardPage(stage, pageable);
 
-        return ResponseEntity.status(HttpStatus.OK).body(cardId);
-    }
+		return ResponseEntity.status(HttpStatus.OK).body(responseDtoList);
+	}
 
-    private void checkCardAssignor(UserDetailsImpl userDetails, Long boardId, Card card) {
-        if (!card.getAssignor().getId().equals(userDetails.getUser().getId()) ||
-                !boardUserRoleValidator.getRole(boardId, userDetails.getUser().getId())
-                        .equals(GENERAL_MANAGER)) {
-            throw new IllegalArgumentException("카드에 대한 권한이 없습니다.");
-        }
-    }
+	@DeleteMapping("/{cardId}")
+	public ResponseEntity<Long> deleteCard(@PathVariable Long boardId, @PathVariable Long stageId,
+		@PathVariable Long cardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-    private Card checkAPI(Long boardId, Long stageId, Long cardId) {
+		Card card = checkAPI(boardId, stageId, cardId);
+		checkCardAssignor(userDetails, boardId, card);
+		cardService.delete(card);
 
-        Stage stage = stageService.checkStage(boardId, stageId);
+		return ResponseEntity.status(HttpStatus.OK).body(cardId);
+	}
 
-        return cardService.checkStageCard(stage.getId(), cardId);
-    }
+	private void checkCardAssignor(UserDetailsImpl userDetails, Long boardId, Card card) {
+		if (!card.getAssignor().getId().equals(userDetails.getUser().getId()) ||
+			!boardUserRoleValidator.getRole(boardId, userDetails.getUser().getId())
+				.equals(GENERAL_MANAGER)) {
+			throw new IllegalArgumentException("카드에 대한 권한이 없습니다.");
+		}
+	}
+
+	private Card checkAPI(Long boardId, Long stageId, Long cardId) {
+
+		Stage stage = stageService.checkStage(boardId, stageId);
+
+		return cardService.checkStageCard(stage.getId(), cardId);
+	}
 }

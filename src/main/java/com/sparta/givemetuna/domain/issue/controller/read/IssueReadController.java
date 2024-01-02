@@ -2,6 +2,7 @@ package com.sparta.givemetuna.domain.issue.controller.read;
 
 import com.sparta.givemetuna.domain.issue.dto.read.IssueReadResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueSelectCondition;
+import com.sparta.givemetuna.domain.issue.exception.SelectIssueNotFoundException;
 import com.sparta.givemetuna.domain.issue.service.read.IssueReadService;
 import com.sparta.givemetuna.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class IssueReadController {
 	public ResponseEntity<IssueReadResponseDto> getSingularIssue(
 		@PathVariable("issue_id") long issueId
 		//		@AuthenticationPrincipal UserDetailsImpl userDetails
-	) {
+	) throws SelectIssueNotFoundException {
 		IssueReadResponseDto readResponseDto = issueReadService.getIssue(issueId, User.builder().build());
 		return ResponseEntity.status(HttpStatus.OK).body(readResponseDto);
 	}

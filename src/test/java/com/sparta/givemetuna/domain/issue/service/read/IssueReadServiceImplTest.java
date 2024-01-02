@@ -7,6 +7,7 @@ import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueReadResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.entity.IssueStatus;
+import com.sparta.givemetuna.domain.issue.exception.SelectIssueNotFoundException;
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
 import com.sparta.givemetuna.domain.support.IntegrationTestSupport;
 import com.sparta.givemetuna.domain.user.entity.User;
@@ -31,7 +32,7 @@ class IssueReadServiceImplTest extends IntegrationTestSupport {
 
 	@Test
 	@DisplayName("회원이 작성한 이슈를 단건 조회합니다.")
-	public void 회원작성자_이슈_단건조회() {
+	public void 회원작성자_이슈_단건조회() throws SelectIssueNotFoundException {
 		// GIVEN
 		Card card = cardRepository.save(Card.builder().id(1L).build());
 		User user = userRepository.save(User.builder().id(1L).build());

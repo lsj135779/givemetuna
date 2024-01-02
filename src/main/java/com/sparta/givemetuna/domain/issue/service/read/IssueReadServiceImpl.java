@@ -3,6 +3,7 @@ package com.sparta.givemetuna.domain.issue.service.read;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueReadResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueSelectCondition;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
+import com.sparta.givemetuna.domain.issue.exception.SelectIssueNotFoundException;
 import com.sparta.givemetuna.domain.issue.repository.IssueRepository;
 import com.sparta.givemetuna.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,7 @@ public class IssueReadServiceImpl implements IssueReadService {
 	@Override
 	public Issue selectById(long issueId, User user) {
 		return issueRepository.findByIdAndUser(issueId, user)
-			.orElseThrow(() ->
-				new RuntimeException("찾으시는 issue가 존재하지 않습니다.")); // 도메인 커스텀 예외로 변경 요망
+			.orElseThrow(SelectIssueNotFoundException::new);
 	}
 
 	@Override
