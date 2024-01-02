@@ -13,6 +13,7 @@ import com.sparta.givemetuna.domain.issuecomment.service.read.IssueCommentReadSe
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.global.validator.BoardUserRoleValidator;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequiredArgsConstructor
 @RequestMapping("/api/boards/{board_id}/issues")
 @EnableWebMvc
+@SecurityRequirement(name = "Bearer Authentication")
 public class IssueCommentCudController {
 
 	private final BoardUserRoleValidator userRoleValidator;
