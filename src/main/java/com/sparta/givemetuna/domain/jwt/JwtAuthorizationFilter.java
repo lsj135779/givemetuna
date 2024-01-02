@@ -34,22 +34,22 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = jwtUtil.resolveToken(httpServletRequest);
+        String token = jwtUtil.resolveToken(request);
 
         if(Objects.nonNull(token)) {
             if(jwtUtil.validateToken(token)) {
                 Claims info = jwtUtil.getUserInfoFromToken(token);
 
-                // 인증정보에 유저정보(account) 넣기
+                // 인증정보에 요저정보(username) 넣기
                 // username -> user 조회
-                String account = info.getSubject();
+                String username = info.getSubject();
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 // -> userDetails 에 담고
-                UserDetailsImpl userDetailsImpl = userDetailsServiceImpl.getUserDetails(account);
+                UserDetailsImpl userDetails = userDetailsServiceImpl.getUserDetails(username);
                 // -> authentication의 principal 에 담고
-                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsImpl, null, userDetailsImpl.getAuthorities());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 // -> securityContent 에 담고
                 context.setAuthentication(authentication);
                 // -> SecurityContextHolder 에 담고
@@ -58,13 +58,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             } else {
                 // 인증정보가 존재하지 않을때
                 CommonResponseDTO commonResponseDto = new CommonResponseDTO("토큰이 유효하지 않습니다.", HttpStatus.BAD_REQUEST.value());
-                httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                httpServletResponse.setContentType("application/json; charset=UTF-8");
-                httpServletResponse.getWriter().write(objectMapper.writeValueAsString(commonResponseDto));
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setContentType("application/json; charset=UTF-8");
+                response.getWriter().write(objectMapper.writeValueAsString(commonResponseDto));
                 return;
             }
         }
 
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+        filterChain.doFilter(request, response);
     }
 }

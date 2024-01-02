@@ -12,9 +12,12 @@ public enum ErrorCode {
 	INVALID_PARAM(HttpStatus.BAD_REQUEST, "잘못된 형식의 입력값입니다."),
 	/* AUTHORIZATION */
 	ACCESS_DENIED(HttpStatus.FORBIDDEN, "권한이 필요한 요청입니다."),
+	/* GLOBAL */
+	INVALID_ORDER_CRITERIA(HttpStatus.BAD_REQUEST, "올바른 정렬기준값을 입력해주세요."),
 	/* USER */
 	SIGNUP_DUPLICATED_USER_ACCOUNT(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다."),
 	SIGNUP_DUPLICATED_USER_NICKNAME(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
+	SIGNUP_DUPLICATED_USER_EMAIL(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
 	LOGIN_INVALID_ACCOUNT(HttpStatus.UNAUTHORIZED, "올바르지 않은 아이디로 로그인을 시도하셨습니다."),
 	LOGIN_INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "올바르지 않은 비밀번호로 로그인을 시도하셨습니다."),
 	UPDATE_IDENTICAL_ACCOUNT(HttpStatus.CONFLICT, "이전과 동일한 아이디를 입력하셨습니다."),
@@ -31,10 +34,13 @@ public enum ErrorCode {
 	UPDATE_ISSUE_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 이슈의 수정 권한이 없습니다."),
 	CLOSE_ISSUE_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 이슈의 종료 권한이 없습니다."),
 	DELETE_ISSUE_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 이슈의 삭제 권한이 없습니다."),
+	/* ISSUE COMMENT */
+	SELECT_ISSUE_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "찾으시는 이슈 댓글은 존재하지 않습니다."),
 	SELECT_ISSUE_COMMENT_INVALID_ORDER_CRITERIA(HttpStatus.BAD_REQUEST, "댓글에 대한 올바른 정렬기준값을 입력해주세요."),
 	UPDATE_ISSUE_COMMENT_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 이슈 댓글의 수정 권한이 없습니다."),
 	DELETE_ISSUE_COMMENT_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 이슈 댓글의 삭제 권한이 없습니다."),
 	/* CHECKLIST */
+	SELECT_CHECKLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "찾으시는 체크리스트는 존재하지 않습니다."),
 	UPDATE_CHECKLIST_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 체크리스트의 수정 권한이 없습니다."),
 	DELETE_CHECKLIST_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 체크리스트의 삭제 권한이 없습니다."),
 	/* STAGE */
@@ -46,6 +52,7 @@ public enum ErrorCode {
 	UPDATE_STAGE_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 스테이지의 수정 권한이 없습니다."),
 	DELETE_STAGE_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 스테이지의 삭제 권한이 없습니다."),
 	/* CARD */
+	SELECT_CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "찾으시는 카드는 존재하지 않습니다."),
 	CARD_ASSIGNOR_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "카드에 대한 Assignor 권한이 없습니다."),
 	CARD_ASSIGNEE_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "카드에 대한 Assignee 권한이 없습니다."),
 	SELECT_CARD_INVALID_ORDER_CRITERIA(HttpStatus.BAD_REQUEST, "카드에 대한 올바른 형식의 정렬기준값을 입력해주세요."),

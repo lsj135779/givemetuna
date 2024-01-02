@@ -2,15 +2,12 @@ package com.sparta.givemetuna.domain.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @EqualsAndHashCode
+@NoArgsConstructor
 public class UserInfoRequestDTO {
 
     @Pattern(regexp = "^[a-z0-9]{6,12}$", message = "비밀번호는 소문자, 숫자 6~12자리입니다.")

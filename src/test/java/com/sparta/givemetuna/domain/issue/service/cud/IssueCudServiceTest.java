@@ -2,6 +2,7 @@ package com.sparta.givemetuna.domain.issue.service.cud;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateRequestDto;
@@ -18,6 +19,7 @@ import com.sparta.givemetuna.domain.support.IntegrationTestSupport;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,26 @@ class IssueCudServiceTest extends IntegrationTestSupport {
 	@Autowired
 	private UserRepository userRepository;
 
+	private Card card;
+
+	private User user;
+
+	private Issue issue;
+
+	@BeforeEach
+	void setUp() {
+		card = cardRepository.save(Card.builder().title("요청업무#1").cardPriority(CardPriority.HIGH).build());
+		user = userRepository.save(User.builder().build());
+		issue = Issue.builder()
+			.title("도메인이슈 : 업무 프로세스 수정요청드립니다.")
+			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
+			.issueStatus(IssueStatus.OPEN)
+			.card(card)
+			.user(user)
+			.build();
+		issueRepository.save(issue);
+	}
+
 	@AfterEach
 	void tearDown() {
 		issueRepository.deleteAllInBatch();
@@ -50,11 +72,9 @@ class IssueCudServiceTest extends IntegrationTestSupport {
 	@DisplayName("카드에 대한, 새로운 이슈를 생성한다.")
 	public void 카드관련_새로운이슈_등록() {
 		// GIVEN
-		Card card = cardRepository.save(Card.builder().build());
-		User user = userRepository.save(User.builder().build());
 		IssueCreateRequestDto requestDto = IssueCreateRequestDto.builder()
-			.title("도메인이슈 : 업무 프로세스가 이상합니다")
-			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
+			.title("도메인이슈#1 : 업무 프로세스 이상합니다")
+			.contents("요청주신 업무#30 관련하여 프로세스에 대해 이해가 되지 않습니다.")
 			.cardId(card.getId())
 			.build();
 
@@ -71,16 +91,6 @@ class IssueCudServiceTest extends IntegrationTestSupport {
 	@DisplayName("이슈에 대하여 이슈 내용을 수정한다.")
 	public void 이슈_수정() {
 		// GIVEN
-		Card card = cardRepository.save(Card.builder().build());
-		User user = userRepository.save(User.builder().build());
-		Issue issue = Issue.builder()
-			.title("도메인이슈 : 업무 프로세스 수정요청드립니다.")
-			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
-			.issueStatus(IssueStatus.OPEN)
-			.card(card)
-			.user(user)
-			.build();
-		issueRepository.save(issue);
 		IssueUpdateRequestDto updateRequestDto = IssueUpdateRequestDto.builder()
 			.title("도메인이슈 : 업무 프로세스 수정요청드립니다.")
 			.contents("요청주신 업무 관련하여 이상한 점을 발견했는데요. 혹시 이 부분에 대해서 이야기할 수 있을까요?")
@@ -99,16 +109,6 @@ class IssueCudServiceTest extends IntegrationTestSupport {
 	@DisplayName("이슈를 닫거나 엽니다.")
 	public void 이슈_종료() {
 		// GIVEN
-		Card card = cardRepository.save(Card.builder().build());
-		User user = userRepository.save(User.builder().build());
-		Issue issue = Issue.builder()
-			.title("도메인이슈 : 업무 프로세스가 이상합니다")
-			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
-			.issueStatus(IssueStatus.OPEN)
-			.card(card)
-			.user(user)
-			.build();
-		issueRepository.save(issue);
 		IssueStatusUpdateRequestDto requestDto = IssueStatusUpdateRequestDto.builder()
 			.issueStatus(IssueStatus.CLOSED)
 			.build();
@@ -123,23 +123,11 @@ class IssueCudServiceTest extends IntegrationTestSupport {
 	@Test
 	@DisplayName("이슈를 삭제합니다.")
 	public void 이슈_삭제() {
-		// GIVEN
-		Card card1 = cardRepository.save(Card.builder().build());
-		User user = userRepository.save(User.builder().build());
-		Issue issue = Issue.builder()
-			.title("도메인이슈 : 업무 프로세스가 이상합니다")
-			.contents("요청주신 업무 관련하여 프로세스에 대해 이해가 되지 않습니다.")
-			.issueStatus(IssueStatus.OPEN)
-			.card(card1)
-			.user(user)
-			.build();
-		issueRepository.save(issue);
-
 		// WHEN
 		IssueDeleteResponseDto deleteResponseDto = issueCudService.deleteIssue(issue);
 
 		// THEN
 		assertEquals(0, issueRepository.findAll().size());
-		assertEquals(card1.getId(), deleteResponseDto.getIssueId());
+		assertEquals(card.getId(), deleteResponseDto.getIssueId());
 	}
 }

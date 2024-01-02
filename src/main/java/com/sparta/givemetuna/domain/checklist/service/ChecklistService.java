@@ -1,6 +1,8 @@
 package com.sparta.givemetuna.domain.checklist.service;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
+import com.sparta.givemetuna.domain.card.exception.CardAssigneeInvalidAuthorizationException;
+import com.sparta.givemetuna.domain.card.exception.CardAssignorInvalidAuthorizationException;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistCheckUpdateResponseDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistContentsUpdateRequestDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistContentsUpdateResponseDto;
@@ -11,6 +13,9 @@ import com.sparta.givemetuna.domain.checklist.dto.ChecklistPriorityUpdateRequest
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistPriorityUpdateResponseDto;
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.checklist.entity.Priority;
+import com.sparta.givemetuna.domain.checklist.exception.DeleteChecklistInvalidAuthorizationException;
+import com.sparta.givemetuna.domain.checklist.exception.SelectChecklistNotFoundException;
+import com.sparta.givemetuna.domain.checklist.exception.UpdateChecklistInvalidAuthorizationException;
 import com.sparta.givemetuna.domain.checklist.repository.ChecklistRepository;
 import com.sparta.givemetuna.domain.core.service.ChecklistMatcherService;
 import com.sparta.givemetuna.domain.user.entity.Role;
@@ -32,27 +37,27 @@ public class ChecklistService {
 
 	public ChecklistCreateResponseDto createChecklist(
 		ChecklistCreateRequestDto checklistCreateRequestDto, Long boardId, Long stageId,
-		Long cardId, User user) throws IllegalArgumentException {
+		Long cardId, User user) {
 		// 보드아이디와 사용자 유저정보를 가지고 userRole 알아내기
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
 		Card card = checklistMatcherService.getCard(cardId);
-		// 체크리스트 레포에서 사용자 유저 정보로 체크리스트 정보 가져오기
-		Checklist checklist = checklistRepository.findFirstByAssignee(user.getId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 유저는 부여받은 정보가 없습니다."));
-
+		// 권한 부여가 안된 상태에서 생성하는 경우
+		if (card.getChecklists().isEmpty()) {
+			throw new CardAssigneeInvalidAuthorizationException();
+		}
 		// 관리자, 카드생성한 매니저, 카드를 부여받은 유저까지 생성가능하다.
 		// role이 manager인 경우
 		if (role.equals(Role.TEAM_MANAGER)) {
 			if (!Objects.equals(card.getCreator().getId(), user.getId())) {
-				throw new IllegalArgumentException("카드 생성자만 체크리스트 생성이 가능합니다.");
+				throw new CardAssignorInvalidAuthorizationException();
 			}
 		}
 
 		// role이 user인 경우
 		if (role.equals(Role.WORKER)) {
-			if (!Objects.equals(card.getId(), checklist.getCard().getId())) {
-				throw new IllegalArgumentException("카드를 부여받은 유저만 체크리스트 생성이 가능합니다.");
+			if (!Objects.equals(card.getChecklists().get(0).getUser().getId(), user.getId())) {
+				throw new CardAssigneeInvalidAuthorizationException();
 			}
 		}
 
@@ -71,8 +76,7 @@ public class ChecklistService {
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
 		Card card = checklistMatcherService.getCard(cardId);
-		Checklist checklist = checklistRepository.findById(checklistId)
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 체크리스트가 없습니다."));
+		Checklist checklist = getChecklist(checklistId);
 		// 수정 가능 여부 판단
 		updatableChecklist(role, card, checklist, user);
 
@@ -87,8 +91,7 @@ public class ChecklistService {
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
 		Card card = checklistMatcherService.getCard(cardId);
-		Checklist checklist = checklistRepository.findById(checklistId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 체크리스트는 업습니다."));
+		Checklist checklist = getChecklist(checklistId);
 		// 수정 가능 여부 판단
 		updatableChecklist(role, card, checklist, user);
 
@@ -105,8 +108,7 @@ public class ChecklistService {
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
 		Card card = checklistMatcherService.getCard(cardId);
-		Checklist checklist = checklistRepository.findById(checklistId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 체크리스트는 업습니다."));
+		Checklist checklist = getChecklist(checklistId);
 		// 수정 가능 여부 판단
 		updatableChecklist(role, card, checklist, user);
 
@@ -121,31 +123,35 @@ public class ChecklistService {
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
 		Card card = checklistMatcherService.getCard(cardId);
-		Checklist checklist = checklistRepository.findById(checklistId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 체크리스트는 업습니다."));
+		Checklist checklist = getChecklist(checklistId);
 		// 관리자 가능
 		// 해당 카드를 만든 매니저 가능
 		if (role.equals(Role.TEAM_MANAGER)) {
 			if (!Objects.equals(card.getCreator().getId(), user.getId())) {
-				throw new IllegalArgumentException("카드 생성자만 체크리스트 삭제가 가능합니다.");
+				throw new DeleteChecklistInvalidAuthorizationException();
 			}
 		}
 
 		// 체크리스트 생성한 유저 가능
 		if (role.equals(Role.WORKER)) {
 			if (!Objects.equals(checklist.getUser().getId(), user.getId())) {
-				throw new IllegalArgumentException("체크리스트 생성자만 삭제가 가능합니다.");
+				throw new DeleteChecklistInvalidAuthorizationException();
 			}
 		}
 
 		// 첫 번째 체크리스트는 삭제 불가능
 		if (!checklist.getDeletable()) {
-			throw new IllegalArgumentException("삭제할 수 없는 체크리스트입니다.");
+			throw new DeleteChecklistInvalidAuthorizationException();
 		}
 
 		Long id = checklist.getId();
 		checklistRepository.delete(checklist);
 		return ChecklistDeleteResponseDto.of(id);
+	}
+
+	private Checklist getChecklist(Long checklistId) {
+		return checklistRepository.findById(checklistId)
+			.orElseThrow(SelectChecklistNotFoundException::new);
 	}
 
 	private void updatableChecklist(Role role, Card card, Checklist checklist, User user)
@@ -154,14 +160,14 @@ public class ChecklistService {
 		// 해당 카드를 만든 매니저 가능
 		if (role.equals(Role.TEAM_MANAGER)) {
 			if (!Objects.equals(card.getCreator().getId(), user.getId())) {
-				throw new IllegalArgumentException("카드 생성자만 수정이 가능합니다.");
+				throw new UpdateChecklistInvalidAuthorizationException();
 			}
 		}
 
 		// 체크리스트 생성한 유저 가능
 		if (role.equals(Role.WORKER)) {
 			if (!Objects.equals(checklist.getUser().getId(), user.getId())) {
-				throw new IllegalArgumentException("체크리스트 생성자만 수정이 가능합니다.");
+				throw new UpdateChecklistInvalidAuthorizationException();
 			}
 		}
 	}

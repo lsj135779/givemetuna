@@ -3,6 +3,7 @@ package com.sparta.givemetuna.domain.issuecomment.service.read;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
@@ -45,7 +46,7 @@ class IssueCommentReadServiceImplTest extends IntegrationTestSupport {
 	void setUp() {
 		// GIVEN
 		savedUser = userRepository.save(User.builder().build());
-		Card card = cardRepository.save(Card.builder().build());
+		Card card = cardRepository.save(Card.builder().title("요청업무#1").cardPriority(CardPriority.HIGH).build());
 		Issue issue = Issue.builder()
 			.title(String.format("도메인이슈 #%d", 1))
 			.contents(String.format("요청 업무 프로세스 이슈 #%d 에 관하여 여쭤보고 싶습니다.", 1))

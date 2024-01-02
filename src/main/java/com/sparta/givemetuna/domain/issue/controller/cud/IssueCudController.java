@@ -16,6 +16,7 @@ import com.sparta.givemetuna.domain.issue.service.read.IssueReadService;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.global.validator.BoardUserRoleValidator;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -32,8 +33,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/issues")
+@RequestMapping("/api/boards/{board_id}/issues")
 @EnableWebMvc
+@SecurityRequirement(name = "Bearer Authentication")
 public class IssueCudController {
 
 	private final BoardUserRoleValidator userRoleValidator;
@@ -48,9 +50,11 @@ public class IssueCudController {
 
 	@PostMapping
 	public ResponseEntity<IssueCreateResponseDto> createIssue(
+		@PathVariable("board_id") long boardId,
 		@RequestBody IssueCreateRequestDto createRequestDto,
 		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
+		userRoleValidator.validateRole(this.getClass(), userDetails.getUser().getId(), boardId);
 		Card card = cardService.checkCard(createRequestDto.getCardId());
 		IssueCreateResponseDto responseDto = issueCudService.createIssue(
 			createRequestDto,
@@ -62,10 +66,12 @@ public class IssueCudController {
 
 	@PatchMapping("/{issue_id}/contents")
 	public ResponseEntity<IssueUpdateResponseDto> updateIssue(
+		@PathVariable("board_id") long boardId,
 		@PathVariable("issue_id") long issueId,
 		@RequestBody IssueUpdateRequestDto updateRequestDto,
 		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) throws SelectIssueNotFoundException {
+		userRoleValidator.validateRole(this.getClass(), userDetails.getUser().getId(), boardId);
 		User user = userDetails.getUser();
 		Issue issue = issueReadService.selectById(issueId, user);
 
@@ -78,10 +84,12 @@ public class IssueCudController {
 
 	@PatchMapping("/{issue_id}/status")
 	public ResponseEntity<IssueStatusUpdateResponseDto> closeIssue(
+		@PathVariable("board_id") long boardId,
 		@PathVariable("issue_id") long issueId,
 		@RequestBody IssueStatusUpdateRequestDto updateRequestDto,
 		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) throws SelectIssueNotFoundException {
+		userRoleValidator.validateRole(this.getClass(), userDetails.getUser().getId(), boardId);
 		User user = userDetails.getUser();
 		Issue issue = issueReadService.selectById(issueId, user);
 
@@ -95,9 +103,11 @@ public class IssueCudController {
 
 	@DeleteMapping("/{issue_id}")
 	public ResponseEntity<IssueDeleteResponseDto> deleteIssue(
+		@PathVariable("board_id") long boardId,
 		@PathVariable("issue_id") long issueId,
 		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) throws SelectIssueNotFoundException {
+		userRoleValidator.validateRole(this.getClass(), userDetails.getUser().getId(), boardId);
 		User user = userDetails.getUser();
 		Issue issue = issueReadService.selectById(issueId, user);
 

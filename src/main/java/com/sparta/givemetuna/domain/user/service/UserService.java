@@ -4,6 +4,11 @@ import com.sparta.givemetuna.domain.board.dto.Invitation;
 import com.sparta.givemetuna.domain.user.dto.SignUpRequestDTO;
 import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
+import com.sparta.givemetuna.domain.user.exception.LoginInvalidAccountException;
+import com.sparta.givemetuna.domain.user.exception.LoginInvalidPasswordException;
+import com.sparta.givemetuna.domain.user.exception.SignUpDuplicatedUserAccountException;
+import com.sparta.givemetuna.domain.user.exception.SignUpDuplicatedUserEmailException;
+import com.sparta.givemetuna.domain.user.exception.SignUpDuplicatedUserNicknameException;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.HashMap;
@@ -35,15 +40,15 @@ public class UserService {
 		String description = signUpRequestDTO.getDescription();
 
 		if (userRepository.findByAccount(account).isPresent()) {
-			throw new IllegalArgumentException("이미 가입된 아이디 입니다.");
+			throw new SignUpDuplicatedUserAccountException();
 		}
 
 		if (userRepository.findByEmail(email).isPresent()) {
-			throw new IllegalArgumentException("이미 가입된 이메일 입니다.");
+			throw new SignUpDuplicatedUserEmailException();
 		}
 
 		if (userRepository.findByNickname(nickname).isPresent()) {
-			throw new IllegalArgumentException("이미 가입된 닉네임 입니다.");
+			throw new SignUpDuplicatedUserNicknameException();
 		}
 
 		User user = new User(account, password, email, nickname, github, description);
@@ -56,19 +61,11 @@ public class UserService {
 		String password = signUpRequestDTO.getPassword();
 
 		User user = userRepository.findByAccount(account)
-			.orElseThrow(() -> new IllegalArgumentException("등록된 유저가 없습니다."));
+			.orElseThrow(LoginInvalidAccountException::new);
 
 		if (!passwordEncoder.matches(password, user.getPassword())) {
-			throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+			throw new LoginInvalidPasswordException();
 		}
-	}
-
-	public User checkUser(Long boardId, User user) {
-		return null;
-	}
-
-	public User findbyAccount(String assignorAccount) {
-		return null;
 	}
 
 	public User findByAccount(String account) {

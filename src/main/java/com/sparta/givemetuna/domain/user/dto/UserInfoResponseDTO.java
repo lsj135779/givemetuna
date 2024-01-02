@@ -1,11 +1,7 @@
 package com.sparta.givemetuna.domain.user.dto;
 
-import com.sparta.givemetuna.domain.CommonResponseDTO;
 import com.sparta.givemetuna.domain.user.entity.User;
 import lombok.*;
-
-import java.time.LocalDateTime;
-
 
 @Setter
 @Getter
