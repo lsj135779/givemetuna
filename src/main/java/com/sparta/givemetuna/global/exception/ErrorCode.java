@@ -46,6 +46,7 @@ public enum ErrorCode {
 	UPDATE_STAGE_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 스테이지의 수정 권한이 없습니다."),
 	DELETE_STAGE_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 스테이지의 삭제 권한이 없습니다."),
 	/* CARD */
+	SELECT_CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "찾으시는 카드는 존재하지 않습니다."),
 	CARD_ASSIGNOR_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "카드에 대한 Assignor 권한이 없습니다."),
 	CARD_ASSIGNEE_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "카드에 대한 Assignee 권한이 없습니다."),
 	SELECT_CARD_INVALID_ORDER_CRITERIA(HttpStatus.BAD_REQUEST, "카드에 대한 올바른 형식의 정렬기준값을 입력해주세요."),
