@@ -17,9 +17,10 @@ import com.sparta.givemetuna.domain.card.service.CardService;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.stage.service.StageService;
 import com.sparta.givemetuna.domain.user.entity.BoardUserRole;
+import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
-import com.sparta.givemetuna.domain.user.service.BoardUserRoleService;
 import com.sparta.givemetuna.domain.user.service.UserInfoService;
+import com.sparta.givemetuna.global.validator.BoardUserRoleValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CardMatcherService {
 
-    private final BoardUserRoleService boardUserRoleService;
+    private final BoardUserRoleValidator boardUserRoleValidator;
     private final StageService stageService;
     private final UserInfoService userInfoService;
     private final CardService cardService;
@@ -41,9 +42,9 @@ public class CardMatcherService {
             return cardService.createCard(stage, client, client, requestDto);
         }
         User checkedUser = userInfoService.getUser(requestDto.getAssignorAccount());
-        User assignor = checkBoardUserRole(boardId, checkedUser);
+        boardUserRoleValidator.validateRole(CardMatcherService.class, checkedUser.getId(), boardId);
 
-        return cardService.createCard(stage, client, assignor, requestDto);
+        return cardService.createCard(stage, client, checkedUser, requestDto);
     }
 
 
@@ -58,11 +59,11 @@ public class CardMatcherService {
     public UpdateCardAllAssignResponseDto updateCardAllAssign(Long boardId, Card card,
             UpdateCardAllAssignRequestDto requestDto) {
 
-        User checkAssignor = userInfoService.getUser(requestDto.getAssignor());
-        User checkAssignee = userInfoService.getUser(requestDto.getAssignee());
+        User nextAssignor = userInfoService.getUser(requestDto.getAssignor());
+        User assignee = userInfoService.getUser(requestDto.getAssignee());
 
-        User nextAssignor = checkBoardUserRole(boardId, checkAssignor);
-        User assignee = checkBoardUserRole(boardId, checkAssignee);
+        boardUserRoleValidator.validateRole(CardMatcherService.class, nextAssignor.getId(), boardId);
+        Role role = boardUserRoleValidator.getRole(boardId, assignee.getId());
 
         return cardService.updateAllAssign(card, nextAssignor, assignee);
 
@@ -71,28 +72,18 @@ public class CardMatcherService {
     public UpdateCardAssignorResponseDto updateCardAssignor(Long boardId, Card card,
             UpdateCardAssignorRequestDto requestDto) {
 
-        User checkedUser = userInfoService.getUser(requestDto.getAssignor());
-        User assignor = checkBoardUserRole(boardId, checkedUser);
+        User assignor = userInfoService.getUser(requestDto.getAssignor());
+        boardUserRoleValidator.validateRole(CardMatcherService.class, assignor.getId(), boardId);
 
         return cardService.updateAssignor(card, assignor);
     }
 
-    public UpdateCardAssigneeResponseDto updateCardAssignee(Card card,
+    public UpdateCardAssigneeResponseDto updateCardAssignee(Long boardId, Card card,
             UpdateCardAssigneeRequestDto requestDto) {
 
         User assignee = userInfoService.getUser(requestDto.getAssignee());
+        Role role = boardUserRoleValidator.getRole(boardId, assignee.getId());
 
         return cardService.updateAssignee(card, assignee);
-    }
-
-    private User checkBoardUserRole(Long boardId, User user) {
-
-        BoardUserRole clientRole = boardUserRoleService.checkBoardUser(boardId,
-                user.getId());
-
-        if (clientRole.getRole().equals(WORKER)) {
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
-        return clientRole.getUser();
     }
 }
