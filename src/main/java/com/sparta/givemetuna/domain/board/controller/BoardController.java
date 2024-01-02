@@ -9,7 +9,6 @@ import com.sparta.givemetuna.domain.board.dto.InviteUserRequestDto;
 import com.sparta.givemetuna.domain.board.dto.InviteUserResponseDto;
 import com.sparta.givemetuna.domain.board.dto.UpdateBoardRequestDto;
 import com.sparta.givemetuna.domain.board.dto.UpdateBoardResponseDto;
-import com.sparta.givemetuna.domain.board.dto.*;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.service.BoardService;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
@@ -30,9 +29,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,7 +51,7 @@ public class BoardController {
 
 	// user 초대
 	// todo: user 추가하는 기능 필요
-	@PostMapping("/{boardId}/invite")
+	@PostMapping("/{board_id}/invite")
 	public ResponseEntity<InviteUserResponseDto> inviteUser(
 		@PathVariable("board_id") Long boardId,
 		@RequestBody InviteUserRequestDto requestDto
