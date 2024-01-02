@@ -3,12 +3,12 @@ package com.sparta.givemetuna.domain.board.repository;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sparta.givemetuna.domain.board.entity.Board;
-import com.sparta.givemetuna.domain.configuration.QueryDslConfig;
 import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.BoardUserRoleRepository;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
 import com.sparta.givemetuna.global.config.JpaAuditingConfig;
+import com.sparta.givemetuna.global.config.QueryDslConfig;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;

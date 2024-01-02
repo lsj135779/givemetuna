@@ -7,12 +7,12 @@ import static com.sparta.givemetuna.domain.user.entity.QUser.user;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.sparta.givemetuna.domain.configuration.QueryDslConfig;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueReadResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueSelectCondition;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.repository.helper.IssueQueryConditionFactory;
 import com.sparta.givemetuna.domain.issue.repository.helper.IssueQueryOrderFactory;
+import com.sparta.givemetuna.global.config.QueryDslConfig;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;

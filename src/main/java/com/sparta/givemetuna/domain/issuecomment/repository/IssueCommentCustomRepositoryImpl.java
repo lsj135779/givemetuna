@@ -6,12 +6,12 @@ import static com.sparta.givemetuna.domain.user.entity.QUser.user;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.sparta.givemetuna.domain.configuration.QueryDslConfig;
 import com.sparta.givemetuna.domain.issuecomment.controller.read.IssueCommentReadResponseDto;
 import com.sparta.givemetuna.domain.issuecomment.dto.read.IssueCommentSelectCondition;
 import com.sparta.givemetuna.domain.issuecomment.entity.IssueComment;
 import com.sparta.givemetuna.domain.issuecomment.repository.helper.IssueCommentQueryConditionFactory;
 import com.sparta.givemetuna.domain.issuecomment.repository.helper.IssueCommentQueryOrderFactory;
+import com.sparta.givemetuna.global.config.QueryDslConfig;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
