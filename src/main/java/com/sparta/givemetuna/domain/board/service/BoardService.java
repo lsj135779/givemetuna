@@ -6,10 +6,15 @@ import com.sparta.givemetuna.domain.board.dto.CreateBoardResponseDto;
 import com.sparta.givemetuna.domain.board.dto.UpdateBoardRequestDto;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.repository.BoardRepository;
+import com.sparta.givemetuna.domain.card.entity.Card;
+import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.stage.repository.StageRepository;
+import com.sparta.givemetuna.domain.user.entity.BoardUserRole;
 import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
+import com.sparta.givemetuna.domain.user.repository.BoardUserRoleRepository;
+import com.sparta.givemetuna.global.validator.BoardUserRoleValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +25,8 @@ import java.util.Map;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 
+import static com.sparta.givemetuna.domain.user.entity.Role.GENERAL_MANAGER;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -28,6 +35,8 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     private final StageRepository stageRepository;
+
+    private final BoardUserRoleRepository boardUserRoleRepository;
 
     // board 생성
     public CreateBoardResponseDto createBoard(CreateBoardRequestDto requestDto, User user) {
@@ -38,7 +47,7 @@ public class BoardService {
         board.setUser(user);
 
         // board에 user 권한 총책임자 설정
-//        setBoardManager(board, user);
+        setBoardManager(board, user);
 
         // 4가지 stage 만들어서 넣기
         createDefaultStages(board, user);
@@ -95,12 +104,6 @@ public class BoardService {
         return board;
     }
 
-    // board 총 책임자 권한 설정
-//    private void setBoardManager(Board board, User user) {
-//        BoardUserRole boardUserRole = new BoardUserRole(user, Role.GENERAL_MANAGER, board);
-//        user.getBoardUserRoles().add(boardUserRole);
-//    }
-
     public Board inviteUser(Long boardId, Map<User, Role> users) {
         Board board = getBoard(boardId);
         board.addUsersWithRole(users);
@@ -118,5 +121,10 @@ public class BoardService {
         defaultStage.add(new Stage(board, "비상", user));
 
         stageRepository.saveAll(defaultStage);
+    }
+
+    // board 생성자 총관리자 설정
+    private void setBoardManager(Board board, User user) {
+        board.addUserWithRole(user, GENERAL_MANAGER);
     }
 }

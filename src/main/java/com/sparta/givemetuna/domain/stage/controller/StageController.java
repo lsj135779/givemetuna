@@ -21,6 +21,7 @@ public class StageController {
 	public ResponseEntity<CreateStageResponseDto> createStage(@PathVariable(name = "boardId") Long boardId,
 															  @RequestBody CreateStageRequestDto requestDto,
 															  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
 		CreateStageResponseDto response = stageService.createStage(boardId, requestDto, userDetails.getUser());
 		return ResponseEntity.ok().body(response);
 	}
