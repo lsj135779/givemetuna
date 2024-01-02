@@ -1,5 +1,7 @@
 package com.sparta.givemetuna.domain.core.service;
 
+import static com.sparta.givemetuna.domain.user.entity.Role.GENERAL_MANAGER;
+
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAllAssignRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAssigneeRequestDto;
@@ -11,8 +13,10 @@ import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAssigneeResponse
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAssignorResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
 import com.sparta.givemetuna.domain.card.entity.Card;
+import com.sparta.givemetuna.domain.card.exception.CardAssignorInvalidAuthorizationException;
 import com.sparta.givemetuna.domain.card.exception.CardInvalidAuthorizationException;
 import com.sparta.givemetuna.domain.card.service.CardService;
+import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.stage.service.StageService;
 import com.sparta.givemetuna.domain.user.entity.Role;
@@ -34,6 +38,25 @@ public class CardMatcherService {
 
 	private final CardService cardService;
 
+
+	/**
+	 * 카드 assignor 와 로그인 사용자이거나 총관리자인 경우 정상처리 아닌 경우, 예외처리
+	 *
+	 * @param userDetails 유저 인증정보
+	 * @param boardId     보드 아이디
+	 * @param card        카드
+	 */
+	private void checkCardAssignor(UserDetailsImpl userDetails, Long boardId, Card card) {
+		User user = userInfoService.getUser(userDetails.getUser().getAccount());// 영속성 컨텍스트 X;
+		User assignor = card.getAssignor(); // Card -> User 영속성 컨텍스트 O
+		boolean isGmInBoard = user.getBoardUserRoles().stream()
+			.filter(boardUserRole -> boardUserRole.getRole().equals(GENERAL_MANAGER))
+			.anyMatch(boardUserRole -> boardUserRole.getBoard().getId().equals(boardId));
+		if (assignor.equals(user) || isGmInBoard) {
+			return;
+		}
+		throw new CardAssignorInvalidAuthorizationException(user.getAccount(), assignor.getAccount());
+	}
 
 	public CreateCardResponseDto createCard(Long boardId, Stage stage, User client,
 		CreateCardRequestDto requestDto) throws CardInvalidAuthorizationException {
@@ -72,7 +95,7 @@ public class CardMatcherService {
 	public UpdateCardAssignorResponseDto updateCardAssignor(Long boardId, Card card,
 		UpdateCardAssignorRequestDto requestDto) {
 
-		User assignor = userInfoService.getUser(requestDto.getAssignor());
+		User assignor = userInfoService.getUser(requestDto.getAssignorAccount());
 		boardUserRoleValidator.validateRole(CardMatcherService.class, assignor.getId(), boardId);
 
 		return cardService.updateAssignor(card, assignor);
@@ -81,7 +104,7 @@ public class CardMatcherService {
 	public UpdateCardAssigneeResponseDto updateCardAssignee(Long boardId, Card card,
 		UpdateCardAssigneeRequestDto requestDto) {
 
-		User assignee = userInfoService.getUser(requestDto.getAssignee());
+		User assignee = userInfoService.getUser(requestDto.getAssigneeAccount());
 		Role role = boardUserRoleValidator.getRole(boardId, assignee.getId());
 
 		return cardService.updateAssignee(card, assignee);

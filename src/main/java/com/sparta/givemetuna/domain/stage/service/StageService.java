@@ -7,13 +7,13 @@ import com.sparta.givemetuna.domain.stage.dto.CreateStageResponseDto;
 import com.sparta.givemetuna.domain.stage.dto.UpdateStageRequestDto;
 import com.sparta.givemetuna.domain.stage.dto.UpdateStageResponseDto;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
+import com.sparta.givemetuna.domain.stage.exception.SelectStageNotFoundException;
 import com.sparta.givemetuna.domain.stage.repository.StageRepository;
 import com.sparta.givemetuna.domain.user.entity.User;
+import java.util.concurrent.RejectedExecutionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.concurrent.RejectedExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -70,11 +70,12 @@ public class StageService {
 
 
 	public Stage checkStage(Long boardId, Long stageId) {
-		return null;
+		return stageRepository.findByIdAndBoardId(stageId, boardId)
+			.orElseThrow(SelectStageNotFoundException::new);
 	}
 
 	@Transactional(readOnly = true)
-    public Stage getStage(Long stageId) {
-        return getStageById(stageId);
-    }
+	public Stage getStage(Long stageId) {
+		return getStageById(stageId);
+	}
 }
