@@ -39,6 +39,7 @@ public class BoardService {
     private final BoardUserRoleValidator boardUserRoleValidator;
 
     // board 생성
+    @Transactional
     public CreateBoardResponseDto createBoard(CreateBoardRequestDto requestDto, User user) {
         // board 만들기
         Board board = new Board(requestDto);
@@ -104,6 +105,7 @@ public class BoardService {
         return board;
     }
 
+    // user 초대 메서드
     public Board inviteUser(Long boardId, Map<User, Role> users) {
         Board board = getBoard(boardId);
         board.addUsersWithRole(users);
@@ -142,5 +144,15 @@ public class BoardService {
         return boardList.stream()
                 .map(board -> new BoardListResponseDto(board.getName()))
                 .collect(Collectors.toList());
+    }
+
+    // board 단일 조회시 권한 체크
+    public void checkBoardAvailability(Long boardId, User user) {
+        Role role = boardUserRoleValidator.getRole(boardId, user.getId());
+        if (role.equals(GENERAL_MANAGER) || role.equals(TEAM_MANAGER) || !role.equals(WORKER)) {
+            return;
+        } else {
+            throw new RejectedExecutionException("board가 허용한 권한이 없습니다.");
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.sparta.givemetuna.domain.board.controller;
 import com.sparta.givemetuna.domain.board.dto.*;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.service.BoardService;
-import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
@@ -40,7 +39,7 @@ public class BoardController {
 	// todo: user 추가하는 기능 필요
 	@PostMapping("/{boardId}/invite")
 	public ResponseEntity<InviteUserResponseDto> inviteUser(
-			@PathVariable("board_id") Long boardId,
+			@PathVariable("boardId") Long boardId,
 			@RequestBody InviteUserRequestDto requestDto,
 			@AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
@@ -68,6 +67,7 @@ public class BoardController {
 	public ResponseEntity<BoardResponseDto> getBoard(@PathVariable(name = "boardId") Long boardId,
 													 @AuthenticationPrincipal UserDetailsImpl userDetails)  {
 
+		boardService.checkBoardAvailability(boardId, userDetails.getUser());
 		Board board = boardService.getBoard(boardId);
 		BoardResponseDto responseDto = BoardResponseDto.of(board);
 		return ResponseEntity.ok().body(responseDto);
