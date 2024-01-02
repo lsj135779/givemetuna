@@ -5,6 +5,5 @@ import java.util.Optional;
 
 public interface ChecklistCustomRepository {
 
-	Optional<Checklist> findFirstByAssignee(long id);
-
+	Optional<Checklist> findFirstByAssigneeAndCardId(long assignee, long cardId);
 }

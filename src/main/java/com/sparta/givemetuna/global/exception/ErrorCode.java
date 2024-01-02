@@ -37,6 +37,7 @@ public enum ErrorCode {
 	/* CHECKLIST */
 	UPDATE_CHECKLIST_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 체크리스트의 수정 권한이 없습니다."),
 	DELETE_CHECKLIST_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 체크리스트의 삭제 권한이 없습니다."),
+	SELECT_CHECKLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "찾으시는 체크리스트는 존재하지 않습니다."),
 	/* STAGE */
 	SELECT_STAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "찾으시는 스테이지는 존재하지 않습니다."),
 	UPDATE_STAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "수정하시려는 스테이지는 존재하지 않습니다."),
