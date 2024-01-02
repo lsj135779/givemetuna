@@ -12,6 +12,8 @@ public enum ErrorCode {
 	INVALID_PARAM(HttpStatus.BAD_REQUEST, "잘못된 형식의 입력값입니다."),
 	/* AUTHORIZATION */
 	ACCESS_DENIED(HttpStatus.FORBIDDEN, "권한이 필요한 요청입니다."),
+	/* GLOBAL */
+	INVALID_ORDER_CRITERIA(HttpStatus.BAD_REQUEST, "올바른 정렬기준값을 입력해주세요."),
 	/* USER */
 	SIGNUP_DUPLICATED_USER_ACCOUNT(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다."),
 	SIGNUP_DUPLICATED_USER_NICKNAME(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
@@ -31,6 +33,8 @@ public enum ErrorCode {
 	UPDATE_ISSUE_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 이슈의 수정 권한이 없습니다."),
 	CLOSE_ISSUE_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 이슈의 종료 권한이 없습니다."),
 	DELETE_ISSUE_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 이슈의 삭제 권한이 없습니다."),
+	/* ISSUE COMMENT */
+	SELECT_ISSUE_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "찾으시는 이슈 댓글은 존재하지 않습니다."),
 	SELECT_ISSUE_COMMENT_INVALID_ORDER_CRITERIA(HttpStatus.BAD_REQUEST, "댓글에 대한 올바른 정렬기준값을 입력해주세요."),
 	UPDATE_ISSUE_COMMENT_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 이슈 댓글의 수정 권한이 없습니다."),
 	DELETE_ISSUE_COMMENT_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 이슈 댓글의 삭제 권한이 없습니다."),
