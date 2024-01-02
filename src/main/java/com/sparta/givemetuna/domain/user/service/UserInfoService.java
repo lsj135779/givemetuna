@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.concurrent.RejectedExecutionException;
-
 
 @Service
 public class UserInfoService {
@@ -44,7 +42,7 @@ public class UserInfoService {
         // Password Valid
         String password = passwordEncoder.encode(userInfoRequestDTO.getPassword());
 
-        if(!Objects.equals(user.getPassword(), password)){
+        if(!passwordEncoder.matches(userInfoRequestDTO.getPassword(), user.getPassword())){
             users.updatePassword(password);
         } else{
             throw new UpdateIdenticalPasswordException();

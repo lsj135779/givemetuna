@@ -15,7 +15,7 @@ public enum ErrorCode {
 	/* USER */
 	SIGNUP_DUPLICATED_USER_ACCOUNT(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다."),
 	SIGNUP_DUPLICATED_USER_NICKNAME(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
-	SIGNUP_DUPLICATED_USER_EMAIL(HttpStatus.CONFLICT, "이미 존재하는 닉네임입니다."),
+	SIGNUP_DUPLICATED_USER_EMAIL(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
 	LOGIN_INVALID_ACCOUNT(HttpStatus.UNAUTHORIZED, "올바르지 않은 아이디로 로그인을 시도하셨습니다."),
 	LOGIN_INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "올바르지 않은 비밀번호로 로그인을 시도하셨습니다."),
 	UPDATE_IDENTICAL_ACCOUNT(HttpStatus.CONFLICT, "이전과 동일한 아이디를 입력하셨습니다."),
