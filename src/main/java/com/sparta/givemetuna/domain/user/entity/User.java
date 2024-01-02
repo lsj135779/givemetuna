@@ -75,6 +75,8 @@ public class User {
 	@Column
 	private String description;
 
+	private Long kakaoId;
+
 	public User(String account, String password, String email, String nickname, String github, String description) {
 		this.account = account;
 		this.password = password;
@@ -82,6 +84,13 @@ public class User {
 		this.nickname = nickname;
 		this.github = github;
 		this.description = description;
+	}
+
+	public User(String account, String password, String email, Long kakaoId) {
+		this.account = account;
+		this.password = password;
+		this.email = email;
+		this.kakaoId =kakaoId;
 	}
 
 	public void updateEmail(UserInfoRequestDTO userInfoRequestDTO) {
@@ -113,4 +122,9 @@ public class User {
 			this.password = password;
 		}
 	}
+
+    public User kakaoIdUpdate(Long kakaoId) {
+		this.kakaoId = kakaoId;
+		return this;
+    }
 }
