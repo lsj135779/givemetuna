@@ -1,7 +1,6 @@
 package com.sparta.givemetuna.domain.checklist.service;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
-import com.sparta.givemetuna.domain.card.service.CardService;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistCheckUpdateResponseDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistContentsUpdateRequestDto;
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistContentsUpdateResponseDto;
@@ -13,6 +12,7 @@ import com.sparta.givemetuna.domain.checklist.dto.ChecklistPriorityUpdateRespons
 import com.sparta.givemetuna.domain.checklist.entity.Checklist;
 import com.sparta.givemetuna.domain.checklist.entity.Priority;
 import com.sparta.givemetuna.domain.checklist.repository.ChecklistRepository;
+import com.sparta.givemetuna.domain.core.service.ChecklistMatcherService;
 import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.global.validator.BoardUserRoleValidator;
@@ -27,7 +27,7 @@ public class ChecklistService {
 
 	private final ChecklistRepository checklistRepository;
 
-	private final CardService cardService;
+	private final ChecklistMatcherService checklistMatcherService;
 	private final BoardUserRoleValidator boardUserRoleValidator;
 
 	public ChecklistCreateResponseDto createChecklist(
@@ -36,7 +36,7 @@ public class ChecklistService {
 		// 보드아이디와 사용자 유저정보를 가지고 userRole 알아내기
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
-		Card card = cardService.checkCard(cardId);
+		Card card = checklistMatcherService.getCard(cardId);
 		// 체크리스트 레포에서 사용자 유저 정보로 체크리스트 정보 가져오기
 		Checklist checklist = checklistRepository.findFirstByAssignee(user.getId())
 			.orElseThrow(() -> new IllegalArgumentException("해당 유저는 부여받은 정보가 없습니다."));
@@ -70,7 +70,7 @@ public class ChecklistService {
 		// 보드아이디와 사용자 유저정보를 가지고 userRole 알아내기
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
-		Card card = cardService.checkCard(cardId);
+		Card card = checklistMatcherService.getCard(cardId);
 		Checklist checklist = checklistRepository.findById(checklistId)
 			.orElseThrow(() -> new IllegalArgumentException("해당하는 체크리스트가 없습니다."));
 		// 수정 가능 여부 판단
@@ -86,7 +86,7 @@ public class ChecklistService {
 		// 보드아이디와 사용자 유저정보를 가지고 userRole 알아내기
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
-		Card card = cardService.checkCard(cardId);
+		Card card = checklistMatcherService.getCard(cardId);
 		Checklist checklist = checklistRepository.findById(checklistId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 체크리스트는 업습니다."));
 		// 수정 가능 여부 판단
@@ -104,7 +104,7 @@ public class ChecklistService {
 		// 보드아이디와 사용자 유저정보를 가지고 userRole 알아내기
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
-		Card card = cardService.checkCard(cardId);
+		Card card = checklistMatcherService.getCard(cardId);
 		Checklist checklist = checklistRepository.findById(checklistId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 체크리스트는 업습니다."));
 		// 수정 가능 여부 판단
@@ -120,7 +120,7 @@ public class ChecklistService {
 		// 보드아이디와 사용자 유저정보를 가지고 userRole 알아내기
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
-		Card card = cardService.checkCard(cardId);
+		Card card = checklistMatcherService.getCard(cardId);
 		Checklist checklist = checklistRepository.findById(checklistId)
 			.orElseThrow(() -> new IllegalArgumentException("해당 체크리스트는 업습니다."));
 		// 관리자 가능
