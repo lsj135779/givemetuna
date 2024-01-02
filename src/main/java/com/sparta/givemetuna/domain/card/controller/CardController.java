@@ -77,7 +77,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardStageRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkBoardClientRole(boardId, userDetails.getUser());
+        checkCardAssignor(userDetails, card);
 
         UpdateCardStageResponseDto responseDto = cardMatcherService.updateCardStage(boardId, card,
                 requestDto);
@@ -92,7 +92,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardTitleRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkBoardClientRole(boardId, userDetails.getUser());
+        checkCardAssignor(userDetails, card);
 
         UpdateCardTitleResponseDto responseDto = cardService.updateTitle(card,
                 requestDto.getTitle());
@@ -123,7 +123,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardAssignorRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkBoardClientRole(boardId, userDetails.getUser());
+        checkCardAssignor(userDetails, card);
 
         UpdateCardAssignorResponseDto responseDto = cardMatcherService.updateCardAssignor(boardId,
                 card, requestDto);
@@ -138,7 +138,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardAssigneeRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkBoardClientRole(boardId, userDetails.getUser());
+        checkCardAssignor(userDetails, card);
 
         UpdateCardAssigneeResponseDto responseDto = cardMatcherService.updateCardAssignee(card,
                 requestDto);
@@ -153,7 +153,7 @@ public class CardController {
             @Valid @RequestBody UpdatetCardPriorityRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkBoardClientRole(boardId, userDetails.getUser());
+        checkCardAssignor(userDetails, card);
 
         UpdateCardPriorityResponseDto responseDto = cardService.updatePriority(card,
                 requestDto.getCardPriority());
@@ -168,7 +168,7 @@ public class CardController {
             @Valid @RequestBody UpdateCardPeriodRequestDto requestDto) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkBoardClientRole(boardId, userDetails.getUser());
+        checkCardAssignor(userDetails, card);
 
         UpdateCardPeriodResponseDto responseDto = cardService.updatePeriod(card,
                 requestDto.getStartedAt(), requestDto.getClosedAt());
@@ -204,7 +204,7 @@ public class CardController {
             @PathVariable Long cardId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         Card card = checkAPI(boardId, stageId, cardId);
-        checkBoardClientRole(boardId, userDetails.getUser());
+        checkCardAssignor(userDetails, card);
         cardService.delete(card);
 
         return ResponseEntity.status(HttpStatus.OK).body(cardId);
