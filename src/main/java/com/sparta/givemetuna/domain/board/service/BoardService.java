@@ -6,9 +6,12 @@ import com.sparta.givemetuna.domain.board.dto.CreateBoardResponseDto;
 import com.sparta.givemetuna.domain.board.dto.UpdateBoardRequestDto;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.repository.BoardRepository;
+import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.stage.repository.StageRepository;
 import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.RejectedExecutionException;
@@ -32,15 +35,17 @@ public class BoardService {
 		Board board = new Board(requestDto);
 
 		// ***board에 user 넣기
-//        Board.setUser(user);
+        board.setUser(user);
 
 		// board에 user 권한 총책임자 설정
 		// board.setBoardRole("총책임자");
 
 		// 3가지 stage 만들어서 넣기
+		createDefaultStages(board, user);
 
 		// board 저장
 		boardRepository.save(board);
+
 
 		return new CreateBoardResponseDto(board);
 	}
@@ -93,7 +98,7 @@ public class BoardService {
 
 	// Board id로 board 찾기
 	@Transactional(readOnly = true)
-	Board getBoardById(Long id) {
+	public Board getBoardById(Long id) {
 		return boardRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("The board does not exist"));
 	}
@@ -106,5 +111,18 @@ public class BoardService {
 		Board board = getBoard(boardId);
 		board.addUsersWithRole(users);
 		return board;
+	}
+
+	// 기본 Stage 생성 메서드
+	@Transactional
+	public void createDefaultStages(Board board, User user) {
+		List<Stage> defaultStage = new ArrayList<>();
+
+		defaultStage.add(new Stage(board, "백로그", user));
+		defaultStage.add(new Stage(board, "프로세스", user));
+		defaultStage.add(new Stage(board, "완료", user));
+		defaultStage.add(new Stage(board, "비상", user));
+
+		stageRepository.saveAll(defaultStage);
 	}
 }

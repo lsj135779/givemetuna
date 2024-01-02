@@ -39,6 +39,7 @@ public class BoardController {
 	public ResponseEntity<CreateBoardResponseDto> createBoard(@RequestBody CreateBoardRequestDto requestDto,
 															  @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		CreateBoardResponseDto responseDto = boardService.createBoard(requestDto, userDetails.getUser());
+
 		return ResponseEntity.ok().body(responseDto);
 	}
 
