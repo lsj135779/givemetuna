@@ -1,4 +1,4 @@
-package com.sparta.givemetuna.domain.issuecomment.controller.read;
+package com.sparta.givemetuna.domain.issuecomment.dto.read;
 
 
 import com.sparta.givemetuna.domain.issue.entity.Issue;

@@ -6,7 +6,7 @@ import static com.sparta.givemetuna.domain.user.entity.QUser.user;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.sparta.givemetuna.domain.issuecomment.controller.read.IssueCommentReadResponseDto;
+import com.sparta.givemetuna.domain.issuecomment.dto.read.IssueCommentReadResponseDto;
 import com.sparta.givemetuna.domain.issuecomment.dto.read.IssueCommentSelectCondition;
 import com.sparta.givemetuna.domain.issuecomment.entity.IssueComment;
 import com.sparta.givemetuna.domain.issuecomment.repository.helper.IssueCommentQueryConditionFactory;

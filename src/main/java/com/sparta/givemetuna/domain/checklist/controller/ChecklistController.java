@@ -11,6 +11,8 @@ import com.sparta.givemetuna.domain.checklist.dto.ChecklistPriorityUpdateRequest
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistPriorityUpdateResponseDto;
 import com.sparta.givemetuna.domain.checklist.service.ChecklistService;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
+import com.sparta.givemetuna.global.validator.BoardUserRoleValidator;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,9 +34,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/boards/{board_id}/stages/{stage_id}/cards/{card_id}/checklists")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class ChecklistController {
 
 	private final ChecklistService checklistService;
+
+	private BoardUserRoleValidator boardUserRoleValidator;
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

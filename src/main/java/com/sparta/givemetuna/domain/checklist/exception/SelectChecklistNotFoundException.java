@@ -4,7 +4,7 @@ import com.sparta.givemetuna.domain.common.exception.DomainException;
 import com.sparta.givemetuna.global.exception.ErrorCode;
 import com.sparta.givemetuna.global.exception.ErrorDetail;
 
-// "해당 체크리스트의 삭제 권한이 없습니다."
+// "찾으시는 체크리스트는 존재하지 않습니다."
 public class SelectChecklistNotFoundException extends DomainException {
 
 	public SelectChecklistNotFoundException(String field, String value) {

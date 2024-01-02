@@ -27,6 +27,7 @@ import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.stage.service.StageService;
 import com.sparta.givemetuna.global.validator.BoardUserRoleValidator;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,6 +49,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/boards/{boardId}/stage/{stageId}/cards")
+@SecurityRequirement(name = "Bearer Authentication")
 public class CardController {
 
     private final BoardUserRoleValidator boardUserRoleValidator;

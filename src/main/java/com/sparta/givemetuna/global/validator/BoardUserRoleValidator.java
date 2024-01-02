@@ -40,16 +40,6 @@ public class BoardUserRoleValidator {
 		return boardUserRole.getRole();
 	}
 
-	/*
-	 * Board : 총관리자
-	 * <p>
-	 * <p>
-	 * Card : 총관리자 or 매니저
-	 * <p>
-	 * <p>
-	 * Checklist,Issue, IssueComment : 총관리자 or 매니저 or 워커
-	 */
-
 	/**
 	 * @param apiClass api 호출 클래스 정보
 	 * @param userId   회원ID
