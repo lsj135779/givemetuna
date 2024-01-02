@@ -1,5 +1,6 @@
 package com.sparta.givemetuna.domain.stage.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.stage.dto.UpdateStageRequestDto;
@@ -33,10 +34,12 @@ public class Stage {
 	@Column
 	private String category;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "board_id")
 	private Board board;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;

@@ -1,7 +1,5 @@
 package com.sparta.givemetuna.domain.core.service;
 
-import static com.sparta.givemetuna.domain.user.entity.Role.WORKER;
-
 import com.sparta.givemetuna.domain.card.dto.request.CreateCardRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAllAssignRequestDto;
 import com.sparta.givemetuna.domain.card.dto.request.UpdateCardAssigneeRequestDto;
@@ -13,10 +11,10 @@ import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAssigneeResponse
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardAssignorResponseDto;
 import com.sparta.givemetuna.domain.card.dto.response.UpdateCardStageResponseDto;
 import com.sparta.givemetuna.domain.card.entity.Card;
+import com.sparta.givemetuna.domain.card.exception.CardInvalidAuthorizationException;
 import com.sparta.givemetuna.domain.card.service.CardService;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.stage.service.StageService;
-import com.sparta.givemetuna.domain.user.entity.BoardUserRole;
 import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.service.UserInfoService;
@@ -28,62 +26,64 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CardMatcherService {
 
-    private final BoardUserRoleValidator boardUserRoleValidator;
-    private final StageService stageService;
-    private final UserInfoService userInfoService;
-    private final CardService cardService;
+	private final BoardUserRoleValidator boardUserRoleValidator;
+
+	private final StageService stageService;
+
+	private final UserInfoService userInfoService;
+
+	private final CardService cardService;
 
 
-    public CreateCardResponseDto createCard(Long boardId, Stage stage, User client,
-            CreateCardRequestDto requestDto) {
+	public CreateCardResponseDto createCard(Long boardId, Stage stage, User client,
+		CreateCardRequestDto requestDto) throws CardInvalidAuthorizationException {
 
-        if (requestDto.getAssignorAccount() == null || requestDto.getAssignorAccount().isEmpty()) {
+		if (requestDto.getAssignorAccount() == null || requestDto.getAssignorAccount().isEmpty()) {
 
-            return cardService.createCard(stage, client, client, requestDto);
-        }
-        User checkedUser = userInfoService.getUser(requestDto.getAssignorAccount());
-        boardUserRoleValidator.validateRole(CardMatcherService.class, checkedUser.getId(), boardId);
+			return cardService.createCard(stage, client, client, requestDto);
+		}
+		User checkedUser = userInfoService.getUser(requestDto.getAssignorAccount());
+		boardUserRoleValidator.validateRole(CardMatcherService.class, checkedUser.getId(), boardId);
 
-        return cardService.createCard(stage, client, checkedUser, requestDto);
-    }
+		return cardService.createCard(stage, client, checkedUser, requestDto);
+	}
 
 
-    public UpdateCardStageResponseDto updateCardStage(Long boardId, Card card,
-            UpdateCardStageRequestDto requestDto) {
+	public UpdateCardStageResponseDto updateCardStage(Long boardId, Card card,
+		UpdateCardStageRequestDto requestDto) {
 
-        Stage afterStage = stageService.checkStage(boardId, requestDto.getStageId());
+		Stage afterStage = stageService.checkStage(boardId, requestDto.getStageId());
 
-        return cardService.updateStage(afterStage, card);
-    }
+		return cardService.updateStage(afterStage, card);
+	}
 
-    public UpdateCardAllAssignResponseDto updateCardAllAssign(Long boardId, Card card,
-            UpdateCardAllAssignRequestDto requestDto) {
+	public UpdateCardAllAssignResponseDto updateCardAllAssign(Long boardId, Card card,
+		UpdateCardAllAssignRequestDto requestDto) {
 
-        User nextAssignor = userInfoService.getUser(requestDto.getAssignor());
-        User assignee = userInfoService.getUser(requestDto.getAssignee());
+		User nextAssignor = userInfoService.getUser(requestDto.getAssignor());
+		User assignee = userInfoService.getUser(requestDto.getAssignee());
 
-        boardUserRoleValidator.validateRole(CardMatcherService.class, nextAssignor.getId(), boardId);
-        Role role = boardUserRoleValidator.getRole(boardId, assignee.getId());
+		boardUserRoleValidator.validateRole(CardMatcherService.class, nextAssignor.getId(), boardId);
+		Role role = boardUserRoleValidator.getRole(boardId, assignee.getId());
 
-        return cardService.updateAllAssign(card, nextAssignor, assignee);
+		return cardService.updateAllAssign(card, nextAssignor, assignee);
+	}
 
-    }
+	public UpdateCardAssignorResponseDto updateCardAssignor(Long boardId, Card card,
+		UpdateCardAssignorRequestDto requestDto) {
 
-    public UpdateCardAssignorResponseDto updateCardAssignor(Long boardId, Card card,
-            UpdateCardAssignorRequestDto requestDto) {
+		User assignor = userInfoService.getUser(requestDto.getAssignor());
+		boardUserRoleValidator.validateRole(CardMatcherService.class, assignor.getId(), boardId);
 
-        User assignor = userInfoService.getUser(requestDto.getAssignor());
-        boardUserRoleValidator.validateRole(CardMatcherService.class, assignor.getId(), boardId);
+		return cardService.updateAssignor(card, assignor);
+	}
 
-        return cardService.updateAssignor(card, assignor);
-    }
+	public UpdateCardAssigneeResponseDto updateCardAssignee(Long boardId, Card card,
+		UpdateCardAssigneeRequestDto requestDto) {
 
-    public UpdateCardAssigneeResponseDto updateCardAssignee(Long boardId, Card card,
-            UpdateCardAssigneeRequestDto requestDto) {
+		User assignee = userInfoService.getUser(requestDto.getAssignee());
+		Role role = boardUserRoleValidator.getRole(boardId, assignee.getId());
 
-        User assignee = userInfoService.getUser(requestDto.getAssignee());
-        Role role = boardUserRoleValidator.getRole(boardId, assignee.getId());
-
-        return cardService.updateAssignee(card, assignee);
-    }
+		return cardService.updateAssignee(card, assignee);
+	}
 }
