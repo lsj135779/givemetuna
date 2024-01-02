@@ -2,6 +2,7 @@ package com.sparta.givemetuna.domain.issue.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.issue.dto.read.IssueReadResponseDto;
@@ -48,7 +49,7 @@ class IssueRepositoryTest {
 	void setUp() {
 		// GIVEN
 		User user = userRepository.save(User.builder().build());
-		Card card = cardRepository.save(Card.builder().build());
+		Card card = cardRepository.save(Card.builder().title("요청업무#1").cardPriority(CardPriority.HIGH).build());
 		List<Issue> issues = new ArrayList<>();
 		for (long l = 1L; l < 10L; l++) {
 			Issue issue = Issue.builder()

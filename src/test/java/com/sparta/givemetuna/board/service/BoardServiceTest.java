@@ -24,6 +24,10 @@ class BoardServiceTest extends IntegrationTest {
 	@Autowired
 	protected BoardService boardService;
 
+	Board board1;
+
+	Board board2;
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -36,11 +40,11 @@ class BoardServiceTest extends IntegrationTest {
 	@BeforeEach
 	void setUp() {
 		User user = userRepository.save(User.builder().build());
-		Board board1 = boardRepository.save(
+		board1 = boardRepository.save(
 			Board.builder()
 				.id(1L)
 				.build());
-		Board board2 = boardRepository.save(
+		board2 = boardRepository.save(
 			Board.builder()
 				.id(2L)
 				.build());
@@ -57,20 +61,20 @@ class BoardServiceTest extends IntegrationTest {
 	@Test
 	void createBoard() {
 		// GIVEN
-		long boardId = 1L;
+		long boardId = board1.getId();
 
 		// WHEN
 		Board board = boardService.getBoard(boardId);
 
 		// THEN
-		assertEquals(1L, board.getId());
+		assertEquals(boardId, board.getId());
 	}
 
 	@Test
 	@DisplayName("총관리자가 설정한 권한을 가지고 있는 회원을 초대합니다.")
 	public void 설정한_권한_회원초대() {
 		// GIVEN
-		long boardId = 1L;
+		long boardId = board1.getId();
 		Map<User, Role> users = new HashMap<>();
 		User soo123 = userRepository.save(User.builder()
 			.account("soo123")

@@ -1,7 +1,7 @@
 package com.sparta.givemetuna.domain.issuecomment.service.read;
 
 import com.sparta.givemetuna.domain.issue.entity.Issue;
-import com.sparta.givemetuna.domain.issuecomment.controller.read.IssueCommentReadResponseDto;
+import com.sparta.givemetuna.domain.issuecomment.dto.read.IssueCommentReadResponseDto;
 import com.sparta.givemetuna.domain.issuecomment.dto.read.IssueCommentSelectCondition;
 import com.sparta.givemetuna.domain.issuecomment.entity.IssueComment;
 import com.sparta.givemetuna.domain.user.entity.User;
