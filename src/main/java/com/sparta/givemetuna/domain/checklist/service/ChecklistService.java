@@ -42,7 +42,10 @@ public class ChecklistService {
 		Role role = boardUserRoleValidator.getRole(boardId, user.getId());
 		// 카드 레포에서 해당 카드 정보 가져오기
 		Card card = checklistMatcherService.getCard(cardId);
-
+		// 권한 부여가 안된 상태에서 생성하는 경우
+		if (card.getChecklists().isEmpty()) {
+			throw new CardAssigneeInvalidAuthorizationException();
+		}
 		// 관리자, 카드생성한 매니저, 카드를 부여받은 유저까지 생성가능하다.
 		// role이 manager인 경우
 		if (role.equals(Role.TEAM_MANAGER)) {
