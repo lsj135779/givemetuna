@@ -36,7 +36,7 @@ public class UserController {
 
     //회원가입
     @PostMapping("/users/signup")
-    public ResponseEntity<CommonResponseDTO> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) throws SignUpDuplicatedUserNicknameException, SignUpDuplicatedUserAccountException {
+    public ResponseEntity<CommonResponseDTO> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO){
 
         userService.signup(signUpRequestDTO);
 
@@ -47,12 +47,8 @@ public class UserController {
     //로그인
     @PostMapping("/users/login")
     public ResponseEntity<CommonResponseDTO> login(@RequestBody SignUpRequestDTO signUpRequestDTO, HttpServletResponse httpServletResponse) throws LoginInvalidAccountException, LoginInvalidPasswordException {
-
         userService.login(signUpRequestDTO);
-
-
         httpServletResponse.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(signUpRequestDTO.getAccount()));
-
         return ResponseEntity.ok().body(new CommonResponseDTO("로그인 성공", HttpStatus.OK.value()));
     }
 
@@ -66,9 +62,7 @@ public class UserController {
     //사용자 정보 수정
     @PatchMapping ("/users/{account}")
     public ResponseEntity<UserInfoResponseDTO> updateUserProfile(@PathVariable String account, @RequestBody UserInfoRequestDTO userInfoRequestDTO,
-                                                       @AuthenticationPrincipal UserDetailsImpl userDetails) throws SignUpDuplicatedUserNicknameException,
-                                                                                SignUpDuplicatedUserEmailException, UpdateIdenticalIntroductionException {
-
+                                                       @AuthenticationPrincipal UserDetailsImpl userDetails){
         UserInfoResponseDTO userInfoResponseDTO = userInfoService.updateUser(account, userInfoRequestDTO, userDetails.getUser());
         return ResponseEntity.ok().body(userInfoResponseDTO);
     }
@@ -76,7 +70,6 @@ public class UserController {
     //사용자 삭제
     @DeleteMapping("/users/{account}")
     public ResponseEntity<CommonResponseDTO> deleteUser(@PathVariable String account, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
         userInfoService.deleteUser(account, userDetails.getUser());
         return ResponseEntity.ok().body(new CommonResponseDTO("유저 삭제 성공", HttpStatus.OK.value()));
     }

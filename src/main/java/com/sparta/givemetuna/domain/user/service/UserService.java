@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.user.service;
 
 import com.sparta.givemetuna.domain.user.entity.User;
+import com.sparta.givemetuna.domain.user.exception.*;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
 import com.sparta.givemetuna.domain.user.dto.SignUpRequestDTO;
 import jakarta.transaction.Transactional;
@@ -30,15 +31,15 @@ public class UserService {
         String description = signUpRequestDTO.getDescription();
 
         if (userRepository.findByAccount(account).isPresent()) {
-            throw new IllegalArgumentException("이미 가입된 아이디 입니다.");
+            throw new SignUpDuplicatedUserAccountException();
         }
 
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new IllegalArgumentException("이미 가입된 이메일 입니다.");
+            throw new SignUpDuplicatedUserEmailException();
         }
 
         if (userRepository.findByNickname(nickname).isPresent()) {
-            throw new IllegalArgumentException("이미 가입된 닉네임 입니다.");
+            throw new SignUpDuplicatedUserNicknameException();
         }
 
         User user = new User(account, password, email, nickname, github, description);
@@ -51,10 +52,10 @@ public class UserService {
         String password = signUpRequestDTO.getPassword();
 
         User user = userRepository.findByAccount(account)
-                .orElseThrow(() -> new IllegalArgumentException("등록된 유저가 없습니다."));
+                .orElseThrow(LoginInvalidAccountException::new);
 
         if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new LoginInvalidPasswordException();
         }
     }
 }
