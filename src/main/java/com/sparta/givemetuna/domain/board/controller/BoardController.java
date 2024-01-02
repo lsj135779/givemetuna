@@ -9,6 +9,7 @@ import com.sparta.givemetuna.domain.board.dto.InviteUserRequestDto;
 import com.sparta.givemetuna.domain.board.dto.InviteUserResponseDto;
 import com.sparta.givemetuna.domain.board.dto.UpdateBoardRequestDto;
 import com.sparta.givemetuna.domain.board.dto.UpdateBoardResponseDto;
+import com.sparta.givemetuna.domain.board.dto.*;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.service.BoardService;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
@@ -29,6 +30,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -74,7 +78,7 @@ public class BoardController {
 	// todo: stage와 card까지 보여져야함
 	// todo:생성한 사람과 초대받은 사람 이외의 사람들에겐 접근권한 없어야함
 	@GetMapping("/{boardId}")
-	public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long boardId) {
+	public ResponseEntity<BoardResponseDto> getBoard(@PathVariable(name = "boardId") Long boardId) {
 		Board board = boardService.getBoard(boardId);
 		BoardResponseDto responseDto = BoardResponseDto.of(board);
 		return ResponseEntity.ok().body(responseDto);

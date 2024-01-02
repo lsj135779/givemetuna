@@ -13,15 +13,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class BoardResponseDto {
 
-	private long boardId;
+	private Long boardId;
 
 	private String name;
 
 	private List<String> stages;
-
-	public BoardResponseDto(Board board) {
-		this.name = board.getName();
-	}
 
 	public static BoardResponseDto of(Board board) {
 		return new BoardResponseDto(

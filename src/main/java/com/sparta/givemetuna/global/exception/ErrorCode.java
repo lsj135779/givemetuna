@@ -40,8 +40,8 @@ public enum ErrorCode {
 	DELETE_ISSUE_COMMENT_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 이슈 댓글의 삭제 권한이 없습니다."),
 	/* CHECKLIST */
 	SELECT_CHECKLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "찾으시는 체크리스트는 존재하지 않습니다."),
-	UPDATE_CHECKLIST_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 체크리스트의 수정 권한이 없습니다."),
-	DELETE_CHECKLIST_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 체크리스트의 삭제 권한이 없습니다."),
+	UPDATE_CHECKLIST_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 체크리스트의 수정 권한이 없습니다."),
+	DELETE_CHECKLIST_INVALID_AUTHORIZATION(HttpStatus.NOT_FOUND, "해당 체크리스트의 삭제 권한이 없습니다."),
 	/* STAGE */
 	SELECT_STAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "찾으시는 스테이지는 존재하지 않습니다."),
 	UPDATE_STAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "수정하시려는 스테이지는 존재하지 않습니다."),
@@ -51,8 +51,8 @@ public enum ErrorCode {
 	UPDATE_STAGE_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 스테이지의 수정 권한이 없습니다."),
 	DELETE_STAGE_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "해당 스테이지의 삭제 권한이 없습니다."),
 	/* CARD */
+	SELECT_CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "찾으시는 카드는 존재하지 않습니다."),
 	CARD_ASSIGNOR_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "카드에 대한 Assignor 권한이 없습니다."),
-	CARD_ASSIGNEE_INVALID_AUTHORIZATION(HttpStatus.FORBIDDEN, "카드에 대한 Assignee 권한이 없습니다."),
 	SELECT_CARD_INVALID_ORDER_CRITERIA(HttpStatus.BAD_REQUEST, "카드에 대한 올바른 형식의 정렬기준값을 입력해주세요."),
 	CARD_INVALID_AUTHORIZATION(HttpStatus.BAD_REQUEST, "Card 요청 처리 시, 총 관리자 혹은 팀 매니저만 접근할 수 있습니다."),
 	/* BOARD */

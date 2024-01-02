@@ -42,11 +42,14 @@ public class StageController {
 		@RequestBody UpdateStageRequestDto requestDto,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-		UpdateStageResponseDto response = stageService.updateStage(stage_id, requestDto, userDetails.getUser());
+		UpdateStageResponseDto response = stageService.updateStage(stageId, requestDto, userDetails.getUser());
 		return ResponseEntity.ok().body(response);
 	}
 
 	// 페이징 및 정렬
+	@GetMapping
+	public void getStages() {
+	}
 
 	//stage 삭제
 	@DeleteMapping("/{stage_id}")
@@ -56,13 +59,11 @@ public class StageController {
 		return ResponseEntity.ok().body(new DeleteStageResponseDto("Stage deleted successfully"));
 	}
 
-	@GetMapping("/{stage_id}")
-	public void getStage() {
-
-	}
-
-	@GetMapping
-	public void getStages() {
-
+	// stage 단건 조회
+	@GetMapping("/{stageId}")
+	public ResponseEntity<SingleStageResponseDto> getStage(@PathVariable(name = "stageId") Long stageId) {
+		Stage stage = stageService.getStageById(stageId);
+		SingleStageResponseDto response = SingleStageResponseDto.of(stage);
+		return ResponseEntity.ok().body(response);
 	}
 }

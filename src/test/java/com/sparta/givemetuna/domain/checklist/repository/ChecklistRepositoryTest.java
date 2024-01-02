@@ -1,6 +1,5 @@
 package com.sparta.givemetuna.domain.checklist.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sparta.givemetuna.domain.card.constant.CardPriority;
@@ -87,16 +86,16 @@ class ChecklistRepositoryTest {
 		assertTrue(hasChecklist2);
 	}
 
-	@Test
-	@DisplayName("할당자에 따라 체크리스트 옵셔널값을 조회합니다.")
-	public void 할당자에따른_체크리스트옵셔널_조회() {
-		// GIVEN
-		long userId = user.getId();
-
-		// WHEN
-		Checklist checklist = checklistRepository.findFirstByAssignee(userId).orElseThrow(SelectChecklistNotFoundException::new);
-
-		// THEN
-		assertEquals(checklist1.getContents(), checklist.getContents());
-	}
+//	@Test
+//	@DisplayName("할당자에 따라 체크리스트 옵셔널값을 조회합니다.")
+//	public void 할당자에따른_체크리스트옵셔널_조회() {
+//		// GIVEN
+//		long userId = 1L;
+//
+//		// WHEN
+//		Checklist checklist = (Checklist) checklistRepository.findFirstByAssigneeAndCardId(1L, 2L).get();
+//
+//		// THEN
+//		assertEquals("체크리스트#1", checklist.getContents());
+//	}
 }

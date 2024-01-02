@@ -41,12 +41,12 @@ public class ChecklistController {
 
 	private BoardUserRoleValidator boardUserRoleValidator;
 
-	// Valid 작성
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<CommonResponseDTO> handleValidationException(MethodArgumentNotValidException ex) {
 		BindingResult result = ex.getBindingResult();
 		FieldError fieldError = result.getFieldError();
+		assert fieldError != null;
 		String errorMessage = fieldError.getDefaultMessage();
 
 		CommonResponseDTO responseDto = new CommonResponseDTO(errorMessage, HttpStatus.BAD_REQUEST.value());
