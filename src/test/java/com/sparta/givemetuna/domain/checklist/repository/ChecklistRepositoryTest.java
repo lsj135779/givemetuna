@@ -1,5 +1,6 @@
 package com.sparta.givemetuna.domain.checklist.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sparta.givemetuna.domain.card.constant.CardPriority;
@@ -47,7 +48,7 @@ class ChecklistRepositoryTest {
 
 		Checklist checklist1 = Checklist.builder()
 			.contents("체크리스트#1")
-			.user(user)
+			.user(user) //asignee
 			.card(card)
 			.build();
 		Checklist checklist2 = Checklist.builder()
@@ -81,10 +82,12 @@ class ChecklistRepositoryTest {
 	@DisplayName("할당자에 따라 체크리스트 옵셔널값을 조회합니다.")
 	public void 할당자에따른_체크리스트옵셔널_조회() {
 		// GIVEN
+		long userId = 1L;
 
 		// WHEN
+		Checklist checklist = checklistRepository.findFirstByAssignee(1L).get();
 
 		// THEN
-
+		assertEquals("체크리스트#1", checklist.getContents());
 	}
 }
