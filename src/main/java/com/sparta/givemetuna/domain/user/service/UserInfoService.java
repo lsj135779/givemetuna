@@ -1,89 +1,119 @@
 package com.sparta.givemetuna.domain.user.service;
 
 import com.sparta.givemetuna.domain.board.entity.Board;
+import com.sparta.givemetuna.domain.board.exception.BoardInvalidAuthorizationException;
+import com.sparta.givemetuna.domain.board.exception.SelectBoardNotFoundException;
 import com.sparta.givemetuna.domain.board.repository.BoardRepository;
 import com.sparta.givemetuna.domain.user.dto.UserInfoRequestDTO;
 import com.sparta.givemetuna.domain.user.dto.UserInfoResponseDTO;
 import com.sparta.givemetuna.domain.user.entity.User;
+import com.sparta.givemetuna.domain.user.exception.*;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
-import java.util.concurrent.RejectedExecutionException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 
 @Service
 public class UserInfoService {
 
-	private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-	private final BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
-	private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-	public UserInfoService(UserRepository userRepository, BoardRepository boardRepository, PasswordEncoder passwordEncoder) {
-		this.userRepository = userRepository;
-		this.boardRepository = boardRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
+    public UserInfoService(UserRepository userRepository, BoardRepository boardRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.boardRepository = boardRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-	//사용자 조회
-	public UserInfoResponseDTO getUserInfo(String account) {
-		User user = getUser(account);
-		return new UserInfoResponseDTO(user);
-	}
+    //사용자 조회
+    public UserInfoResponseDTO getUserInfo(String account) {
+        User user = getUser(account);
+        return new UserInfoResponseDTO(user);
+    }
 
-	//사용자 수정
-	public UserInfoResponseDTO updateUser(String account, UserInfoRequestDTO userInfoRequestDTO, User user) {
-		User users = getUserInfos(account, user);
+    //사용자 수정
+    public UserInfoResponseDTO updateUser(String account, UserInfoRequestDTO userInfoRequestDTO, User user) {
+        User users = getUserInfos(account, user);
 
-		if (userInfoRequestDTO.getPassword() != null) {
-			String password = passwordEncoder.encode(userInfoRequestDTO.getPassword());
-			users.updatePassword(password);
-		}
+        // Password Valid
+        String password = passwordEncoder.encode(userInfoRequestDTO.getPassword());
 
-		users.updateEmail(userInfoRequestDTO);
-		users.updateNickname(userInfoRequestDTO);
-		users.updateGithub(userInfoRequestDTO);
-		users.updatedescription(userInfoRequestDTO);
+        if(!passwordEncoder.matches(userInfoRequestDTO.getPassword(), user.getPassword())){
+            users.updatePassword(password);
+        } else{
+            throw new UpdateIdenticalPasswordException();
+        }
 
-		userRepository.save(users);
+        //Email Valid
+        if(!Objects.equals(user.getEmail(), userInfoRequestDTO.getEmail())){
+            users.updateEmail(userInfoRequestDTO);
+        } else{
+            throw new UpdateIdenticalEmailException();
+        }
 
-		return new UserInfoResponseDTO(users);
-	}
+        //Nickname Valid
+        if(!Objects.equals(user.getNickname(), userInfoRequestDTO.getNickname())){
+            users.updateNickname(userInfoRequestDTO);
+        } else{
+            throw new UpdateIdenticalAccountException();
+        }
 
-	//사용자 삭제
-	public void deleteUser(String account, User user) {
-		User users = getUserInfos(account, user);
+        //Github Valid
+        if(!Objects.equals(user.getGithub(), userInfoRequestDTO.getGithub())){
+            users.updateGithub(userInfoRequestDTO);
+        } else{
+            throw new UpdateIdenticalEmailException();
+        }
 
-		userRepository.delete(users);
-	}
+        //Intro Valid
+        if(!Objects.equals(user.getDescription(), userInfoRequestDTO.getDescription())){
+            users.updatedescription(userInfoRequestDTO);
+        } else{
+            throw new UpdateIdenticalIntroductionException();
+        }
 
-	//사용자 존재여부 확인
-	public User getUser(String account) {
-		return userRepository.findByAccount(account)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-	}
+        userRepository.save(users);
 
-	//사용자 인증 확인
-	private User getUserInfos(String account, User user) {
-		User users = getUser(account);
+        return new UserInfoResponseDTO(users);
+    }
 
-		if (!user.getId().equals(users.getId())) {
-			throw new IllegalArgumentException("본인만 접근 가능합니다.");
-		}
-		return users;
-	}
+    //사용자 삭제
+    public void deleteUser(String account, User user) {
+        User users = getUserInfos(account, user);
 
-	//Board 사용자 검증
-	public Board getUserBoard(Long id, User user) {
-		//Board 존재여부 확인
-		Board board = boardRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
+        userRepository.delete(users);
+    }
 
-		//Board작성자와 현재 사용자 검증
-		if (!user.getId().equals(board.getUser().getId())) {
-			throw new RejectedExecutionException("Board 작성자만 수정할 수 있습니다.");
-		}
-		return board;
-	}
+    //사용자 존재여부 확인
+    public User getUser(String account) {
+        return userRepository.findByAccount(account)
+                .orElseThrow(SelectUserNotFoundException::new);
+    }
+
+    //사용자 인증 확인
+    private User getUserInfos(String account, User user) {
+        User users = getUser(account);
+
+        if(!user.getId().equals(users.getId())) {
+            throw new UpdateUserInvalidAuthorizationException();
+        }
+        return users;
+    }
+
+    //Board 사용자 검증
+    public Board getUserBoard(Long id, User user) {
+        //Board 존재여부 확인
+        Board board = boardRepository.findById(id)
+                .orElseThrow(SelectBoardNotFoundException::new);
+
+        //Board작성자와 현재 사용자 검증
+        if(!user.getId().equals(board.getUser().getId())) {
+            throw new BoardInvalidAuthorizationException();
+        }
+        return board;
+    }
 }

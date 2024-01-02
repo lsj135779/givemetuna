@@ -10,6 +10,7 @@ import com.sparta.givemetuna.domain.user.service.UserInfoService;
 import com.sparta.givemetuna.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequestMapping("/api/users")
 @RestController
 public class UserController {
@@ -42,47 +44,40 @@ public class UserController {
 	@PostMapping("/signup")
 	public ResponseEntity<CommonResponseDTO> signup(@Valid @RequestBody SignUpRequestDTO signUpRequestDTO) {
 
-		try {
-			userService.signup(signUpRequestDTO);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(new CommonResponseDTO(e.getMessage(), HttpStatus.CONFLICT.value()));
-		}
+        userService.signup(signUpRequestDTO);
 
 		return ResponseEntity.status(HttpStatus.CREATED.value())
 			.body(new CommonResponseDTO("회원가입 성공", HttpStatus.CREATED.value()));
 	}
 
-	//로그인
-	@PostMapping("/login")
-	public ResponseEntity<CommonResponseDTO> login(@RequestBody SignUpRequestDTO signUpRequestDTO,
-		HttpServletResponse httpServletResponse) {
-		try {
-			userService.login(signUpRequestDTO);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(new CommonResponseDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-		}
+    //로그인
+    @PostMapping("/login")
+    public ResponseEntity<CommonResponseDTO> login(@RequestBody SignUpRequestDTO signUpRequestDTO, HttpServletResponse httpServletResponse){
+        userService.login(signUpRequestDTO);
+        httpServletResponse.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(signUpRequestDTO.getAccount()));
+        return ResponseEntity.ok().body(new CommonResponseDTO("로그인 성공", HttpStatus.OK.value()));
+    }
 
-		httpServletResponse.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(signUpRequestDTO.getAccount()));
+    //사용자 정보 조회
+    @GetMapping("/{account}")
+    public ResponseEntity<UserInfoResponseDTO> getUserProfile(@PathVariable(name = "account") String account) {
+        UserInfoResponseDTO userInfoResponseDTO = userInfoService.getUserInfo(account);
+        return ResponseEntity.ok().body(userInfoResponseDTO);
+    }
 
-		return ResponseEntity.ok().body(new CommonResponseDTO("로그인 성공", HttpStatus.OK.value()));
-	}
+    //사용자 정보 수정
+    @PatchMapping ("/{account}")
+    public ResponseEntity<UserInfoResponseDTO> updateUserProfile(@PathVariable(name = "account") String account, @RequestBody UserInfoRequestDTO userInfoRequestDTO,
+                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-	//사용자 정보 조회
-	@GetMapping("/{account}")
-	@SecurityRequirement(name = "Bearer Authentication")
-	public ResponseEntity<UserInfoResponseDTO> getUserProfile(@PathVariable String account) {
-		UserInfoResponseDTO userInfoResponseDTO = userInfoService.getUserInfo(account);
-		return ResponseEntity.ok().body(userInfoResponseDTO);
-	}
+        UserInfoResponseDTO userInfoResponseDTO = userInfoService.updateUser(account, userInfoRequestDTO, userDetails.getUser());
+        return ResponseEntity.ok().body(userInfoResponseDTO);
+    }
 
-	//사용자 정보 수정
-	@PatchMapping("/{account}")
-	@SecurityRequirement(name = "Bearer Authentication")
-	public ResponseEntity<UserInfoResponseDTO> updateUserProfile(@PathVariable String account,
-		@RequestBody UserInfoRequestDTO userInfoRequestDTO,
-		@AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-		UserInfoResponseDTO userInfoResponseDTO = userInfoService.updateUser(account, userInfoRequestDTO, userDetails.getUser());
-		return ResponseEntity.ok().body(userInfoResponseDTO);
-	}
+    //사용자 삭제
+    @DeleteMapping("/{account}")
+    public ResponseEntity<CommonResponseDTO> deleteUser(@PathVariable(name = "account") String account, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userInfoService.deleteUser(account, userDetails.getUser());
+        return ResponseEntity.ok().body(new CommonResponseDTO("유저 삭제 성공", HttpStatus.OK.value()));
+    }
 }
