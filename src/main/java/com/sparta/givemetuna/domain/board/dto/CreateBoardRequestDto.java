@@ -1,10 +1,15 @@
 package com.sparta.givemetuna.domain.board.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CreateBoardRequestDto {
-    private String name;
+
+	private String name;
 }
