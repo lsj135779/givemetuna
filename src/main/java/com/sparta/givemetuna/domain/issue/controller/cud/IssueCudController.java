@@ -1,6 +1,7 @@
 package com.sparta.givemetuna.domain.issue.controller.cud;
 
 import com.sparta.givemetuna.domain.card.entity.Card;
+import com.sparta.givemetuna.domain.issue.controller.validation.IssueValidator;
 import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateRequestDto;
 import com.sparta.givemetuna.domain.issue.dto.cud.IssueCreateResponseDto;
 import com.sparta.givemetuna.domain.issue.dto.cud.IssueDeleteResponseDto;
@@ -11,10 +12,12 @@ import com.sparta.givemetuna.domain.issue.dto.cud.IssueUpdateResponseDto;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
 import com.sparta.givemetuna.domain.issue.service.cud.IssueCudService;
 import com.sparta.givemetuna.domain.issue.service.read.IssueReadService;
+import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,14 +38,17 @@ public class IssueCudController {
 
 	private final IssueReadService issueReadService;
 
+	private final IssueValidator issueValidator;
+
 //	private final CardService cardService;
 
 	@PostMapping
 	public ResponseEntity<IssueCreateResponseDto> createIssue(
-		@RequestBody IssueCreateRequestDto createRequestDto
-//		@AuthenticationPrincipal UserDetailsImpl userDetails
+		@RequestBody IssueCreateRequestDto createRequestDto,
+		@AuthenticationPrincipal UserDetailsImpl userDetails
 	) {
 		/* Body 검증 :: Card 검증 *//**/
+//		issueValidator.validateRole(
 		// Card card = cardService.selectById(createRequestDto.getCardId());
 		IssueCreateResponseDto responseDto = issueCudService.createIssue(
 			createRequestDto,
