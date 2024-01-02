@@ -11,6 +11,7 @@ import com.sparta.givemetuna.domain.checklist.dto.ChecklistPriorityUpdateRequest
 import com.sparta.givemetuna.domain.checklist.dto.ChecklistPriorityUpdateResponseDto;
 import com.sparta.givemetuna.domain.checklist.service.ChecklistService;
 import com.sparta.givemetuna.domain.security.UserDetailsImpl;
+import com.sparta.givemetuna.global.validator.BoardUserRoleValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChecklistController {
 
 	private final ChecklistService checklistService;
+	private BoardUserRoleValidator boardUserRoleValidator;
 
 	// Valid 작성
 	@ExceptionHandler(MethodArgumentNotValidException.class)
