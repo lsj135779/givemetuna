@@ -1,14 +1,14 @@
 package com.sparta.givemetuna.domain.user.service;
 
 import com.sparta.givemetuna.domain.board.entity.Board;
+import com.sparta.givemetuna.domain.board.repository.BoardRepository;
 import com.sparta.givemetuna.domain.user.dto.UserInfoRequestDTO;
 import com.sparta.givemetuna.domain.user.dto.UserInfoResponseDTO;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.UserRepository;
+import java.util.concurrent.RejectedExecutionException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.RejectedExecutionException;
 
 
 @Service
@@ -20,7 +20,8 @@ public class UserInfoService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UserInfoService(UserRepository userRepository, BoardRepository boardRepository, PasswordEncoder passwordEncoder) {
+    public UserInfoService(UserRepository userRepository, BoardRepository boardRepository,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.boardRepository = boardRepository;
         this.passwordEncoder = passwordEncoder;
@@ -33,10 +34,11 @@ public class UserInfoService {
     }
 
     //사용자 수정
-    public UserInfoResponseDTO updateUser(String account, UserInfoRequestDTO userInfoRequestDTO, User user) {
+    public UserInfoResponseDTO updateUser(String account, UserInfoRequestDTO userInfoRequestDTO,
+            User user) {
         User users = getUserInfos(account, user);
 
-        if(userInfoRequestDTO.getPassword() != null) {
+        if (userInfoRequestDTO.getPassword() != null) {
             String password = passwordEncoder.encode(userInfoRequestDTO.getPassword());
             users.updatePassword(password);
         }
@@ -68,7 +70,7 @@ public class UserInfoService {
     private User getUserInfos(String account, User user) {
         User users = getUser(account);
 
-        if(!user.getId().equals(users.getId())) {
+        if (!user.getId().equals(users.getId())) {
             throw new IllegalArgumentException("본인만 접근 가능합니다.");
         }
         return users;
@@ -81,7 +83,7 @@ public class UserInfoService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
 
         //Board작성자와 현재 사용자 검증
-        if(!user.getId().equals(board.getUser().getId())) {
+        if (!user.getId().equals(board.getUser().getId())) {
             throw new RejectedExecutionException("Board 작성자만 수정할 수 있습니다.");
         }
         return board;
