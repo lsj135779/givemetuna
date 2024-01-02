@@ -44,7 +44,7 @@ public class ChecklistService {
 		// 관리자, 카드생성한 매니저, 카드를 부여받은 유저까지 생성가능하다.
 		// role이 manager인 경우
 		if (role.equals(Role.TEAM_MANAGER)) {
-			if (!Objects.equals(card.getCreator(), user.getId())) {
+			if (!Objects.equals(card.getCreator().getId(), user.getId())) {
 				throw new IllegalArgumentException("카드 생성자만 체크리스트 생성이 가능합니다.");
 			}
 		}
@@ -126,7 +126,7 @@ public class ChecklistService {
 		// 관리자 가능
 		// 해당 카드를 만든 매니저 가능
 		if (role.equals(Role.TEAM_MANAGER)) {
-			if (!Objects.equals(card.getCreator(), user.getId())) {
+			if (!Objects.equals(card.getCreator().getId(), user.getId())) {
 				throw new IllegalArgumentException("카드 생성자만 체크리스트 삭제가 가능합니다.");
 			}
 		}
@@ -153,7 +153,7 @@ public class ChecklistService {
 		// 관리자 가능
 		// 해당 카드를 만든 매니저 가능
 		if (role.equals(Role.TEAM_MANAGER)) {
-			if (!Objects.equals(card.getCreator(), user.getId())) {
+			if (!Objects.equals(card.getCreator().getId(), user.getId())) {
 				throw new IllegalArgumentException("카드 생성자만 수정이 가능합니다.");
 			}
 		}
