@@ -3,8 +3,8 @@ package com.sparta.givemetuna.global.validator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.sparta.givemetuna.domain.common.exception.InvalidOrderCriteriaException;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
-import com.sparta.givemetuna.domain.issue.exception.SelectIssueInvalidOrderCriteriaException;
 import com.sparta.givemetuna.global.exception.ErrorCode;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -31,8 +31,8 @@ class OrderCriteriaValidatorTest {
 
 		// WHEN
 		// THEN
-		SelectIssueInvalidOrderCriteriaException exception = assertThrows(
-			SelectIssueInvalidOrderCriteriaException.class,
+		InvalidOrderCriteriaException exception = assertThrows(
+			InvalidOrderCriteriaException.class,
 			() -> OrderCriteriaValidator.validateOrderCriteria(Issue.class, orderCriterias));
 		assertEquals(ErrorCode.INVALID_ORDER_CRITERIA, exception.getErrorCode());
 	}

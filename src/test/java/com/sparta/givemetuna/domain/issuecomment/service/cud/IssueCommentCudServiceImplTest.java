@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.sparta.givemetuna.domain.card.constant.CardPriority;
 import com.sparta.givemetuna.domain.card.entity.Card;
 import com.sparta.givemetuna.domain.card.repository.CardRepository;
 import com.sparta.givemetuna.domain.issue.entity.Issue;
@@ -49,7 +50,7 @@ class IssueCommentCudServiceImplTest extends IntegrationTestSupport {
 	@BeforeEach
 	void setUp() {
 		savedUser = userRepository.save(User.builder().build());
-		Card card = cardRepository.save(Card.builder().build());
+		Card card = cardRepository.save(Card.builder().title("요청업무#1").cardPriority(CardPriority.HIGH).build());
 		Issue issue = Issue.builder()
 			.user(savedUser)
 			.card(card)
