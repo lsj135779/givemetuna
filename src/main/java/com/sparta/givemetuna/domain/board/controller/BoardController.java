@@ -67,6 +67,7 @@ public class BoardController {
 	public ResponseEntity<BoardResponseDto> getBoard(@PathVariable(name = "boardId") Long boardId,
 													 @AuthenticationPrincipal UserDetailsImpl userDetails)  {
 
+		// 유저의 board 접근 권한 확인 메서드
 		boardService.checkBoardAvailability(boardId, userDetails.getUser());
 		Board board = boardService.getBoard(boardId);
 		BoardResponseDto responseDto = BoardResponseDto.of(board);

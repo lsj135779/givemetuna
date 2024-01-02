@@ -39,7 +39,6 @@ public class BoardService {
     private final BoardUserRoleValidator boardUserRoleValidator;
 
     // board 생성
-    @Transactional
     public CreateBoardResponseDto createBoard(CreateBoardRequestDto requestDto, User user) {
         // board 만들기
         Board board = new Board(requestDto);
@@ -85,7 +84,6 @@ public class BoardService {
     }
 
     // update
-    @Transactional
     public Board updateBoard(Long boardId, UpdateBoardRequestDto requestDto, User user) {
         // user 검증 로직
         Board board = checkBoardAuth(boardId, user);
@@ -113,7 +111,6 @@ public class BoardService {
     }
 
     // 기본 Stage 생성 메서드
-    @Transactional
     public void createDefaultStages(Board board, User user) {
         List<Stage> defaultStage = new ArrayList<>();
 
