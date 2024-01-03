@@ -23,7 +23,7 @@ public class UpdateCardAllAssignResponseDto {
 
 	private String title;
 
-	private String assignor;
+	private String assignorAccount;
 
 	private CardPriority cardPriority;
 
@@ -43,13 +43,13 @@ public class UpdateCardAllAssignResponseDto {
 
 	@Builder
 	private UpdateCardAllAssignResponseDto(Long boardId, Long stageId, String title,
-		String assignor, CardPriority cardPriority, Timestamp startedAt,
+		String assignorAccount, CardPriority cardPriority, Timestamp startedAt,
 		Timestamp closedAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
 
 		this.boardId = boardId;
 		this.stageId = stageId;
 		this.title = title;
-		this.assignor = assignor;
+		this.assignorAccount = assignorAccount;
 		this.cardPriority = cardPriority;
 		this.startedAt = startedAt;
 		this.closedAt = closedAt;
@@ -63,7 +63,7 @@ public class UpdateCardAllAssignResponseDto {
 			.boardId(card.getStage().getBoard().getId())
 			.stageId(card.getStage().getId())
 			.title(card.getTitle())
-			.assignor(card.getAssignor().getAccount())
+			.assignorAccount(card.getAssignor().getAccount())
 			.cardPriority(card.getCardPriority())
 			.startedAt(card.getStartedAt())
 			.closedAt(card.getClosedAt())

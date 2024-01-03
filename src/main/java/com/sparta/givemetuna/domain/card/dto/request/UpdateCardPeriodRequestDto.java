@@ -2,14 +2,18 @@ package com.sparta.givemetuna.domain.card.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateCardPeriodRequestDto {
 
-	@NotNull
+	@NotNull(message = "yyyy-MM-dd HH:mm:ss 형태로 입력해주세요.")
 	private Timestamp startedAt;
 
-	@NotNull
+	@NotNull(message = "yyyy-MM-dd HH:mm:ss 형태로 입력해주세요.")
 	private Timestamp closedAt;
 }

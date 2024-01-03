@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateCardPriorityRequestDto {
 
-	@NotNull
+	@NotNull(message = "HIGH, MIDDLE, LOW, NON 중에서 골라주세요.")
 	private CardPriority cardPriority;
 }

@@ -6,16 +6,19 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.sql.Timestamp;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateCardRequestDto {
 
     @Size(max = 500)
-    @NotBlank
+    @NotBlank(message = "Title은 필수입니다.")
     private String title;
 
     private String assignorAccount;

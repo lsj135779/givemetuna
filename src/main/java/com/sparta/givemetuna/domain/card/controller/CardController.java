@@ -169,7 +169,7 @@ public class CardController {
             @PathVariable("stage_id") Long stageId,
             @PathVariable("card_id") Long cardId,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody UpdatetCardPriorityRequestDto requestDto) {
+            @Valid @RequestBody UpdateCardPriorityRequestDto requestDto) {
 
 		Card card = checkAPI(boardId, stageId, cardId);
 		checkCardAssignor(userDetails, boardId, card);
