@@ -24,7 +24,7 @@ public class CreateCardResponseDto {
 
 	private String title;
 
-	private String account;
+	private String assignorAccount;
 
 	private CardPriority cardPriority;
 
@@ -39,14 +39,14 @@ public class CreateCardResponseDto {
 	private LocalDateTime createdAt;
 
 	@Builder
-	private CreateCardResponseDto(Long boardId, Long stageId, String title, String account,
+	private CreateCardResponseDto(Long boardId, Long stageId, String title, String assignorAccount,
 		CardPriority cardPriority, Timestamp startedAt, Timestamp closedAt,
 		LocalDateTime createdAt) {
 
 		this.boardId = boardId;
 		this.stageId = stageId;
 		this.title = title;
-		this.account = account;
+		this.assignorAccount = assignorAccount;
 		this.cardPriority = cardPriority;
 		this.startedAt = startedAt;
 		this.closedAt = closedAt;
@@ -59,7 +59,7 @@ public class CreateCardResponseDto {
 			.boardId(stage.getBoard().getId())
 			.stageId(card.getStage().getId())
 			.title(card.getTitle())
-			.account(assignor.getAccount())
+			.assignorAccount(assignor.getAccount())
 			.cardPriority(card.getCardPriority())
 			.startedAt(card.getStartedAt())
 			.closedAt(card.getClosedAt())

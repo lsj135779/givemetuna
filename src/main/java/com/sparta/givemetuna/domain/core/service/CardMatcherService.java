@@ -83,8 +83,8 @@ public class CardMatcherService {
 	public UpdateCardAllAssignResponseDto updateCardAllAssign(Long boardId, Card card,
 		UpdateCardAllAssignRequestDto requestDto) {
 
-		User nextAssignor = userInfoService.getUser(requestDto.getAssignor());
-		User assignee = userInfoService.getUser(requestDto.getAssignee());
+		User nextAssignor = userInfoService.getUser(requestDto.getAssignorAccount());
+		User assignee = userInfoService.getUser(requestDto.getAssigneeAccount());
 
 		boardUserRoleValidator.validateRole(CardMatcherService.class, nextAssignor.getId(), boardId);
 		Role role = boardUserRoleValidator.getRole(boardId, assignee.getId());
