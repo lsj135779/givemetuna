@@ -1,12 +1,13 @@
 package com.sparta.givemetuna.domain.stage.dto;
 
-import com.sparta.givemetuna.domain.board.entity.Board;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateStageRequestDto {
-    private String category;
-    private Board board;
+
+	private String category;
 }

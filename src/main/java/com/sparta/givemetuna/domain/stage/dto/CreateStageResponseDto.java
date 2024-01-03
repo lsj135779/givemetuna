@@ -1,21 +1,21 @@
 package com.sparta.givemetuna.domain.stage.dto;
 
-import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.stage.entity.Stage;
-import com.sparta.givemetuna.domain.user.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateStageResponseDto {
-    private Long id;
-    private String category;
-    private Board board;
 
-    public CreateStageResponseDto(Stage stage) {
-        this.id = stage.getId();
-        this.category = stage.getCategory();
-        this.board = stage.getBoard();
-    }
+	private Long id;
+
+	private String category;
+
+	public CreateStageResponseDto(Stage stage) {
+		this.id = stage.getId();
+		this.category = stage.getCategory();
+	}
 }

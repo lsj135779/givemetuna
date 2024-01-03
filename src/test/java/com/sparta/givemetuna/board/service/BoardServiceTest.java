@@ -4,9 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sparta.givemetuna.board.IntegrationTest;
+import com.sparta.givemetuna.domain.board.dto.CreateBoardRequestDto;
+import com.sparta.givemetuna.domain.board.dto.CreateBoardResponseDto;
 import com.sparta.givemetuna.domain.board.entity.Board;
 import com.sparta.givemetuna.domain.board.repository.BoardRepository;
 import com.sparta.givemetuna.domain.board.service.BoardService;
+import com.sparta.givemetuna.domain.stage.repository.StageRepository;
 import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.repository.BoardUserRoleRepository;
@@ -24,9 +27,11 @@ class BoardServiceTest extends IntegrationTest {
 	@Autowired
 	protected BoardService boardService;
 
-	Board board1;
+	private Board board1;
 
-	Board board2;
+	private Board board2;
+
+	private User user;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -37,9 +42,12 @@ class BoardServiceTest extends IntegrationTest {
 	@Autowired
 	private BoardUserRoleRepository boardUserRoleRepository;
 
+	@Autowired
+	private StageRepository stageRepository;
+
 	@BeforeEach
 	void setUp() {
-		User user = userRepository.save(User.builder().build());
+		user = userRepository.save(User.builder().build());
 		board1 = boardRepository.save(
 			Board.builder()
 				.id(1L)
@@ -52,6 +60,7 @@ class BoardServiceTest extends IntegrationTest {
 
 	@AfterEach
 	void tearDown() {
+		stageRepository.deleteAllInBatch();
 		boardUserRoleRepository.deleteAllInBatch();
 		boardRepository.deleteAllInBatch();
 		userRepository.deleteAllInBatch();
@@ -61,13 +70,15 @@ class BoardServiceTest extends IntegrationTest {
 	@Test
 	void createBoard() {
 		// GIVEN
-		long boardId = board1.getId();
+		CreateBoardRequestDto requestDto = CreateBoardRequestDto.builder()
+			.name("새로운프로젝트보드")
+			.build();
 
 		// WHEN
-		Board board = boardService.getBoard(boardId);
+		CreateBoardResponseDto responseDto = boardService.createBoard(requestDto, user);
 
 		// THEN
-		assertEquals(boardId, board.getId());
+		assertEquals(requestDto.getName(), responseDto.getName());
 	}
 
 	@Test

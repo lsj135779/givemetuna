@@ -4,8 +4,10 @@ import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.stage.dto.CreateStageRequestDto;
 import com.sparta.givemetuna.domain.stage.dto.CreateStageResponseDto;
 import com.sparta.givemetuna.domain.stage.dto.DeleteStageResponseDto;
+import com.sparta.givemetuna.domain.stage.dto.SingleStageResponseDto;
 import com.sparta.givemetuna.domain.stage.dto.UpdateStageRequestDto;
 import com.sparta.givemetuna.domain.stage.dto.UpdateStageResponseDto;
+import com.sparta.givemetuna.domain.stage.entity.Stage;
 import com.sparta.givemetuna.domain.stage.service.StageService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +42,8 @@ public class StageController {
 
 	//stage 수정
 	@PatchMapping("/{stage_id}")
-	public ResponseEntity<UpdateStageResponseDto> updateStage(@PathVariable Long stage_id,
+	public ResponseEntity<UpdateStageResponseDto> updateStage(
+		@PathVariable("stage_id") Long stageId,
 		@RequestBody UpdateStageRequestDto requestDto,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
@@ -62,8 +65,8 @@ public class StageController {
 	}
 
 	// stage 단건 조회
-	@GetMapping("/{stageId}")
-	public ResponseEntity<SingleStageResponseDto> getStage(@PathVariable(name = "stageId") Long stageId) {
+	@GetMapping("/{stage_id}")
+	public ResponseEntity<SingleStageResponseDto> getStage(@PathVariable(name = "stage_id") Long stageId) {
 		Stage stage = stageService.getStageById(stageId);
 		SingleStageResponseDto response = SingleStageResponseDto.of(stage);
 		return ResponseEntity.ok().body(response);

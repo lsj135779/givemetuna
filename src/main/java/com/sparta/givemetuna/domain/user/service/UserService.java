@@ -1,11 +1,13 @@
 package com.sparta.givemetuna.domain.user.service;
 
 import com.sparta.givemetuna.domain.board.dto.Invitation;
+import com.sparta.givemetuna.domain.security.UserDetailsImpl;
 import com.sparta.givemetuna.domain.user.dto.SignUpRequestDTO;
 import com.sparta.givemetuna.domain.user.entity.Role;
 import com.sparta.givemetuna.domain.user.entity.User;
 import com.sparta.givemetuna.domain.user.exception.LoginInvalidAccountException;
 import com.sparta.givemetuna.domain.user.exception.LoginInvalidPasswordException;
+import com.sparta.givemetuna.domain.user.exception.SelectUserNotFoundException;
 import com.sparta.givemetuna.domain.user.exception.SignUpDuplicatedUserAccountException;
 import com.sparta.givemetuna.domain.user.exception.SignUpDuplicatedUserEmailException;
 import com.sparta.givemetuna.domain.user.exception.SignUpDuplicatedUserNicknameException;
@@ -18,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class UserService {
 
 	private final PasswordEncoder passwordEncoder;
@@ -68,10 +71,14 @@ public class UserService {
 		}
 	}
 
+	public User findByUserDetails(UserDetailsImpl userDetails) {
+		return userRepository.findById(userDetails.getUser().getId())
+			.orElseThrow(SelectUserNotFoundException::new);
+	}
+
 	public User findByAccount(String account) {
 		return userRepository.findByAccount(account)
-			.orElseThrow(
-				() -> new RuntimeException(String.format("%s에 해당하는 유저가 존재하지 않습니다.", account)));
+			.orElseThrow(SelectUserNotFoundException::new);
 	}
 
 	public Map<User, Role> findbyAccountsWithRole(List<Invitation> invitations) {

@@ -76,7 +76,7 @@ create table if not exists checklist
     `check`   bit                           null,
     contents  varchar(255)                  null,
     deletable bit                           null,
-    priority  enum ('높음', '중간', '낮음', '없음') null,
+    priority   enum ('HIGH', 'MIDDLE', 'LOW', 'NON') not null,
     card_id   bigint                        null,
     assignee  bigint                        null,
     constraint FKb5iu2ls69wtnpnhq9k8nyx9cv
@@ -84,6 +84,7 @@ create table if not exists checklist
     constraint FKl18c46f576k3nb0odml49teom
     foreign key (card_id) references card (id)
     );
+
 
 create table if not exists issue
 (

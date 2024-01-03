@@ -70,6 +70,7 @@ public class Board {
 		}
 	}
 
+	
 	public void addUserWithRole(User user, Role role) {
 		BoardUserRole boardUserRole = new BoardUserRole(user, role, this);
 		invitedUserRole.add(boardUserRole);

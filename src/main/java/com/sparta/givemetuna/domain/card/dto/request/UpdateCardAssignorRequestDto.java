@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 public class UpdateCardAssignorRequestDto {
 
-    @NotBlank
-    private String assignor;
+	@NotBlank
+	private String assignorAccount;
 }
